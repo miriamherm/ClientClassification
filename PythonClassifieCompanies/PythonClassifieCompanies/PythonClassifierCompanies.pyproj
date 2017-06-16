@@ -14,6 +14,9 @@
     <Name>PythonClassifierCompanies</Name>
     <RootNamespace>PythonClassifieCompanies</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <CommandLineArguments>C:\Users\Miriam\Documents\MastersResearch\DataScience\CompanyClassifier\companyRedirects.csv C:\Users\Miriam\Documents\MastersResearch\DataScience\CompanyClassifier\CompanyTest\Trade_Waste_Broker_Registrants.csv "ACCOUNT NAME"</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
