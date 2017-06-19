@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{a41c8ea1-112a-4a2d-9f91-29557995525f};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>classifier.py</StartupFile>
+    <StartupFile>vocabulary.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -15,7 +15,7 @@
     <RootNamespace>PythonClassifieCompanies</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>C:\Users\Miriam\Documents\MastersResearch\DataScience\CompanyClassifier\companyRedirects.csv C:\Users\Miriam\Documents\MastersResearch\DataScience\CompanyClassifier\CompanyTest\Trade_Waste_Broker_Registrants.csv "ACCOUNT NAME"</CommandLineArguments>
+    <CommandLineArguments>C:\Users\Miriam\Documents\MastersResearch\DataScience\CompanyClassifier\companyRedirects.csv C:\Users\Miriam\Documents\MastersResearch\DataScience\CompanyClassifier\CompanyTest\FOIL_Report_-_Trade_Waste_All_Approved_or_Denied.csv "MAILING OFFICE"</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -28,6 +28,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="classifier.py" />
+    <Compile Include="vocabulary.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -152,16 +152,16 @@ if __name__ == "__main__":
     test_file_name=ntpath.basename(URL_Test)
 
   
-    training = train_data()
+    # training = train_data()
     testing = test_column(URL_Test, test_file_column)
-    missing = check_missing_words(testing, training)
+   # missing = check_missing_words(testing, training)
     
-    df = pd.merge(training, testing, on='word', how='inner')
-    sim= cosine(df['norm'], df['test_norm'])
+   # df = pd.merge(training, testing, on='word', how='inner')
+    #sim= cosine(df['norm'], df['test_norm'])
 
-    training.to_csv(trainingfile)
-    testingfile = "results\\"+ str(sim)+test_file_name
-    missingfile = "results\\missing_"+ test_file_name
+   # training.to_csv(trainingfile)
+    testingfile = "results\\"+"ADD_"+test_file_column+test_file_name
+   # missingfile = "results\\missing_"+ test_file_name
     
     testing.to_csv(testingfile) 
-    missing.to_csv(missingfile)
+  #  missing.to_csv(missingfile)
