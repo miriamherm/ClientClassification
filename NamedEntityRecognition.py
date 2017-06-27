@@ -150,7 +150,8 @@ embedded_sequences = embedding_layer(sequence_input)
 
 x = Dense(128, activation='relu')(embedded_sequences)
 
-# don't understand why we need flatten here?
+# need to move from a 2 dimensional input vector (number of words that make up the entity and number of units composing the embedding per word) to a one dimensional one - so use flatten
+# need to also try an LSTM to capture dependencies between words in case that is useful for NER
 x = Flatten()(x)
 preds = Dense(len(labels_index), activation='softmax')(x)
 
