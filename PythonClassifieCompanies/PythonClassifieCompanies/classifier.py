@@ -23,8 +23,8 @@ from datetime import datetime
 from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
 
-URL=sys.argv[1]  #"C:\\Users\\Miriam\\Documents\\MastersResearch\\DataScience\\CompanyClassifier\\companyRedirects.csv"
-URL_Test = sys.argv[2] #"C:\\Users\\Miriam\\Documents\\MastersResearch\\DataScience\\CompanyClassifier\\CompanyTest\\Prequalified_Firms.csv"
+URL=sys.argv[1] #training url
+URL_Test = sys.argv[2] #test url
 trainingfile = "training_company_counts.csv"
 
 # =====================================================================

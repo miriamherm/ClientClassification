@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import sys
+import tempfile
+import urllib
 
 def read_column(f):
    #indir = '/home/des/test'
@@ -17,7 +19,6 @@ def read_column(f):
  
 if __name__ == "__main__":
     dir=sys.argv[1]
-    #"C:\\Users\\Miriam\\Source\\Repos\\ClientClassification\\PythonClassifieCompanies\\PythonClassifieCompanies\\results"
     s1 = pd.Series(['ST'])
     for root, dirs, filenames in os.walk(dir):
         for f in filenames:
