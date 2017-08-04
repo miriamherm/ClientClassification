@@ -10,9 +10,12 @@ from keras.models import Model, model_from_json
 from keras.utils import to_categorical
 from sklearn.metrics import classification_report, confusion_matrix
 
-BASE_DIR = 'C:\\Users\\Miriam\\Documents\\MastersResearch\\DataScience\\'
-TEST_DATA_DIR = BASE_DIR + 'testNERData'
+#first argument base directory for project
+#second argument model name folder
 
+BASE_DIR = sys.argv[1]
+TEST_DATA_DIR = BASE_DIR + 'testNERData'
+MODEL_DIR= BASE_DIR + "Models\\"+ sys.argv[2]+"\\"
 MAX_SEQUENCE_LENGTH = 10
 
 
@@ -25,6 +28,7 @@ def is_english(data):
     except UnicodeDecodeError:
         return False
     return True
+
 def label_data(TEXT_DATA_DIR):
     
     texts = []  # list of text samples
@@ -55,20 +59,25 @@ def label_data(TEXT_DATA_DIR):
     return texts,labels_index,labels
 
 #test load from pickle from tokenizer
-json_file = open('nermodel.json', 'r')
+json_file = open(MODEL_DIR+'nermodel.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("nermodel.h5")
+loaded_model.load_weights(MODEL_DIR+"nermodel.h5")
 print("Loaded model from disk")
 
 loaded_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
+print("Compiled model")
+
 tokenizer=None
-tokenizer_file = open('tokenizer.pkl', 'rb')
+tokenizer_file = open(MODEL_DIR+'tokenizer.pkl', 'rb')
 tokenizer = pickle.load(tokenizer_file)
 
+print("Loaded Tokenizer model")
+
+print("Loading data")
 texts,labels_index,labels= label_data(TEST_DATA_DIR)
 
 sequences = tokenizer.texts_to_sequences(texts)
@@ -93,7 +102,7 @@ score= loaded_model.predict(x_test, batch_size=batch_size)
 ls=np.asarray([w.replace('\n', '') for w in texts])
 print("saving predictions to model_predic.csv")
 data_score=np.hstack([ls[:,None],score]) #np.concatenate((ls[:,None],score),axis=1)
-np.savetxt('model_predic.csv', data_score, fmt="%s")   # X is an array
+np.savetxt(MODEL_DIR+'model_predic.csv', data_score, fmt="%s")   # X is an array
 
 #confusion matrix
 #from http://learnandshare645.blogspot.in/2016/06/feeding-your-own-data-set-into-cnn.html
@@ -103,9 +112,10 @@ print(Y_pred)
 y_pred = np.argmax(Y_pred, axis=1)
 print(y_pred)
 
-target_names = ['class 0(NAMES)', 'class 1(COMPANIEs)']
-print("confusion report:")
+target_names = ['class 1(ADDRESSES)', 'class 2(COMPANIES)', 'class 3(NAMES)' ]
+print("precision/recall report:")
 print(classification_report(np.argmax(y_test,axis=1), y_pred,target_names=target_names))
 print("confusion matrix:")
-print(confusion_matrix(np.argmax(y_test,axis=1), y_pred))
+cm=confusion_matrix(np.argmax(y_test,axis=1), y_pred)
+print(cm)
 

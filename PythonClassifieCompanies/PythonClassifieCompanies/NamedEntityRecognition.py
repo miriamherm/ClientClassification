@@ -18,15 +18,21 @@ from keras.models import Model, model_from_json
 from keras.utils import to_categorical, plot_model
 
 
+#first argument base directory for project
+#second argument pre trained embedding folder
+#third argument embeddings file
+#fourth argument embeddings dimension
 
-
-BASE_DIR = 'C:\\Users\\Miriam\\Documents\\MastersResearch\\DataScience\\'
+BASE_DIR = sys.argv[1]
 # directory containing glove encodings from Wikipedia (we can swap this out for another encoding later)
 # Download glove.6B.zip from https://nlp.stanford.edu/projects/glove/
-GLOVE_DIR = BASE_DIR + 'glove'
+GLOVE_DIR = BASE_DIR + sys.argv[2]
 TEXT_DATA_DIR = BASE_DIR + 'nerData'
 TEST_DATA_DIR = BASE_DIR + 'testNERData'
-PRED_DATA_DIR = BASE_DIR + 'CompanyClassifier'
+
+# Size of embeddings 
+embeddings_file= sys.argv[3]
+EMBEDDING_DIM = int(sys.argv[4])
 
 # number of words an entity is allowed to have
 # distribution of number of words in peoples names can be found in peopleNamesDisbn
@@ -72,34 +78,6 @@ def label_data(TEXT_DATA_DIR):
         f.close()
     return texts,labels_index,labels
 
-def return_column_list(url):
-    '''
-    download column to classify.
-    '''
-    frame = pd.read_csv(
-        url,
-        encoding='utf-8',
-        # sep='|', default , seperator
-        dtype=str,
-    )
-
-    # Return specific column
-   
-    return list(frame)
-
-def download_test_column(url,columnname):
-    '''
-    download column to classify.
-    '''
-    frame = pd.read_csv(
-        url,
-        encoding='utf-8',
-        # sep='|', default , seperator
-        dtype=str,
-    )
-
-    # Return specific column
-    return frame[columnname]
 
 # Total number of unique tokens in peoples names is 90K, including a lot of non-English names.  To remove those
 # we use an egregious hack to check if its UTF-8
@@ -107,24 +85,26 @@ def download_test_column(url,columnname):
 # Assuming no overlap between the two we get about 127K.  We may need to tweak this parameter as we go
 # but according to the Keras documentation, this can even be left unset
 MAX_NB_WORDS = 80000
-# Size of embeddings from Glove (we will try the 100 dimension encoding to start with)
-EMBEDDING_DIM = 100
+
 VALIDATION_SPLIT = 0.2
 
 # first, build index mapping words in the glove embeddings set
 # to their embedding vector.  This is a straightforward lookup of
 # words in Glove and then their embeddings which should be a 100 sized array of floats
 
-'''
+
 print('Reading word embeddings: Indexing word vectors.')
 
 embeddings_index = {}
-f = open(os.path.join(GLOVE_DIR, 'glove.6B.100d.txt'), encoding="utf8")
+f = open(os.path.join(GLOVE_DIR, embeddings_file), encoding="utf8")
 for line in f:
-    values = line.split()
-    word = values[0]
-    coefs = np.asarray(values[1:], dtype='float32')
-    embeddings_index[word] = coefs
+    try:
+        values = line.split()
+        word = values[0]
+        coefs = np.asarray(values[1:], dtype='float32')
+        embeddings_index[word] = coefs
+    except ValueError:
+        print ("Unable to embed line \n")
 f.close()
 
 print('Found %s word vectors.' % len(embeddings_index))
@@ -194,7 +174,7 @@ embedded_sequences = embedding_layer(sequence_input)
 x = Dense(128, activation='relu')(embedded_sequences)
 
 # don't understand why we need flatten here?
-# it may be for when there are multiple layers to the network
+# the labels are 2D, need to flatten them
 x = Flatten()(x)
 preds = Dense(len(labels_index), activation='softmax')(x)
 
@@ -208,101 +188,19 @@ model.fit(x_train, y_train,
           epochs=10,
           validation_data=(x_val, y_val))
 
+#serialize model to JSON
+model_json = model.to_json()
+with open("nermodel.json", "w") as json_file:
+    json_file.write(model_json)
+#serialize weights to HDF5
+model.save_weights("nermodel.h5")
+print("Saved model to disk")
+
 tokenizer_file = open('tokenizer.pkl', 'wb')
 
 # Pickle dictionary using protocol 0.
 pickle.dump(tokenizer, tokenizer_file)
 tokenizer_file.close()
-'''
-
-#test load from pickle from tokenizer
-json_file = open('nermodel.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-# load weights into new model
-loaded_model.load_weights("nermodel.h5")
-print("Loaded model from disk")
-
-loaded_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-tokenizer=None
-tokenizer_file = open('tokenizer.pkl', 'rb')
-tokenizer = pickle.load(tokenizer_file)
-
-texts,labels_index,labels= label_data(TEST_DATA_DIR)
-
-sequences = tokenizer.texts_to_sequences(texts)
-data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
-labels = to_categorical(np.asarray(labels))
-
-print('Shape of data tensor:', data.shape)
-print('Shape of label tensor:', labels.shape)
-
-x_test = data
-y_test = labels
-
-score= loaded_model.evaluate(x_test, y_test)
-print(score)
-score= loaded_model.predict(x_test, batch_size=167)
-#concatenate text list with prediction
-ls=np.asarray([w.replace('\n', '') for w in texts])
-data_score=np.concatenate((ls[:,None],score),axis=1)
-np.savetxt('model_predic.csv', data_score, fmt="%s", delimiter=',')   # X is an array
-
-
-'''
-def clean_column(column_data, column):
-    noblanks = column_data != ""
-    isEnglish= column_data.apply(is_english)
-    num_tokens= (column_data.str.strip().split(sequence_input=' ')<MAX_SEQUENCE_LENGTH) and  (column_data.str.strip().split(sequence_input=' ')>0)
-    column_data = column_data[noblanks]
-    return column_data.values.tolist()
-'''
-
-def clean_column(column_data, column):
-     a=column_data.as_matrix()
-     #insert numpy cleansing functions
-     #get rid of blanks and word sequences that are longer than MAX_SEQUENCE_LENGTH. 
-     #all upper case
-     return column_data
-df=None
-for name in sorted(os.listdir(PRED_DATA_DIR)):
-    if not name.endswith(".csv"):
-        continue
-    fpath = os.path.join(PRED_DATA_DIR, name)
-    if os.path.isdir(fpath):
-        continue
-    if sys.version_info < (3,):
-        f = open(fpath)
-    else:
-        column_list=return_column_list(fpath)
-        for column in column_list:
-            texts=[]
-            column_data=download_test_column(fpath, column)
-            #make sure column is not just numbers
-            if df is None:
-                df=pd.DataFrame(column_data)
-            else:
-                df[column]=column_data
-            texts=clean_column(column_data, column)
-            sequences = tokenizer.texts_to_sequences(texts)
-            data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
-            #dynamically generate batch_size based on column length
-            results= loaded_model.predict(data, batch_size=51, verbose=1) 
-            df[column+"_results"]=results[:,0]
-
-
-
-'''
- serialize model to JSON
-model_json = model.to_json()
-with open("nermodel.json", "w") as json_file:
-    json_file.write(model_json)
- serialize weights to HDF5
-model.save_weights("nermodel.h5")
-print("Saved model to disk")
-'''
 
 # later...
 
