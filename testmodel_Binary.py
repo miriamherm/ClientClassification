@@ -20,12 +20,13 @@ from sklearn.metrics import classification_report, confusion_matrix
 #first argument base directory for project
 #second argument model name folder, with subfolders with models for each of the data_types
 #third argument experiment #
-BASE_DIR = sys.argv[1]
+BASE_DIR = os.getcwd()
 TEST_DATA_DIR= os.path.join(BASE_DIR, "testNERdata")
-MODEL_DIR= BASE_DIR + "Models/"+ sys.argv[2]+"/"+ sys.argv[3]+ "/"
+MODEL_DIR= os.path.join(BASE_DIR, "Models/glove.6B.100d.txt/4/")
+
 MAX_SEQUENCE_LENGTH = 10
 
-data_types = ["names","companies", "address"] #
+data_types = ["names","companies", "address", "products"] #
 
 
 def factors(n):
@@ -48,17 +49,19 @@ def read_data(TEXT_DATA_DIR, name):
         f = open(fpath)
     else:
         f = open(fpath, encoding='latin-1')
-
     for t in f.readlines():
-        if not is_english(t):
-            continue
-        if (t.strip() == ''):
-            continue
-        num_tokens = len(t.strip().split(sep=' '))
-        if 0 < num_tokens < MAX_SEQUENCE_LENGTH:
-            texts.append(t)
+        process(texts, t)
     f.close()
     return texts
+
+def process(texts, t):
+    if not is_english(t):
+        return
+    if (t.strip() == ''):
+        return
+    num_tokens = len(t.strip().split(sep=' '))
+    if 0 < num_tokens < MAX_SEQUENCE_LENGTH:
+        texts.append(t)
 
 def load_model(model_dir, data_type):
 
@@ -79,20 +82,24 @@ def load_model(model_dir, data_type):
 
     return loaded_model, tokenizer
 
-preds = dict()
+def main():
+    preds = dict()
 
-for name in sorted(os.listdir(TEST_DATA_DIR)):
-    print("Loading data "+ name)
-    texts = read_data(TEST_DATA_DIR, name)
-    if not texts:
-        continue
-    for data_type in data_types:
-        loaded_model, tokenizer=load_model(MODEL_DIR+data_type+"/", data_type)
+    for name in sorted(os.listdir(TEST_DATA_DIR)):
+        print("Loading data "+ name)
+        texts = read_data(TEST_DATA_DIR, name)
+        if not texts:
+            continue
+        for data_type in data_types:
+            loaded_model, tokenizer=load_model(MODEL_DIR+data_type+"/", data_type)
 
-        sequences = tokenizer.texts_to_sequences(texts)
-        data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
-        preds[data_type] = loaded_model.predict(data)
+            sequences = tokenizer.texts_to_sequences(texts)
+            data = pad_sequences(sequences, maxlen=MAX_SEQUENCE_LENGTH)
+            preds[data_type] = loaded_model.predict(data)
 
-    for i in preds:
-        #np.savetxt("output.txt", preds[i], delimiter="\t")
-        print(i, np.average(preds[i][:,0]))
+        for i in preds:
+            #np.savetxt("output.txt", preds[i], delimiter="\t")
+            print(i, np.average(preds[i][:,0]))
+
+if __name__ == "__main__":
+    main()
