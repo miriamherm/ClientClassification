@@ -1,0 +1,1041 @@
+% This is "sig-alternate.tex" V2.1 April 2013
+% This file should be compiled with V2.5 of "sig-alternate.cls" May 2012
+%
+% This example file demonstrates the use of the 'sig-alternate.cls'
+% V2.5 LaTeX2e document class file. It is for those submitting
+% articles to ACM Conference Proceedings WHO DO NOT WISH TO
+% STRICTLY ADHERE TO THE SIGS (PUBS-BOARD-ENDORSED) STYLE.
+% The 'sig-alternate.cls' file will produce a similar-looking,
+% albeit, 'tighter' paper resulting in, invariably, fewer pages.
+%
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V2.5) produces:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) NO page numbers
+%
+% as against the acm_proc_article-sp.cls file which
+% DOES NOT produce 1) thru' 3) above.
+%
+% Using 'sig-alternate.cls' you have control, however, from within
+% the source .tex file, over both the CopyrightYear
+% (defaulted to 200X) and the ACM Copyright Data
+% (defaulted to X-XXXXX-XX-X/XX/XX).
+% e.g.
+% \CopyrightYear{2007} will cause 2007 to appear in the copyright line.
+% \crdata{0-12345-67-8/90/12} will cause 0-12345-67-8/90/12 to appear in the copyright line.
+%
+% ---------------------------------------------------------------------------------------------------------------
+% This .tex source is an example which *does* use
+% the .bib file (from which the .bbl file % is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission, you *NEED* to 'insert'
+% your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% ================= IF YOU HAVE QUESTIONS =======================
+% Questions regarding the SIGS styles, SIGS policies and
+% procedures, Conferences etc. should be sent to
+% Adrienne Griscti (griscti@acm.org)
+%
+% Technical questions _only_ to
+% Gerald Murray (murray@hq.acm.org)
+% ===============================================================
+%
+% For tracking purposes - this is V2.0 - May 2012
+
+\documentclass{sig-alternate-05-2015}
+
+
+\begin{document}
+
+% Copyright
+\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+
+% DOI
+%\doi{10.475/123_4}
+
+% ISBN
+%\isbn{123-4567-24-567/08/06}
+
+%Conference
+%\conferenceinfo{PLDI '13}{June 16--19, 2013, Seattle, WA, USA}
+
+%\acmPrice{\$15.00}
+
+%
+% --- Author Metadata here ---
+%\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
+%\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
+%\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
+% --- End of Author Metadata ---
+
+\title{Artificial Neural Networks Applied to Named Entity Recognition of Structured Data Sets }
+\subtitle{Master's Thesis, Submitted on 10/23/2017 }
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{1} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+Miriam Herman\\
+       \affaddr{Yeshiva University - Department of Mathematical Sciences}\\
+       \affaddr{215 Lexington Ave}\\
+       \affaddr{New York, NY}\\
+       \email{miriam.herman@mail.yu.edu}
+% 2nd. author
+%\alignauthor
+%G.K.M. Tobin\titlenote{The secretary disavows
+%any knowledge of this author's actions.}\\
+%       \affaddr{Institute for Clarity in Documentation}\\
+%       \affaddr{P.O. Box 1212}\\
+%       \affaddr{Dublin, Ohio 43017-6221}\\
+%       \email{webmaster@marysville-ohio.com}
+% 3rd. author
+%\alignauthor Lars Th{\o}rv{\"a}ld\titlenote{This author is the
+%one who did all the really hard work.}\\
+%       \affaddr{The Th{\o}rv{\"a}ld Group}\\
+%       \affaddr{1 Th{\o}rv{\"a}ld Circle}\\
+%       \affaddr{Hekla, Iceland}\\
+%       \email{larst@affiliation.org}
+%\and  % use '\and' if you need 'another row' of author names
+% 4th. author
+%\alignauthor Lawrence P. Leipuner\\
+%       \affaddr{Brookhaven Laboratories}\\
+%       \affaddr{Brookhaven National Lab}\\
+%       \affaddr{P.O. Box 5000}\\
+%       \email{lleipuner@researchlabs.org}
+% 5th. author
+%\alignauthor Sean Fogarty\\
+%       \affaddr{NASA Ames Research Center}\\
+%       \affaddr{Moffett Field}\\
+%       \affaddr{California 94035}\\
+%       \email{fogartys@amesres.org}
+% 6th. author
+%\alignauthor Charles Palmer\\
+%       \affaddr{Palmer Research Laboratories}\\
+%       \affaddr{8600 Datapoint Drive}\\
+%       \affaddr{San Antonio, Texas 78229}\\
+%       \email{cpalmer@prl.com}
+}
+% There's nothing stopping you putting the seventh, eighth, etc.
+% author on the opening page (as the 'third row') but we ask,
+% for aesthetic reasons that you place these 'additional authors'
+% in the \additional authors block, viz.
+%\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
+%email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
+%(The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
+%\date{30 July 1999}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+\begin{abstract}
+This paper demonstrates the utilization of Artificial Neural Networks (ANNs) to classify the contents of column data in structured data sets. Using 100 dimensional pre-trained word embeddings from GloVE, we demonstrate a significant improvement over the existing Stanford NLP, OpenNLP, and NLTK toolkits for the task of classifying names, organizations, and addresses. We also introduce a classifier for products. Our best model has 99.74 \% percent accuracy on unseen data. We used LIME to inspect the quality of our models.  Furthermore, for any given classifier, one of the problems is the comprehensiveness of negative examples, specifically, how to deal with the fact that negative examples for any classifier are actually an open set.  We demonstrate how we can use fine tuning techniques to change the model if it handles data incorrectly. 
+
+\end{abstract}
+
+%
+% The code below should be generated by the tool at
+% http://dl.acm.org/ccs.cfm
+% Please copy and paste the code instead of the example below. 
+%
+%\begin{CCSXML}
+%<ccs2012>
+% <concept>
+%  <concept_id>10010520.10010553.10010562</concept_id>
+%  <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+%  <concept_significance>500</concept_significance>
+% </concept>
+% <concept>
+ % <concept_id>10010520.10010575.10010755</concept_id>
+ % <concept_desc>Computer systems organization~Redundancy</concept_desc>
+%  <concept_significance>300</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010553.10010554</concept_id>
+%  <concept_desc>Computer systems organization~Robotics</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10003033.10003083.10003095</concept_id>
+%  <concept_desc>Networks~Network reliability</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+%</ccs2012>  
+%\end{CCSXML}
+
+%\ccsdesc[500]{Computer systems organization~Embedded systems}
+%\ccsdesc[300]{Computer systems organization~Redundancy}
+%\ccsdesc{Computer systems organization~Robotics}
+%\ccsdesc[100]{Networks~Network reliability}
+
+
+%
+% End generated code
+%
+
+%
+%  Use this command to print the description
+%
+%\printccsdesc
+
+% We no longer use \terms command
+%\terms{Theory}
+
+\keywords{Artifical Neural Networks;  ANN; Named Entity Recognition;NER; structured data}
+
+\section{Introduction}
+ According to a survey conducted by CrowdFlower, a platform for data scientists, ``data preparation accounts for about 51\% of the work of data scientists" and ``60 \% of data scientists view data preparation [collecting, labeling, cleaning, and organizing data] as the least enjoyable part of their work." \cite{CrowdFlower:report} The report also stated that 49 \% of a data scientists work involves structured data. It would therefore be extremely valuable to provide a rigorous method for tagging the contents of structured data sets to minimize the amount of time data scientists must spend on the tasks they enjoy the least. Semantically structuring the data is a useful first step to allow data scientists to search for useful data.
+ 
+There are several NLP models geared for named entity recognition of data.  However they all target unstructured data.  Our goal was to create a set of deep learning (ANN) models to classify structured data.  As a baseline, we compared the results of our state of the art ANN models to NLP models such as Stanford NLP, openNLP, and Python's NLTK toolkit to find a 99.7 \% accuracy improvement in the best case for Neural Networks and a 16\% improvement in the worst. Across all models, the average improvement is 75\% with the Neural Network model. Our source code and training sets can be found  at \url{https://github.com/miriamherm/ClientClassification}.
+
+\section{Data, Baselines, and Experiments}
+In this section I share details of the data collection, the results of the baseline classifiers with examples, and the architecture for a Neural Network that achieves near perfect accuracy on the test data set. I then show how to inspect the the Neural Networks I built to assess the quality of what was built, and then present a viable way to fine-tune the model when it makes errors.  
+
+\subsection{Data Collection and Cleansing}
+Data for training and testing was acquired from a variety of sources, with duplicates removed. The appendix contains a complete list of data sources used, with notes regarding file name, column name and any additional steps taken on the data.
+
+Once all the data was collected, the data was divided by type and compiled for each type into a single file. All duplicates were removed. The final count includes 723,553 unique addresses, 1,061,544 unique companies, 249,227 unique peoples names and 559,591 unique products. The data sets were then shuffled, and 20\% of each set was removed for testing purposes.
+
+We also generated a set of 250,000 names using a datafactory \cite{gibson:datafactory}  that utilizes US census information to create name data determined by name frequency. We perform tests and training on names data with and without the generated names.
+
+\subsection{Baselines}
+In order to assess the necessity of a Neural Network trained classifiers for structured data, three baseline measures were tested; Stanford NLP NER \cite{finkel:ner}, OpenNLP, and Python's NLTK package.
+
+We tested the models on address, company, and names data, using the following metric. A tag was labeled  correct if all words in a cell had the same label, and that label was correct, otherwise it was labeled incorrect. If the model allowed, we also show the metric for all words in a cell having at least once the correct label, and the rest "other." 
+
+The results of each model are below.  
+
+\subsubsection{Stanford NLP NER}
+We used the Stanford NLP NER tool \cite{finkel:ner} to classify addresses, organizations and people, but as right from the box it is only capable of classifying 7 specific types: Location, Person, Organization, Money, Percent, Date, Time, we did not use it to classify product data.
+
+Using the above first metric, we found the Stanford NLP could not classify addresses. It wasn't able to classify addresses because it classified items crucial to identifying addresses, such as street numbers and words like ``Rd" and ``Ave" as  ``Other". A typical example of classifier output is: 603/O HINMAN/PERSON RD/O where ``603" and ``RD" were labeled as ``Other" and ``FINMAN" labeled as ``PERSON".  For the 144,709 addresses in the test set, the model had 0\% accuracy, labeling only two addresses correctly. If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 9.28\% or 13,431 addresses labeled correctly. 
+
+We also found the Stanford NLP NER classifier had difficulty classifying organizations for a very similar reason; words crucial to an organization, such as ``Limited", are classified as ``Other". A typical example of the output for an organization cell is: ALASTAIR/PERSON WRAY/PERSON LIMITED/O. Since many companies are named after their founder, they are often confused for names. For the 212,307 companies in the test set, the model had 0.018 \% accuracy, labeling only 38 companies correctly.If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 8.95\% or 19,009 companies labeled correctly. 
+
+Since the Stanford NLP NER classifier does  not distinguish a single letter as a name, and because a lot of our name data consists of first and middle names listed with just an initial, the Stanford NLP NER struggled to classify people as well. A typical example of the output for a name is:I/O   SONI/PERSON, where the initial is labeled as ``Other". Of the 49,844 names in the test set, the model had 3.66 \% accuracy, labeling 1825 examples correctly. If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 52.73\% or 26,287 names labeled correctly. 
+
+When the Stanford NLP NER classifier was tested on the collected names data together with the datafactory generated names data, it performed significantly better, labeling 39.69\% or 35,634 out of 89,789 names correctly. (Missing 2486 generated names.) If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 71.89\% or 64,548 names labeled correctly. 
+
+
+Out of 406,860 examples, only 1865 or 0.5\% of examples were labeled correctly. 
+
+\begin{table*}
+\centering
+\caption{Stanford NLP Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|l|l|l|} \hline
+&Address&Company&Name&Product&Other & Mixed\\ \hline
+Address & 0.000 & 0.000& 0.000 & NA & .249 & .750 \\ \hline
+Company& 0.000 &0.000& .002& NA & .573 & .425 \\ \hline
+Name& 0.000 & 0.000& .037 & NA & .140& .824 \\ \hline
+Product & NA & NA& NA & NA & NA & NA \\
+\hline\end{tabular}
+\end{table*}
+
+\subsubsection{OpenNLP}
+We used the OpenNLP NER \cite{apache:openNLP} tool to classify addresses, organizations and people, but like StanfordNLP, it is only capable of classifying; Location, Person, Organization, Money, Percent, Date, Time right out of the box. We did not attempt to train it to classify product data.
+
+OpenNLP performed much better than Stanford NLP when classifying addresses because it seems to recognize certain words common to addresses, like ``Ave" and ``St". However, it does not recognize other crucial words, like ``Rd"s and misclassified most ``Rd"s as ``Organizations". Out of 144,709  addresses in the test set, OpenNLP classified 19.22\% or 27,818 examples correctly. 
+
+This model also performed much better than Stanford NLP when classifying companies, recognizing common company abbreviations like ``LTD" and ``CO" as part of an organization.  However, it failed to recognize common company words like ``Limited" and ``Agency". Out of 212,307 companies in the test set, OpenNLP classified 36.39\% or 77,265 examples correctly.
+
+When classifying names OpenNLP performed significantly  better than Stanford NLP because it classified full terms, and didn't classify names with initials if the last name was recognized strongly as a name.  A name like ``A G QUITO," with an uncommon last name, would have been misclassified as an organization and some names that were not formatted well were left unclassified, such as ``B HARRIS". Out of 49,844 names in the test set, OpenNLP classified 63.16\% or 31,483 examples correctly. 
+
+When the OpenNLP NER classifier was tested on the collected names data together with the datafactory generated names data, it performed slightly better, labeling 70.58\% or 63,374 out of 89,789 names correctly. 
+
+
+Out of 406,860 examples OpenNLP classified a total of 136,576 or 33.6\% examples correctly. 
+
+\begin{table*}
+\centering
+\caption{OpenNLP Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|l|l|} \hline
+&Address&Company&Name&Product& Unclassified & Mixed\\ \hline
+Address & .192 & .257& .040 & NA & .076 & .435 \\ \hline
+Company& .001 & .364& .003 & NA & .002 & .630 \\ \hline
+Name& .003& .012& .632 & NA & .061 & .292 \\ \hline
+Product & NA & NA& NA & NA & NA & NA \\
+\hline\end{tabular}
+\end{table*}
+
+\subsubsection{NLTK Classifer}
+We attempted to classify addresses, organizations and people using the Natural Language Toolkit (NLTK)\cite{python:NLTK} package in Python. The NLTK package can classify; Organization, Person, Location (for example Mount Everest), Date, Time, Money, Percent, Facility, GPE (Geo-political entities, like city, state/province, country). We used the toolkit straight from the box, using it to classify by Organization, Person, and GPE and did not attempt to train it to classify product data.
+
+NLTK performed much better than Stanford NLP when classifying addresses but worse than OpenNLP. It seems to recognize certain words common to addresses, like ``East" and ``Indian" but not the crucial words like ``st", ``rd", and ``ave". The NLTK classifier misclassified addresses as organizations, people, and other, but very rarely confused them with several mixed labels. Out of 144709  address in the test set, NLTK classified 2.61\% or 3,771 examples correctly. 
+
+This model performed much better than Stanford NLP and OpenNLP when classifying companies, recognizing common company abbreviations like "LTD" and "CO" as part of an organization. It is hard to understand why it classified some companies incorrectly. Out of 212,307 companies in the test set, NLTK classified 82.73\% or 175,631 examples correctly.
+
+When classifying names NLTK performed worse than Stanford NLP and OpenNLP, and it is unclear why. On occasion NLTK would correctly identify a name with initials as a person, and in other cases it would classify them as organizations, GPEs, or other. There does seem to be a correct trend of classifying names as "Person" if there is a first and middle initial, but this is not consistent. Out of 49,844 names in the test set, OpenNLP classified 3.46\% or 1727 examples correctly. 
+
+When the NLTK classifier was tested on the collected names data together with the datafactory generated names data, it performed  better, labeling 20.43\% or 18,346 out of 89,789 names correctly. 
+
+Out of 406,860 examples OpenNLP classified a total of 181,129 or 44.52\% examples correctly. (This increase in total accuracy is due to NLTK's proficiency at classifying companies.)
+
+\begin{table*}
+\centering
+\caption{NLTK Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|l|l|} \hline
+&Address&Company&Name&Product&Other & Mixed\\ \hline
+Address & .026 & .208& .312 & NA & .449 & .005 \\ \hline
+Company& .003 & .827& .005 & NA & .094 & .070 \\ \hline
+Name& .002 & .145& .035 & NA & .792 & .026 \\ \hline
+Product & NA & NA& NA & NA & NA & NA \\
+\hline\end{tabular}
+\end{table*}
+
+\subsection{Neural Network Training}
+A key component of building deep learning networks for NLP tasks is the use of embeddings for words derived from very large corpora.  These embeddings capture important distributional semantics of words (e.g. the word \textit{king} is related to \textit{queen}), and are crucial in learning to perform generic NLP tasks.  In my previous work, I conducted a thorough analysis of embeddings, including; Facebook fastText, word2vec, continuous bag of words dependency based embeddings, character embeddings from the one billion word corpus etc, and their relevance for the task of building deep learning classifiers.  For the classification task at hand, we learned that one of the best pre-trained embeddings for this task are the 100 dimensional GloVe word vectors. Our models therefore were trained using these embeddings.
+
+Our original intent in building the models was to perform a grid search for the parameters of our model. We began our tests with the simplest model and created binary models for each data type. Each model was a simple multilayered perceptron with an embedding layer, a single hidden layer of 128 nodes to extract features specific to the semantic type, was optimized with adam and trained with 10 epochs. The four models achieved 97\%-99\% accuracy. As this was huge improvement from all the previous baselines, and because no model will have 100\% accuracy, we did not see a need to fine tune the architecture further. 
+
+Our models were trained on 2,016,028 unique phrases containing 389,808 unique words. The max number of words in a phrase was decided to be 10, so our model was trained on 10 dimensional word vectors. If a phrase had fewer than 10 words, it's associated vector was padded with zeros. We trained two models, one  with the datafactory generated names and one without.  Both models were subsequently tested on our test set and on a generated business data set. The models generated probability predictions for the each type. The results are presented.
+
+\subsubsection{Test Set Results}
+We trained two models, one with generated names and one without, and when tested on the test set, for all the data types aside from names, the two models performed almost identically. For names, the model trained with the generated names performed 4\% better, from 94\% to 98\%, and therefore going forward in this paper we will train models on the generated names. The address classifier hovered around 99\%, the companies classifier around 98\% and the product classifier at 96\%. 
+
+
+\begin{table}
+\centering
+\caption{Dataset With Generated Names NN Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|} \hline
+&Address&Company&Name&Product \\ \hline
+Address & .997448 & .0017542 & .0003253 & .003252  \\ \hline
+Company& .00128143 & .987642& .002799 & .007761   \\ \hline
+Name& .0010614 & .008826 & .989925 & .01163\\ \hline
+Product & .00407549 & .0178114 & .006845 & .965432  \\
+\hline\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{Dataset With Collected Names NN Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|} \hline
+&Address&Company&Name&Product \\ \hline
+Address & .996454 & .001618 & .000358 & .00376  \\ \hline
+Company& .000656 & .987531& .002567 & .007580   \\ \hline
+Name& .006821 & .0619743 & .949441 & .0271665\\ \hline
+Product & .00291918 & .0184617& .0068049 & .965063  \\
+\hline\end{tabular}
+\end{table}
+
+\subsection{Business Set Results}
+In order to validate the accuracy of the above Neural Networks results, we tested the models on a business data set kept completely separate from the data collection process. The vanilla network performed well on names, companies, and obviously identified address parts, however it struggled to classify components of addresses such as cities or states without their street addresses and it frequently misclassified products. Dates were mislabeled as products 99\% of the time. Also, due to single letter initials in the names data, entries with single letter codes for semantically completely different constructs such as ``pay cycle" were classified as names 98\% of the time.  We show the results of the model on generated business data in the table below.
+\begin{table*}
+\centering
+\caption{Business Data Results}
+\begin{tabular}{|l|l|l|l|l|l|l|} \hline
+Col Name &Example& Vanilla NN & LSTM 1 Epoch & LSTM 5 Epoch \\ \hline
+Account Owner & Toni Gomez & Person - 0.998  & Person - 0.827 & Person - 0.999  \\ \hline
+Billing Address & Suite \# 10049 & Address- .999 & Companies-  .04 & Address - .69 \\ \hline
+Billing Contact & Allen Hardin& Person- .999 & Person-  .7897& Person-  .999\\ \hline
+Billing Email & jgoff@ma1l2u.org & Company - .826 & Company - .811& Company - .956\\ \hline
+City & Helena & Person - .429 & Company - .308 & Person .356  \\ \hline
+Conversion Date & Thu Apr 03 05:20:32 EDT 2014 &Product - .999 &Product - .999&Product - .998 \\ \hline
+Country & Slovakia & Product - .430  & Product - .430  & Product - .413 \\ \hline
+Custom Metrics & code,text,room & Product - .584& Product - .596 & Product - .564\\ \hline
+Org Name& Morgan Studios & Company - .864 & Company - .875 & Company - .877  \\ \hline
+Parent Name& 'Ringgold Cafe' & Company - .861 & Company - .832& Company - .852  \\ \hline
+Pay Cycle & 'Q','T' & Person - .982  & Person - .993& Person - .997 \\ \hline
+Pay Method & 'Invoice' & Product - .472& Product - .540 & Product - .542  \\ \hline
+po\_num & PO6793946273 & Company - .575  & Company - .459& Product - .397  \\ \hline
+State &  'in', 'so' & Product - .664& Product - .661& Product - .880  \\ \hline
+Street & 'Mcconnel' & Person - .501 & Person - .322 & Person - .456 \\ \hline
+Terms & 'Standard' & Product - .661 & Product - .670 & Product - .552 \\ \hline
+Valid From & Thu Jul 30 05:20:32 EDT 2013 & Product - .999 & Product - .999& Product - .999 \\ \hline
+Valid To & Sat Mar 15 05:20:32 EDT 2014 & Product - .999 & Product - .999 & Product - .998  \\ \hline
+\hline\end{tabular}
+\end{table*}
+
+
+We tried to address problems in the modeling in two ways:
+\begin{itemize}
+\item We used a tool called LIME to understand exactly what words the classifier was paying attention to.
+\item We tried to see if using other network architectures such as LSTM might help alleviate the problem.  The core idea behind LSTM is that it is used for capturing sequences of information.  An initial by itself is not likely to be a name but an initial embedded with a first name and a last name is likely to be that of a person.  
+\end{itemize}
+Each of these approaches is described below.
+
+\subsubsection{LIME - Explaining the Predictions}
+
+Machine learning algorithms and deep learning systems in particular are black box solutions, where input is fed to a model and a classification returned without explanation as to how the decision was made.  LIME, (which stands for Local Interpretable Model-Agnostic Explanations \cite{Ribeiro:Lime},  attempts to solve this problem by learning an interpretable model locally around the prediction to provide insights into exactly what the model might be doing.  Using LIME on a classifier, one can discern which words were most crucial to the classification process.  This sort of exercise is helpful in understanding whether the classifiers we built are actually useful or whether they picked up spurious correlations in the sample.
+
+We provided LIME with 100 words from each type and list below the top 6 results. A complete list results can be found in the appendix.
+
+As was hoped for an address classification model, Ave, Rd, and St are among the 6 most important words. For the company classifier we see words such as Limited and Property as one might expect, but surprisingly ACTUARIAL and CJH make the top of the list, possibly because we provided a very limited sample of 100 phrases to the model. We observed a similar effect for last names, and for Products, LIME provides some insight into why dates were being mislabeled as products as we describe in the next section.  Numbers and mixtures of numbers and letters, like "500" and "2B", carry a lot of weight in the classification of a product, which then explains the spurious results we saw with dates.
+
+\begin{table*}
+\centering
+\caption{LIME - Most Important Words}
+\begin{tabular}{|l|l|l|l|l|} \hline
+Data Type& 6 Important Words \\ \hline
+Address & Saddle, AVE, Rd, Suffield, MADISON, St  \\ \hline
+Company& LIMITED, PROPERTY, ACTUARIAL, CJH, PLAYING, WORLD  \\ \hline
+Name& SINGH, Frank, GALLIMORE, Harding, Bush, Remirez \\ \hline
+Product & 500, Coffee, Non-Stick, 2B, Wine, rigolo  \\
+\hline\end{tabular}
+\end{table*}
+
+\subsubsection{LSTM}
+We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 1 epoch. It took more than 10X longer to run the single epoch that the previous model took for 10 epochs. Testing it took significantly longer as well, and the results were not great.
+
+The model only classified 79\% of addresses correctly and 90\% of names correctly. Although it did show an improvement on the test set for Products, up 2\% to 98\%, it made the same mistakes on the business data set as the vanilla  network.
+
+In order to determine the effects of additional epochs on this problem, I trained a binary model for products using the LSTM architecture above, but for 5 epochs. The results are much better, and are described below.
+
+
+\begin{table}
+\centering
+\caption{LSTM 1 epoch - Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|} \hline
+&Address&Company&Name&Product \\ \hline
+Address & .79172 & .000653 & .000198 & .000914  \\ \hline
+Company& .00724 & .99316& .00173 & .00397   \\ \hline
+Name& .0562 & .0373 & .90744 & .023328\\ \hline
+Product & .05414 & .0092 & .004249 & .983564  \\
+\hline\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{LSTM 5 epochs - Confusion Matrix}
+\begin{tabular}{|l|l|l|l|l|} \hline
+&Address&Company&Name&Product \\ \hline
+Address & .998772 & .000653 & .000198 & .000594  \\ \hline
+Company& .000338 & .99354& .00206 & .00362   \\ \hline
+Name& .000678 & .00407 & .990576 & .00397\\ \hline
+Product & .001436 & .00768 & .00551 & .98511  \\
+\hline\end{tabular}
+\end{table}
+
+
+\subsection{Fine-Tuning }
+Our model performed quite well on the data types it had seen before, such as names and companies, but was confused by some new data types like dates. Instead of retraining the entire model with the new data types, we fine tune the model with  8487 dates of different formats.
+
+We fine-tune the model using Stochastic Gradient Descent. Freezing all layers except the topmost, we set the learning rate to 0.0001, decay to 1e-6 and momentum to 0.9 \cite{xu:finetun}. 
+
+We compile and train each model with the new optimizer on 50 epochs, using only  the negative examples. 
+
+\subsubsection{Vanilla Network}
+The runtime is less than a minute and accuracy on the product test set drops from 96.54\% to 92.29\% . However, the model initially classified dates as products with 89.20\% confidence, and after the fine tuning, that confidence drops to 4.40\%. 
+
+When we run the model on the business data set we find dates are classified as products with only 33.51\%-43.10\% confidence. We have achieved our goal, fine tuning the model to not mistake dates for products.  
+
+If we could improve the accuracy on the test set higher than 92.29\% that would be ideal.
+
+We lower the number of epochs in half, to 25, and find a 1\% improvement to 93.44\% accuracy on the test set, but that dates are classified as products in the business data with 74.60\%-79.41\% confidence. We lower the decay to 1e-4, as is written some examples, and the accuracy on the test set increases less than 1\% to 92.54\% to but dates are classified as products with 43.30-50.58\% accuracy. 
+
+There is a very clear tradeoff here between false positives and false negatives, and it appears that we need more rigorous methods to figure out a way to fine tune the weights of a model, which is clearly important for future work.
+
+\subsubsection{LSTM-1 epoch}
+We also tried to fine-tune the LSTM models, with the expectation that they may do better because of the fact that they have more contextual information from the input.  The runtime to perform the finetuning was close to 5 minutes and accuracy on the product test set barely dropped from 98.35\% to 98.23\% . However, the model initially classified dates as products with 86.35\% confidence, and after the fine tuning, that confidence barely dropped as well to 84.09\%. 
+
+\subsubsection{LSTM-5 epoch}
+The runtime to finetune was close to 10 minutes and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . However, the model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%.
+
+\subsection{Missing Words}
+
+Was the creation of classifiers with word embeddings a problem?  We tested this hypothesis.  For the 389917 unique tokens found by the tokenizer, a total of 145,573 words (37\%) were discluded from the embedding matrix; 8724 of 21,711 address words (40\%), 35985 of 252378 company words (14\%), 33669 of 66475  names words (51\%), and 67195 of 106293 product words (63\%).  About 6\% of the total number of texts.  
+
+Of the missing address words, the vast majority are numbers, including 981764 and 4615 and numbers with words like u52 and 569a. However LIME did list numbers very highly in its results for an addresses most important words. 
+
+Of the missing company words, the vast majority are non-English words, including kebabse, capitus, amav, and bevtex. Some words like limitmanagement were also discluded. Though it would seem most non-English words were excluded, LIME did list very unlikely words like CJF in its results for  most important words.
+
+Of the missing name words, every single one is an irregular name such as modrcin, repohl, and berdichevskaya.
+
+Of the missing product words, many are numbers, dimensions, or non English words like colgadores, however there are some description words like fisherman's and minilight that are being ignored that may be causing the product classification difficulty. 
+
+One might argue that word embeddings for type classification is actually useful because it focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words.  However, the dominance of odd words like CJF or 2B in the embeddings may have skewed the network.  A character embedding may be needed to resolve this problem.  This is again an issue to be resolved in future work. 
+
+\section{Conclusions}
+
+In conclusion we have shown the viability of Neural Networks for learning the contents of structured data sets, and have proven that this method is an improvement on the existing software. We have also presented a simple usable architecture for this task, as well as tools for fine-tuning a model with a small set of negative examples. The source code for this project can be found at \url{https://github.com/miriamherm/ClientClassification} along with our training and test datasets.
+
+%\end{document}  % This is where a 'short' article might terminate
+
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+I would like to acknowledge my advisor, Dr Kavitha Srinivas, for the time and dedication she spent making sure my project was the best it could be. As well I would like to thank the Yeshiva University Department of Mathematical Sciences for their rigorous program in mathematics. 
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+%\balancecolumns
+\appendix
+%Appendix A
+\section{Data Sources}
+
+\begin{table}
+\centering
+\caption{Data Sources}
+\begin{tabular}{|p{1.5cm}|c|c|p{3cm}|} \hline
+Source & Data Type&\# records &Notes\\ \hline
+openaddresses.io &Addresses & 707094 & Concatenated number and street from US Northeast\\ \hline
+sec.gov /rules/other/4-460list.htm &Companies & 951 & Removed headers\\ \hline
+qualityfrozen foods.com &Products & 5615 & Downloads\\ \hline
+crownprod.com/ &Products & 5615 & Downloads\\ \hline
+ikea.com &Products & 2765 & copied all products from site catalog \\ \hline
+product-open-data.com/ &Products & 551953 & GTIN table GTIN\_NM column  \\ \hline
+product-open-data.com/ &Companies & 4151 & brand table brand\_NM column  \\ \hline
+wordlab.com & Companies & 4924 & company-names-list Removed top 66 and bottom 33 rows \\ \hline
+wikipedia &Companies & 688 & List\_of\_common \_carrier\_freight \_railroads\_in \_the\_United\_States \\ \hline
+wikipedi &Companies & 1648 & List\_of\_companies \_of\_the\_United\_States\\ \hline
+wikipedia &Companies & 103 & List\_of\_department \_stores\_of\_the \_United\_States\\ \hline
+wikipedia &Companies & 112 & List\_of\_independent \_bookstores \_in\_the\_United\_States all listed with''in city"\\ \hline
+wikipedia &Companies & 404 & List\_of\_supermarket \_chains \_in\_the\_United\_States split on '(' and '-'\\ \hline
+wikipedia &Companies & 66 & List\_of\_United\_States \_clock\_companies\\ \hline
+wikipedia &Companies & 259 & List\_of\_United\_States \_insurance\_companies\\ \hline
+wikipedi &Companies & 502 & List\_of\_United\_States \_water\_companies\\ \hline
+census.gov & People & 5494 & 1990\_census\_namefiles Names generated with most common first names concatenated with most common last names\\ \hline
+data.gov &Companies & 1139 & Active\_Benefit \_Companies \- Business Name\\ \hline
+data.gov &People & 237260 & Civil\_List \-  Name\\ \hline
+data.gov &Companies & 4362 & Consumer\_Complaints \-Company\\ \hline
+data.gov & Products & 18 & Consumer\_Complaints \- Product\\ \hline
+data.gov & Addresses & 2112 & FOIL\_Report \- Trade\_Waste\_All \_Approved\_or\_Denied \- Mailing Office\\ \hline
+
+\hline\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{Data Sources part 2}
+\begin{tabular}{|p{1.5cm}|c|c|p{3cm}|} \hline
+Source & Data Type&\# records &Notes\\ \hline
+data.gov & Companies & 2151 & FOIL\_Report \- Trade\_Waste\_All \_Approved\_or\_Denied - Trade Name\\ \hline
+data.gov & Addresses & 369 & IDOL\_2013 \_Registered\_Owner \_Rides\.csv \- Address\\ \hline
+data.gov & Companies & 1100 & IDOL\_2013 \_Registered\_Owner \_Rides\.csv \- Ownername and Manufacturer \\ \hline
+data.gov & People & 367 & IDOL\_2013 \_Registered\_Owner \_Rides\.csv \- ContactName \\ \hline
+data.gov & Products & 1731 & IDOL\_2013 \_Registered\_Owner \_Rides\.csv \- Ridename \\ \hline
+data.gov & Companies & 1504 & Licensed \_Insurance \_Companies \- Company Name \\ \hline
+data.gov & Addresses & 488 & Lobbying \_Reporting \_System \_Maryland \_Registered \_Employers \_List \_\- Address \\ \hline
+data.gov & Companies & 444 & Lobbying \_Reporting \_System \_Maryland \_Registered \_Employers \_List \_\- Firm Name \\ \hline
+data.gov & People & 652 & Lobbying \_Reporting \_System \_Maryland \_Registered \_Employers \_List \_\- Concatenate( First Name, Middle Name, Last Name) \\ \hline
+data.gov & Companies & 184 & Lobbyist \_Activity \_Contacts \- Lobbyist Firm \\ \hline
+data.gov & Addresses & 270 & Lobbyist \_Activity \_Contacts\_\- Lobbyist \\ \hline
+data.gov & Addresses & 5031 & M\_WBE\_LBE \_and\_EBE \_Certified\_Business\_List\- Address1 \\ \hline
+data.gov & People & 5327 & M\_WBE\_LBE \_and\_EBE \_Certified\_Business\_List\- Contact\_Name \\ \hline
+data.gov & Companies & 5410 & M\_WBE\_LBE \_and\_EBE \_Certified\_Business\_List\- Vendor\_Formal \_Name \\ \hline
+data.gov & Addresses & 200 & Neighborhood \_and\_Rural \_Preservation \_Companies \_Directory\- Street Address \\ \hline
+
+\hline\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{Data Sources part 3}
+\begin{tabular}{|p{1.5cm}|c|c|p{3cm}|} \hline
+Source & Data Type&\# records &Notes\\ \hline
+data.gov & Companies & 205 & Neighborhood \_and\_Rural \_Preservation \_Companies \_Directory\- Organization Name \\ \hline
+data.gov & Products & 2306 & nsn \_extract \_4\-5\-18\- Common\_Name \\ \hline
+data.gov & Addresses & 7320 &Oregon \_Consumer \_Complaints \- Address 1 \\ \hline
+data.gov & Addresses & 1038 &Oregon \_Consumer \_Complaints \- Address 2\\ \hline
+data.gov & Companies & 9403 &Oregon \_Consumer 
+\_Complaints \- \\ \hline
+data.gov & Companies & 38 &OWEB \_Small \_Grant \_Teams \- Team\\ \hline
+data.gov & People & 38 &OWEB \_Small \_Grant \_Teams \- Team Contact\\ \hline
+data.gov & Companies & 1798 &Prequalified \_Firms \- Prequalified Vendor Name\\ \hline
+data.gov & Companies & 266 &SCA \_Disqualified \_Firms \- Vendor Name\\ \hline
+data.gov & Companies & 47 &Science \_Festival \_Company \_Sponsors \- Company Sponsor\\ \hline
+data.gov & Companies & 58 &Top \_50 \_Employers \_\- \_Hawaii \_County \- Name\\\hline
+data.gov & People & 54 & Top \_50 \_Employers \_\- \_Hawaii \_County \- Concatenate (Contact First Name, Contact Last Name)\\\\hline
+data.gov & Addresses & 135 &  Top \_Manufacturing \_Companies \_in \_SSMA \_Region \- Primary Address\\\hline
+data.gov & Companies & 202 &  Top \_Manufacturing \_Companies \_in \_SSMA \_Region \- Company Name and Ultimate Parent\\\hline
+data.gov & People & 233 &  Top \_Manufacturing \_Companies \_in \_SSMA \_Region \- First Name and Last Name\\\hline
+
+data.gov & Addresses & 71 &  Trade \_Waste \_Broker \_Registrants \- Address \\\hline
+data.gov & Companies & 71 &  Trade \_Waste \_Broker \_Registrants \- Account Name \\\hline
+DBpedia & Companies & 82838 & Column B\\\hline
+DBpedia & People & 200946 & \\\hline
+data.gov.uk & Companies & 1,045,333 & BasicCompanyData\\\hline
+\hline\end{tabular}
+\end{table}
+
+\section{LIME Full Results}
+\begin{table}
+\centering
+\caption{LIME Results - Addresses}
+\begin{tabular}{|l|} \hline
+100 words \\ \hline
+('Colony', 0.011473951103404855)			\\\hline
+('Rock', 0.0089593689938616706)			\\\hline
+('ST', -0.0088593440869146143)			\\\hline
+('472', -0.0087149165447808329)			\\\hline
+('Attawanhood', -0.0084193680321162229)			\\\hline
+('Trl', 0.0083109071638142514)			\\\hline
+('Crse', 0.0073590555140528148)			\\\hline
+('Ln', 0.0068177014744160123)			\\\hline
+('1173', 0.0067862905088006738)			\\\hline
+('St', 0.0066825214955059282)			\\\hline
+('Holcomb', 0.0066454675118291593)			\\\hline
+('MILFORD', 0.0065828182899055456)			\\\hline
+('Dr', 0.0062634731443634893)			\\\hline
+('Sharon', -0.0062604222173652593)			\\\hline
+('Three', 0.0060686596157848551)			\\\hline
+('70', 0.005944576885357245)			\\\hline
+('South', -0.0057737948566826316)			\\\hline
+('Cutlery', -0.0055069602681032583)			\\\hline
+('281', 0.0054479898148037725)			\\\hline
+('750', 0.0053575837734054482)			\\\hline
+('Fish', 0.0052517231180250834)			\\\hline
+('Ct', -0.005249845626465144)			\\\hline
+('Dziok', 0.005195532481860588)			\\\hline
+('MAIN', -0.0051827186689839761)			\\\hline
+('339', 0.0051711308051238377)			\\\hline
+('W', 0.0051267782330448094)			\\\hline
+('JARVIS', 0.0051169503896465887)			\\\hline
+('Long', 0.0051141868924031034)			\\\hline
+('Overlook', 0.0050983299215228445)			\\\hline
+('6', -0.0050572295784190825)			\\\hline
+('Mile', 0.0049800477202194141)			\\\hline
+('Pembroke', 0.004789621037759562)			\\\hline
+('1226', -0.0047872522310372541)			\\\hline
+('67', -0.0046897959503926622)			\\\hline
+('Colonial', -0.0046597142972620072)			\\\hline
+('Hill', -0.0045926377398190525)			\\\hline
+('71', 0.0045063251439902627)			\\\hline
+('Pendleton', 0.0044695469127539848)			\\\hline
+('280', -0.0044146549356582545)			\\\hline
+('24', -0.0043828796785156656)			\\\hline
+('59', -0.0043713162217085119)			\\\hline
+('Middle', 0.0043517852493370618)			\\\hline
+('Pape', 0.0042792432102687471)			\\\hline
+('308', -0.0042628445800114226)			\\\hline
+('50', -0.0041895565069510702)			\\\hline
+('School', 0.0041876186438888421)			\\\hline
+('ALYCE', 0.0041780174901895799)			\\\hline
+('Ford', -0.0041424826686335221)			\\\hline
+('Mayflower', 0.0041262396914725826)			\\\hline
+('2768', 0.004090286339501082)			\\\hline
+('US', -0.0040225689872512649)			\\\hline
+('AVE', 0.003969894901525879)			\\\hline
+('S', 0.0039338102123051459)			\\\hline
+('PRATT', -0.0039145983503342287)			\\\hline
+('259', 0.0039065843632802169)			\\\hline
+('S', 0.0038705685903864871)			\\\hline
+('High', -0.003864942088071649)			\\\hline
+('180', 0.0038492445991866468)			\\\hline
+('33', -0.0038243753658219843)			\\\hline
+('Willow', -0.0037921911871189738)			\\\hline
+('Gail', -0.0037642957560122398)			\\\hline
+('Porterbrook', 0.0037343963878524035)			\\\hline
+('150', 0.0037099380896738884)			\\\hline
+('Lakeside', 0.0036784420502833058)			\\\hline
+('Head', 0.0036616703009673783)			\\\hline
+('Land', 0.0035886181222156794)			\\\hline
+('Arrow', -0.003527077332686993)			\\\hline
+('Mountain', 0.0034743149416708884)			\\\hline
+('Rd', 0.0033216321445049043)			\\\hline
+('Wells', -0.0033192727316741439)			\\\hline
+('Farmington', -0.0031890192159536265)			\\\hline
+('Worthington', -0.0031638633683624116)			\\\hline
+('Wood', -0.0031612217063246148)			\\\hline
+('1505', 0.0031520395361399893)			\\\hline
+('80', -0.0030203794962196003)			\\\hline
+('Farm', -0.0029941068543401046)			\\\hline
+('CIRCLE', -0.0028786259553511022)			\\\hline
+('Beach', 0.0028246371143732319)			\\\hline
+('Tpke', -0.0027204438274248581)			\\\hline
+('TERR', -0.002715074879436093)			\\\hline
+('Langford', -0.0026955396185983182)			\\\hline
+('75', -0.0026469541740276525)			\\\hline
+('P.O.BOX', -0.0025882855374589901)			\\\hline
+('RD', 0.0025412948329680599)			\\\hline
+('River', -0.0025362414423635098)			\\\hline
+('89', -0.0025336525092620266)			\\\hline
+('30', -0.0025107459066266965)			\\\hline
+('329', -0.0024983032155716529)			\\\hline
+('Settlement', 0.0024250463893147898)			\\\hline
+('Weed', -0.002419795170162874)			\\\hline
+('26', -0.0023868050130499436)			\\\hline
+('WALNUT', -0.0023863253908911518)			\\\hline
+('73', -0.0021987873870489638)			\\\hline
+('Cook', -0.0021531165485411796)			\\\hline
+('Meredith', -0.0020533778470170324)			\\\hline
+('14', -0.0018424474278807507)			\\\hline
+('Flax', -0.0017715615269663385)			\\\hline
+('48', -0.0017622115634650941)			\\\hline
+('94', -0.0015277133441205879)			\\\hline
+('WHITE', -0.0014284530102881574)			\\\hline
+
+\hline\end{tabular}
+\end{table}
+\begin{table}
+\centering
+\caption{LIME Results - Companies}
+\begin{tabular}{|l|} \hline
+100 words \\ \hline
+('LIMITED', -0.63349013065099768)\\\hline
+('BOWKER', 0.085768448232139916)\\\hline
+('W', 0.085256963785598189)\\\hline
+('A', 0.077019693074941054)\\\hline
+('CROWTON', 0.063811590981113275)\\\hline
+('LIMITED.I.C.', 0.063226970014220785)\\\hline
+('BLUEBERRY', 0.047334262962764828)\\\hline
+('VISION', 0.041637078213711549)\\\hline
+('DIAMOND', -0.029686911972685942)\\\hline
+('EMPLOYMENT', -0.028821850833759433)\\\hline
+('SERVICES', -0.02675147127561733)\\\hline
+('CHARIOT', -0.026343271954209862)\\\hline
+('INNOVATIONS', 0.025761522824528798)\\\hline
+('PROPERTY', -0.025056847403916681)\\\hline
+('BOYLE', 0.024847613266834677)\\\hline
+('PLUMBING', 0.023818811932263484)\\\hline
+('CAPITAL', 0.023478350642488779)\\\hline
+('GOURMET', 0.023280027593238065)\\\hline
+('BURUNGA', 0.02179084173611746)\\\hline
+('CCI', -0.021382209983426478)\\\hline
+('PRIVATE', -0.021266271724758642)\\\hline
+('CHESHIRE', -0.020814664069936307)\\\hline
+('PRINT', -0.020803835364209447)\\\hline
+('ALAMORT', -0.020644670993146316)\\\hline
+('TRANS', 0.020573449048155883)\\\hline
+('TRANSPORT', -0.019689917035936574)\\\hline
+('PLUMBING,', -0.019673519729161787)\\\hline
+('GIFTS', -0.019247381076709064)\\\hline
+('MANAGEMENT', 0.019216652622711532)\\\hline
+('LIGHTINTHEBOX', -0.018814686020860959)\\\hline
+('ELECTRICAL', -0.01785203711354728)\\\hline
+('COST', -0.017054545513881091)\\\hline
+('ATOMIC', -0.01696395227116955)\\\hline
+('OUTSKIRTS', -0.016135831769840563)\\\hline
+('A.V.', -0.016044059045798663)\\\hline
+('ASSIST', -0.01598204180976778)\\\hline
+('AUTOMOTIVE', 0.015825302950403356)\\\hline
+('RUTLAND', -0.015682944856849682)\\\hline
+('APC', 0.015563790964872162)\\\hline
+('CORPORATE', 0.015507539580536888)\\\hline
+('PUBLISHING', 0.015501764794851217)\\\hline
+('VEHICLE', -0.01521185070585581)\\\hline
+('MITSUBISHI', 0.015166627019123965)\\\hline
+('COCHRANE', -0.01514414968313427)\\\hline
+('LIM', 0.015113258069838122)\\\hline
+('CEILINGS', 0.014986838982052032)\\\hline
+('CAVEAT', -0.014741092974705869)\\\hline
+('SHIRT', -0.014316302671818684)\\\hline
+('CELLWIZE', 0.014265175473772073)\\\hline
+('LTD', 0.014226032630922888)\\\hline
+('ALYASAMEEN', 0.014224222298585875)\\\hline
+('(2017)', -0.01417865195848435)\\\hline
+('ANDREI', -0.014154684427557516)\\\hline
+('CDCE', 0.014066137159655703)\\\hline
+('K', -0.013881831339935365)\\\hline
+('PARTNERS', 0.013782206091035566)\\\hline
+('LIMITEDMPANY', 0.013536027423489739)\\\hline
+('LEARNING', 0.01352363395115847)\\\hline
+('COVENTRYTED', -0.013435468891485898)\\\hline
+('LTD.', 0.013396475386249987)\\\hline
+('12', 0.013278325400936221)\\\hline
+('CARDPRIZE', -0.013085957788976444)\\\hline
+('DADDIES', 0.013035745507551596)\\\hline
+('LTD"', -0.01281774107701851)\\\hline
+('BUBBLE', -0.012725919749265787)\\\hline
+('CONSTRUCTION', -0.012699909713637415)\\\hline
+('CAR', 0.012564794891783504)\\\hline
+('ARTSPACESLTD', -0.012145364975982807)\\\hline
+('BRUNSWICK', 0.011962864236176209)\\\hline
+('P.', -0.011932563688370895)\\\hline
+('APJ', -0.011868965883454102)\\\hline
+('DEVELOPMENTS', -0.011811340904650171)\\\hline
+("D'AMICO", -0.011788191300219372)\\\hline
+('MUSIC', -0.0117761190798452)\\\hline
+('PIMPEC', -0.011736491029493507)\\\hline
+('DBA', -0.011669044298071285)\\\hline
+('MIDLANDS', 0.011661086813649033)\\\hline
+('COLRON', 0.011656571268037565)\\\hline
+('AGE', 0.011494734127881842)\\\hline
+('CLIVE', -0.011345752977641309)\\\hline
+('SITE', 0.011323800073455679)\\\hline
+('VERONICA', 0.01127953567447228)\\\hline
+('AUDIO', 0.011200096809111293)\\\hline
+('BODZIO', 0.010916039924463139)\\\hline
+('RECLAIM', 0.010886798446109758)\\\hline
+('ENGINEERS', 0.010872443291239913)\\\hline
+('AZK', -0.01074301721043534)\\\hline
+('COFFEE', 0.01072613918409023)\\\hline
+('"A2B', 0.010653370580137093)\\\hline
+('INC', -0.010263077183875428)\\\hline
+('COMPUTERS', 0.010130103810699025)\\\hline
+('VIATOR', 0.010051822178148885)\\\hline
+('COLBERRY', 0.010008599322361041)\\\hline
+('N', 0.0099214911098746729)\\\hline
+('CRAGFIT', 0.0095915665011525684)\\\hline
+('ANNE', 0.0095891016126281245)\\\hline
+('M', -0.0095262281832718624)\\\hline
+('MARKETING', 0.009320108060377974)\\\hline
+('RABICANO', 0.0093139853168189568)\\\hline
+('DELTA', 0.0081194713759227006)\\\hline
+
+\hline\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{LIME Results - Names}
+\begin{tabular}{|l|} \hline
+100 words \\ \hline
+('Megan', 0.0020859877331014854)\\\hline
+('MERCADO', 0.0020250263741921769)\\\hline
+('Hannah', 0.0019930725456540452)\\\hline
+('Kathleen', 0.001979090476057016)\\\hline
+('Juanita', -0.0019744115520613763)\\\hline
+('SAN', 0.001904837049135831)\\\hline
+('Mark', -0.0018448339205664032)\\\hline
+('Nathan', -0.0017945064864189162)\\\hline
+('Perkins', 0.0017878865465037453)\\\hline
+('BUCHANAN', 0.0017517594348443204)\\\hline
+('S', 0.0016787643173931241)\\\hline
+('Moss', 0.0016702165905126752)\\\hline
+('Shannon', -0.0016648960651855596)\\\hline
+('DRAYCOTT', -0.0016103413375417037)\\\hline
+('N', -0.0015932217856837851)\\\hline
+('GOMEZDELATORRE', 0.0015674730881019994)\\\hline
+('Tate', -0.0015607938369164806)\\\hline
+('Carolyn', 0.0015489686799778567)\\\hline
+('SANTIAGO', 0.0015378158818201404)\\\hline
+('H', 0.0015279213568687488)\\\hline
+('SANTANGELO', -0.001516661825864027)\\\hline
+('Morton', 0.0015151727001957659)\\\hline
+('Anita', -0.0014943811064093021)\\\hline
+('SCHILLING', 0.0014885028875234671)\\\hline
+('LARRY', -0.0014770034154076221)\\\hline
+('Heath', 0.0014724073394996673)\\\hline
+('Roger', -0.0014635410620008019)\\\hline
+('JIMENEZ', 0.0014430361931297168)\\\hline
+('Valenzuela', 0.0014348824833932696)\\\hline
+('A', 0.0014225054601604851)\\\hline
+('Arnold', 0.0014062961588791488)\\\hline
+('Paul', 0.0013903387391633749)\\\hline
+('Z', -0.0013879262361200986)\\\hline
+('R', 0.0013722776398363374)\\\hline
+('Edwards', -0.0013666751184415124)\\\hline
+('DEVITO-RODRIGUE', -0.0013575577856406141)\\\hline
+('SHARELL', 0.0013245257548944818)\\\hline
+('MAGRAS', -0.001315102130826329)\\\hline
+('GRULLON', -0.0013114917255550751)\\\hline
+('M', 0.0013008313889095752)\\\hline
+('E', -0.0012960629778131011)\\\hline
+('Herrera', 0.0012807023155936021)\\\hline
+('Hatfield', -0.0012728655119864842)\\\hline
+('JOSE', 0.0012579291472865938)\\\hline
+('GRULLON', -0.0012442560742293395)\\\hline
+('Guzman', -0.0012421304963356103)\\\hline
+('ISLA', -0.0011877015530645629)\\\hline
+('Donaldson', 0.0011866710733414714)\\\hline
+('CAMPBELL', -0.0011763569827931183)\\\hline
+('BONNER', 0.001171232333539194)\\\hline
+('BARNABY', 0.0011673858799001104)\\\hline
+('Theresa', -0.0011670397955275932)\\\hline
+('TAVERAS', 0.001166376836556538)\\\hline
+('SANTORO', 0.0011471322594295156)\\\hline
+('Kaufman', 0.0011353931875683026)\\\hline
+('LIMATO', -0.0011303816355485903)\\\hline
+('Derek', -0.0011286176368469525)\\\hline
+('HARGRAVES', 0.0011070245601237428)\\\hline
+('Cain', -0.0010901525656780155)\\\hline
+('Allison', -0.0010767208109246239)\\\hline
+('ANDERSON', -0.0010737612028428446)\\\hline
+('B', -0.0010572042718499158)\\\hline
+('Kathryn', 0.001053010009960439)\\\hline
+('Matthew', -0.0010439297154172847)\\\hline
+('J', -0.0010404575139248491)\\\hline
+('Marlene', 0.0010040435875653181)\\\hline
+('Allen', 0.0010026888506596162)\\\hline
+('Chase', -0.00099699021955446717)\\\hline
+('Barker', -0.00098477545191912323)\\\hline
+('Alice', -0.00097973869649372724)\\\hline
+('Baby', -0.00097642376282147995)\\\hline
+('D', -0.00092049071846337521)\\\hline
+('P', -0.00091318087785729281)\\\hline
+('Duffy', -0.00089691424835125206)\\\hline
+('L', -0.00087330076905062107)\\\hline
+('Hendrix', 0.00085676494824100664)\\\hline
+('WLADIS', -0.00084780884419382815)\\\hline
+('PEDROSA', -0.00082508782360140567)\\\hline
+('Oliver', 0.00081513611976707402)\\\hline
+('Jack', -0.00080299692764281688)\\\hline
+('Danny', 0.00076866022509179319)\\\hline
+('SHAH', 0.00075870789998360474)\\\hline
+('IBERN', -0.00075611046173506896)\\\hline
+('Mariah', 0.00075568519414857783)\\\hline
+('OLIVO', -0.00073905073832933126)\\\hline
+('Phillip', -0.00073739096680993364)\\\hline
+('Tommy', 0.00071614692856639595)\\\hline
+('RESTREPO', -0.00071081954974465845)\\\hline
+('Shannon', 0.0007058785198820782)\\\hline
+('Stephanie', 0.000642583920313274)\\\hline
+('HERSHBERGER', 0.00064101457315222422)\\\hline
+('FERONE', 0.00063473073907655019)\\\hline
+('Hurley', -0.00063406012091820263)\\\hline
+('Elizabeth', -0.0006323550955838861)\\\hline
+('Melendez', 0.00060608752365264886)\\\hline
+('BARGLOWSKA', -0.00054918115755219475)\\\hline
+('EDKINS', 0.0005455871970456227)\\\hline
+('T', 0.00054222060118458621)\\\hline
+('Love', -0.00047300884099280168)\\\hline
+('Clayton', 0.00045190603421496389)\\\hline
+\hline\end{tabular}
+\end{table}
+
+\begin{table}
+\centering
+\caption{LIME Results - Products}
+\begin{tabular}{|l|} \hline
+100 words \\ \hline
+('Protector', -2.6256731385071901e-06)\\\hline
+('Ramps', -2.3891930611410793e-06)\\\hline
+('Linen', -2.3436619972902771e-06)\\\hline
+('90', -2.1822042687207914e-06)\\\hline
+('Diced', -2.1095900325115041e-06)\\\hline
+('All', -2.0906144044229118e-06)\\\hline
+('60', -2.0875366521500831e-06)\\\hline
+('Double-sided', -2.0660697678161833e-06)\\\hline
+('C', -2.0519284562773661e-06)\\\hline
+('Lemon', -1.9946896081845479e-06)\\\hline
+('Oil', -1.9325735219645206e-06)\\\hline
+('Close-up', -1.9271269704153383e-06)\\\hline
+('Sugar', -1.9179601088354763e-06)\\\hline
+('MELHORAL', -1.8979716223716453e-06)\\\hline
+('Hair', -1.8921892830713871e-06)\\\hline
+('120', -1.8880829607139037e-06)\\\hline
+('Dining', 1.8877568586110512e-06)\\\hline
+('LECHE', -1.8767255359194773e-06)\\\hline
+('Definition', -1.869100759258901e-06)\\\hline
+('Xylitol', -1.8610120962086523e-06)\\\hline
+('Tomatoes', -1.8416359579577202e-06)\\\hline
+('"Tablets', -1.8281706632805249e-06)\\\hline
+('Chewing', -1.8230891540283091e-06)\\\hline
+('Lung', -1.8074822485009271e-06)\\\hline
+('Detoxitech', 1.8062111028529713e-06)\\\hline
+('Soft', -1.7804751654310493e-06)\\\hline
+('Squeaksters', 1.7401255137497323e-06)\\\hline
+('Butter', -1.739962185491471e-06)\\\hline
+('Achari', -1.7387419284086943e-06)\\\hline
+('Core', -1.7290335400193742e-06)\\\hline
+('STYLE', -1.7044688391325595e-06)\\\hline
+('Back', -1.7030634397438147e-06)\\\hline
+('Predator', -1.6880776452748697e-06)\\\hline
+('TB', -1.6848665630139052e-06)\\\hline
+('Chelator', -1.6518442496193498e-06)\\\hline
+('vcaps', 1.6465199109375219e-06)\\\hline
+('L', -1.6387403257462667e-06)\\\hline
+('200-RIZOS', -1.6090654576430883e-06)\\\hline
+('Enema', -1.5974708730980886e-06)\\\hline
+('Tablets', -1.5902977283374838e-06)\\\hline
+('Just', 1.588204272712646e-06)\\\hline
+('Elite', -1.5335638564684069e-06)\\\hline
+('1x10', -1.5145173169796078e-06)\\\hline
+('Height', -1.4925871373063442e-06)\\\hline
+('Cooking', -1.4901305224565788e-06)\\\hline
+('(Set', -1.4823013966042235e-06)\\\hline
+('Tabs', -1.476077267303884e-06)\\\hline
+('Amish', 1.4752362136062863e-06)\\\hline
+('Pea', -1.4722668845971375e-06)\\\hline
+('5', -1.4665139192096464e-06)\\\hline
+('100', -1.4640129945103964e-06)\\\hline
+('Peach', -1.4526914768189861e-06)\\\hline
+('Lime', -1.450068051045915e-06)\\\hline
+('Moxie', -1.4288992773748449e-06)\\\hline
+('0.2-0.5\%', -1.4191096791622887e-06)\\\hline
+('Sunblock', -1.4177367457820354e-06)\\\hline
+('CLARA', 1.4069510240662509e-06)\\\hline
+('PHILIPS', 1.4042306274615911e-06)\\\hline
+('Vegetarian', -1.3929175179679644e-06)\\\hline
+('German', 1.3767813528298174e-06)\\\hline
+('3', -1.3763715193717075e-06)\\\hline
+('Exceptional', -1.3734769604219943e-06)\\\hline
+('And', 1.3669455406460257e-06)\\\hline
+('Margarita', -1.359951026740795e-06)\\\hline
+('de', -1.3587517644007717e-06)\\\hline
+('candle', -1.3557198009088583e-06)\\\hline
+('Mesh', -1.343309094427119e-06)\\\hline
+('Game', -1.2974261153885734e-06)\\\hline
+('gevrey', -1.2967931013186837e-06)\\\hline
+('Set', -1.2930235061471416e-06)\\\hline
+('Company', -1.2702066701276919e-06)\\\hline
+('With', -1.2600445682397555e-06)\\\hline
+('King-size', -1.2579524583158708e-06)\\\hline
+('Tonic', -1.2477854655096949e-06)\\\hline
+('Mix', -1.236308831489104e-06)\\\hline
+('SOLAR', -1.2008742577073988e-06)\\\hline
+('Style', -1.1949076969395926e-06)\\\hline
+('Balancing', -1.1895504550842334e-06)\\\hline
+('Gel', -1.1847598428074099e-06)\\\hline
+('5pcs', -1.1688672416422164e-06)\\\hline
+('Up', 1.1287450929999031e-06)\\\hline
+('06', -1.0258863095484146e-06)\\\hline
+('2', 8.2519284939639115e-07)\\\hline
+('LAMP', 7.5539964975550151e-07)\\\hline
+('Great', 7.3858458513431401e-07)\\\hline
+('Caplets', 7.1571621909023754e-07)\\\hline
+('piece', 6.9778274573269864e-07)\\\hline
+('Traditional', 6.7338281909254261e-07)\\\hline
+('mg,', 6.4891759798861803e-07)\\\hline
+('De', 6.3313836372461049e-07)\\\hline
+('Eye', 6.3134619411807593e-07)\\\hline
+('Tv', 6.0705314781305259e-07)\\\hline
+('Focus', 6.0051452422139066e-07)\\\hline
+('10X1UN', 5.8422228639365285e-07)\\\hline
+('Normal', 4.7739378080513686e-07)\\\hline
+('Assorted', 4.7255056508412135e-07)\\\hline
+('Series', 4.5769601315060888e-07)\\\hline
+('Metal', 3.3426722865088335e-07)\\\hline
+('Waterlily', 3.1612327160284638e-07)\\\hline
+\hline\end{tabular}
+\end{table}
+
+\end{document}
