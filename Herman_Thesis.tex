@@ -176,7 +176,7 @@ Miriam Herman\\
 
 \maketitle
 \begin{abstract}
-This paper demonstrates the utilization of Artificial Neural Networks (ANNs) to classify the contents of column data in structured data sets. Using 100 dimensional pre-trained word embeddings from GloVe, we demonstrate a significant improvement over the existing Stanford NLP, OpenNLP, and NLTK toolkits for the task of classifying names, organizations, and addresses. We also introduce a classifier for products. Our best model has 99.74 \% percent accuracy on unseen data. We used LIME to inspect the quality of our models.  Furthermore, for any given classifier, one of the problems is the comprehensiveness of negative examples, specifically, how to deal with the fact that negative examples for any classifier are actually an open set.  We demonstrate how we can use fine tuning techniques to change the model if it handles data incorrectly. 
+This paper demonstrates the utilization of Artificial Neural Networks (ANNs) to classify the contents of columnar data in structured data sets. Using a simple ANN with Glove embeddings, we demonstrated a significant improvement over the existing Stanford NLP, OpenNLP, and NLTK toolkits for the task of classifying names, organizations, and addresses. One of the challenges of creating these sort of classifiers is the problem of explainability.  We used LIME to inspect the quality of our models to examine if they were paying attention to the right features.  Furthermore, there is the additional issue of how to deal with the fact that negative examples for any classifier constitute an open set, and hence, false positives are a serious problem with these classifiers.  We provide an initial demonstration of how we can use fine tuning techniques to change the model if it handles data incorrectly. 
 
 \end{abstract}
 
@@ -231,40 +231,46 @@ This paper demonstrates the utilization of Artificial Neural Networks (ANNs) to 
 \keywords{Artifical Neural Networks;  ANN; Named Entity Recognition;NER; structured data}
 
 \section{Introduction}
- According to a survey conducted by CrowdFlower, a platform for data scientists, ``data preparation accounts for about 51\% of the work of data scientists" and ``60 \% of data scientists view data preparation [collecting, labeling, cleaning, and organizing data] as the least enjoyable part of their work." \cite{CrowdFlower:report} The report also stated that 49 \% of a data scientists work involves structured data. It would therefore be extremely valuable to provide a rigorous method for tagging the contents of structured data sets to minimize the amount of time data scientists must spend on the tasks they enjoy the least. Semantically structuring the data is a useful first step to allow data scientists to search for useful data.
+ According to a survey conducted by CrowdFlower, a platform for data scientists, ``data preparation accounts for about 51\% of the work of data scientists" and ``60\% of data scientists view data preparation [collecting, labeling, cleaning, and organizing data] as the least enjoyable part of their work." \cite{CrowdFlower:report} The report also stated that 49\% of a data scientists work involves structured data. It would therefore be extremely valuable to provide a rigorous method for semantically tagging the contents of structured data sets to minimize the amount of time data scientists must spend on the tasks they enjoy the least. Semantically structuring the data is therefore an important first step to allow data scientists to search for useful data, merge data etc.
  
-There are several NLP models geared for named entity recognition of data.  However they all target unstructured data.  Our goal was to create a set of deep learning (ANN) models to classify structured data.  As a baseline, we compared the results of our state of the art ANN models to NLP models such as Stanford NLP, openNLP, and Python's NLTK toolkit to find a 99.7 \% accuracy improvement in the best case for Neural Networks and a 16\% improvement in the worst. Across all models, the average improvement is 75\% with the Neural Network model. Our source code and training sets can be found  at \url{https://github.com/miriamherm/ClientClassification}.
+One mechanism to tag columns semantically involves recognizing the semantic types of entities in a given column.  If a column contains entities that are all addresses for instance, it may help the user to find locational data even if the column name were not recognizable as an address.  In natural language processing (NLP), the task of extracting semantic types for corresponding words in a sentence is called named entity recognition (NER).  There are several NLP models geared for named entity recognition of data.  Could we re-use these models to extract columnar types?
+
+There is a significant problem in applying NLP models for named entity recognition on structured data because they have all been trained on unstructured data.  The context they use for named entity recognition is therefore significantly different from structured data, which often contains little or no clues for classification of an entity.  Our suspicion was that these models would not transfer to well on unstructured datasets because of this fact.
+
+Our goal therefore was to create a set of named entity recognizers uniquely geared towards classifying structured data.  We decided to create models using deep learning networks primarily because there are now many language models in deep learning that can be leveraged to build better named entity recognition (e.g., word embeddings that capture the distributional semantics of words from massive corpora).  As a baseline, we compared the results of our ANN models to NLP models such as Stanford NLP, openNLP, and Python's NLTK toolkit to find a 99.7\% accuracy improvement in the best case for Neural Networks and a 16\% improvement in the worst.  Compared with all the NLP models, the average improvement was 75\% with our Neural Network model. Our source code and training sets can be found  at \url{https://github.com/miriamherm/ClientClassification}.
+
+Having built the models, we used state of the art techniques to convince ourselves of the validity of the models.  We used LIME \cite{Ribeiro:Lime}, a tool to inspect what features the classifier was paying attention to.  In our example these would be the specific words in the entity that caused the classifier to choose a specific class.  We also demonstrate how any classifier is always prone to false positives, mainly because the negative examples for a specific class is really an open set.  Given that a classifier can never be perfect, the next question is how do we effectively tune the classifier when it produces false positives.  We provide a very initial set of studies around this problem.
 
 \section{Data, Baselines, and Experiments}
-In this section I share details of the data collection, the results of the baseline classifiers with examples, and the architecture for a Neural Network that achieves near perfect accuracy on the test data set. I then show how to inspect the the Neural Networks I built to assess the quality of what was built, and then present a viable way to fine-tune the model when it makes errors.  
+In this section, we describe the datasets we used for training and test, as well as the results of the baseline classifiers with examples.  We also describe the architecture for a Neural Network that achieves near perfect accuracy on the test data set. We then show how to inspect the Neural Networks to assess the quality of what was built, and then present a viable way to fine-tune the model when it makes errors.  
 
 \subsection{Data Collection and Cleansing}
 Data for training and testing was acquired from a variety of sources, with duplicates removed. The appendix contains a complete list of data sources used, with notes regarding file name, column name and any additional steps taken on the data.
 
-Once all the data was collected, the data was divided by type and compiled for each type into a single file. All duplicates were removed. The final count includes 723,553 unique addresses, 1,061,544 unique companies, 249,227 unique peoples names and 559,591 unique products. The data sets were then shuffled, and 20\% of each set was removed for testing purposes.
+Once all the data was collected, the data was divided by type and compiled for each type into a single file. The final count includes 723,553 unique addresses, 1,061,544 unique companies, 249,227 unique peoples names and 559,591 unique products. The data sets were then shuffled, and 20\% of each set was split for testing purposes.
 
 We also generated a set of 250,000 names using a datafactory \cite{gibson:datafactory}  that utilizes US census information to create name data determined by name frequency. We performed tests and training on names data with and without the generated names.
 
 \subsection{Baselines}
 In order to assess the necessity of a Neural Network trained classifiers for structured data, three baseline measures were tested; Stanford NLP NER \cite{finkel:ner}, OpenNLP, and Python's NLTK package.
 
-We tested the models on address, company, and names data, using the following metric. A tag was labeled  correct if all words in a cell had the same label, and that label was correct, otherwise it was labeled incorrect. If the model allowed, we also show the metric for all words in a cell having at least once the correct label, and the rest "other." 
+We tested the models on address, company, and names data, using the following metric. A tag was labeled  correct if all words in a cell had the same label, and that label was correct, otherwise it was labeled incorrect. If the model allowed, we also show the metric for all words in a cell having at least once the correct label, and the rest ``other." 
 
 The results of each model are below.  
 
 \subsubsection{Stanford NLP NER}
-We used the Stanford NLP NER tool \cite{finkel:ner} to classify addresses, organizations and people, but as right from the box it is only capable of classifying 7 specific types: Location, Person, Organization, Money, Percent, Date, Time, we did not use it to classify product data.
+We used the Stanford NLP NER tool \cite{finkel:ner} to classify addresses, organizations and people, but because it ships with models for 7 specific types: Location, Person, Organization, Money, Percent, Date, Time, we did not use it to classify product data.  
 
-Using the above first metric, we found that Stanford NLP could not classify addresses. It wasn't able to because it classified items crucial to identifying addresses, such as street numbers and words like ``Rd" and ``Ave" as  ``Other". A typical example of classifier output is: 603/O HINMAN/PERSON RD/O where ``603" and ``RD" were labeled as ``Other" and ``FINMAN" labeled as ``PERSON".  For the 144,709 addresses in the test set, the model had 0\% accuracy, labeling only two addresses correctly. If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 9.28\% or 13,431 addresses labeled correctly. 
+Using the above first metric, we found that Stanford NLP could not classify addresses. It classified items crucial to identifying addresses, such as street numbers and words like ``Rd" and ``Ave" as  ``Other". A typical example of classifier output is: 603/O HINMAN/PERSON RD/O where ``603" and ``RD" were labeled as ``Other" and ``FINMAN" labeled as ``PERSON".  For the 144,709 addresses in the test set, the model had 0\% accuracy, labeling only two addresses correctly. If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 9.28\% or 13,431 addresses labeled correctly. 
 
-We also found the Stanford NLP NER classifier had difficulty classifying organizations for a very similar reason; words crucial to an organization, such as ``Limited", are classified as ``Other". A typical example of the output for an organization cell is: ALASTAIR/PERSON WRAY/PERSON LIMITED/O. Since many companies are named after their founder, they are often confused for names. For the 212,307 companies in the test set, the model had 0.018 \% accuracy, labeling only 38 companies correctly.If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 8.95\% or 19,009 companies labeled correctly. 
+The classifier also had difficulty classifying organizations for a very similar reason; words crucial to an organization, such as ``Limited", are classified as ``Other". A typical example of the output for an organization cell is: ALASTAIR/PERSON WRAY/PERSON LIMITED/O. Since many companies are named after their founder, they are often confused for names. For the 212,307 companies in the test set, the model had 0.018\% accuracy, labeling only 38 companies correctly.  If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 8.95\% or 19,009 companies labeled correctly. 
 
-Since the Stanford NLP NER classifier does  not distinguish a single letter as a name, and because a lot of our name data consists of first and middle names listed with just an initial, the Stanford NLP NER struggled to classify people as well. A typical example of the output for a name is:I/O   SONI/PERSON, where the initial is labeled as ``Other". Of the 49,844 names in the test set, the model had 3.66 \% accuracy, labeling 1825 examples correctly. If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 52.73\% or 26,287 names labeled correctly. 
+Since the Stanford NLP NER classifier does  not distinguish a single letter as a name, and because a lot of our name data consists of first and middle names listed with an initial, it struggled to classify people as well. A typical example of the output for a name is:I/O   SONI/PERSON, where the initial is labeled as ``Other". Of the 49,844 names in the test set, the model had 3.66\% accuracy, labeling 1825 examples correctly. If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 52.73\% or 26,287 names labeled correctly. 
 
 When the Stanford NLP NER classifier was tested on the collected names data together with the datafactory generated names data, it performed significantly better, labeling 39.69\% or 35,634 out of 89,789 names correctly. (Missing 2486 generated names.) If we consider the metric of accuracy to be ``correct label" and ``other" the accuracy on this set increases to 71.89\% or 64,548 names labeled correctly. 
 
 
-Out of 406,860 examples, only 1865 or 0.5\% of examples were labeled correctly. The results can be found in table \ref{table:stanford}
+Out of 406,860 examples, only 1865 or 0.5\% of examples were labeled correctly. The results can be found in Table \ref{table:stanford}.
 
 \begin{table*}
 \centering
@@ -290,7 +296,7 @@ When classifying names OpenNLP performed significantly  better than Stanford NLP
 When the OpenNLP NER classifier was tested on the collected names data together with the datafactory generated names data, it performed slightly better, labeling 70.58\% or 63,374 out of 89,789 names correctly. 
 
 
-Out of 406,860 examples OpenNLP classified a total of 136,576 or 33.6\% examples correctly. The results can be found in table \ref{table:open}
+Out of 406,860 examples OpenNLP classified a total of 136,576 or 33.6\% examples correctly. The results can be found in Table \ref{table:open}.
 
 \begin{table*}
 \centering
@@ -305,17 +311,17 @@ Product & NA & NA& NA & NA & NA & NA \\
 \end{table*}
 
 \subsubsection{NLTK Classifer}
-We attempted to classify addresses, organizations and people using the Natural Language Toolkit (NLTK)\cite{python:NLTK} package in Python. The NLTK package can classify: Organization, Person, Location (for example Mount Everest), Date, Time, Money, Percent, Facility, GPE (Geo-political entities, like city, state/province, country). We used the toolkit straight from the box, using it to classify by Organization, Person, and GPE and did not attempt to train it to classify product data.
+We attempted to classify addresses, organizations and people using the Natural Language Toolkit (NLTK)\cite{python:NLTK} package in Python. The NLTK package can classify: Organization, Person, Location (for example Mount Everest), Date, Time, Money, Percent, Facility, GPE (Geo-political entities, like city, state/province, country). As before we did not attempt to train it to classify product data.
 
 NLTK performed much better than Stanford NLP when classifying addresses but worse than OpenNLP. It seems to recognize certain words common to addresses, like ``East" and ``Indian" but not the crucial words like ``st", ``rd", and ``ave". The NLTK classifier misclassified addresses as organizations, people, and other, but very rarely confused them with several mixed labels. Out of 144709  address in the test set, NLTK classified 2.61\% or 3,771 examples correctly. 
 
-This model performed much better than Stanford NLP and OpenNLP when classifying companies, recognizing common company abbreviations like "LTD" and "CO" as part of an organization. It is hard to understand why it classified some companies incorrectly. Out of 212,307 companies in the test set, NLTK classified 82.73\% or 175,631 examples correctly.
+This model performed much better than Stanford NLP and OpenNLP when classifying companies, recognizing common company abbreviations like "LTD" and "CO" as part of an organization. Out of 212,307 companies in the test set, NLTK classified 82.73\% or 175,631 examples correctly.
 
 When classifying names NLTK performed worse than Stanford NLP and OpenNLP, and it is unclear why. On occasion NLTK would correctly identify a name with initials as a person, and in other cases it would classify them as organizations, GPEs, or other. There does seem to be a correct trend of classifying names as "Person" if there is a first and middle initial, but this is not consistent. Out of 49,844 names in the test set, OpenNLP classified 3.46\% or 1727 examples correctly. 
 
 When the NLTK classifier was tested on the collected names data together with the datafactory generated names data, it performed  better, labeling 20.43\% or 18,346 out of 89,789 names correctly. 
 
-Out of 406,860 examples OpenNLP classified a total of 181,129 or 44.52\% examples correctly. (This increase in total accuracy is due to NLTK's proficiency at classifying companies.) The results can be found in table \ref{table:nltk}
+Out of 406,860 examples OpenNLP classified a total of 181,129 or 44.52\% examples correctly. (This increase in total accuracy is due to NLTK's proficiency at classifying companies.) The results can be found in Table \ref{table:nltk}.
 
 \begin{table*}
 \centering
@@ -330,14 +336,14 @@ Product & NA & NA& NA & NA & NA & NA \\
 \end{table*}
 
 \subsection{Neural Network Training}
-A key component of building deep learning networks for NLP tasks is the use of embeddings for words derived from very large corpora.  These embeddings capture important distributional semantics of words (e.g. the word \textit{king} is related to \textit{queen}), and are crucial in learning to perform generic NLP tasks.  In my previous work, I conducted a thorough analysis of embeddings, including; Facebook fastText, word2vec, continuous bag of words dependency based embeddings, character embeddings from the one billion word corpus etc, and their relevance for the task of building deep learning classifiers.  For the classification task at hand, we learned that one of the best pre-trained embeddings for this task are the 100 dimensional GloVe word vectors. Our models therefore were trained using these embeddings.
+A key component of building deep learning networks for NLP tasks is the use of embeddings for words derived from very large corpora.  These embeddings capture important distributional semantics of words (e.g. the word \textit{king} is related to \textit{queen}), and are crucial in learning to perform generic NLP tasks.  In previous work, we conducted a thorough analysis of embeddings, including; Facebook fastText, word2vec, continuous bag of words dependency based embeddings, character embeddings from the one billion word corpus etc, and their relevance for the task of building deep learning classifiers.  For the classification task at hand, we learned that one of the best pre-trained embeddings for this task are the 100 dimensional GloVe word vectors. Our models therefore were trained using these embeddings.
 
-Our original intent in building the models was to perform a grid search for the parameters of our model. We began our tests with the simplest model and created binary models for each data type. Each model was a simple multilayered perceptron with an embedding layer, a single hidden layer of 128 nodes to extract features specific to the semantic type, was optimized with adam and trained with 10 epochs. The four models achieved 97\%-99\% accuracy. As this was a huge improvement from all the previous baselines, and because no model will have 100\% accuracy, we did not see a need to fine tune the architecture further. 
+Our original intent in building the models was to perform a grid search for the parameters of our model. We began our tests with the simplest model and created binary classifiers for each data type. This architectural choice of having many binary classifiers rather than a single multi-class classifier was deliberate.  It easily allows extensibility in the system to add more classifiers fore new types as we come across new data.  Each model was a simple multilayered perceptron with an embedding layer, with a single hidden layer of 128 nodes  to extract features specific to the semantic type.  These nodes were connected to a single output node for a binary decision.  Each model was optimized with the adam optimizer, and trained with 10 epochs. The four models achieved 97\%-99\% accuracy. As this was a huge improvement from all the previous baselines, we did not see a need to fine tune the architecture further, although as we will see later, there may be a need to revisit the architectural decisions when fine tuning is needed.
 
-Our models were trained on 2,016,028 unique phrases containing 389,808 unique words. The max number of words in a phrase was decided to be 10, so our model was trained on 10-dimensional word vectors. If a phrase had fewer than 10 words, its associated vector was padded with zeros. We trained two models; one  with the datafactory generated names and one without.  Both models were subsequently tested on our test set and on a generated business data set. The models generated probability predictions for each type.
+Our models were trained on 2,016,028 unique phrases containing 389,808 unique words. The max number of words in a phrase was set to be 10 (most entity names do not exceed 10 words), so our model was trained on 10-dimensional word vectors. If a phrase had fewer than 10 words, its associated vector was padded with zeros. For the people's name classifier alone, we trained two models; one  with the datafactory generated names and one without.  Both models were subsequently tested on our test set and on a generated business data set. The models generated probability predictions for each type.
 
 \subsubsection{Test Set Results}
-We trained two models, one with generated names and one without, and when tested on the test set for all the data types aside from names, the two models performed almost identically. For names, the model trained with the generated names performed 4\% better, from 94\% to 98\%, and therefore going forward in this paper we will train models on the generated names. The address classifier hovered around 99\%, the companies classifier around 98\% and the product classifier at 96\%.  Complete results are presented in table \ref{table:NN} and table \ref{table:NN0}.
+For names, the model trained with the generated names performed 4\% better, from 94\% to 98\%, and therefore going forward in this paper we used the models trained on the generated names when we refer to the name models. The address classifier hovered around 99\%, the companies classifier around 98\% and the product classifier at 96\%.  Complete results for all the models are presented in Table \ref{table:NN} and Table \ref{table:NN0}.
 
 \begin{table}
 \centering
@@ -364,13 +370,13 @@ Product & .00291918 & .0184617& .0068049 & .965063  \\
 \end{table}
 
 \subsection{Business Set Results}
-In order to validate the accuracy of the above Neural Networks results, we tested the models on a business data set kept completely separate from the data collection process. The simple (vanilla) network performed well on names, companies, and address parts, however it struggled to classify components of addresses such as cities or states without their street addresses and it frequently misclassified products. Dates were mislabeled as products 99\% of the time. Also, due to single letter initials in the names data, entries with single letter codes for completely semantically different constructs such as ``pay cycle" were classified as names 98\% of the time.  We show the results of the model on generated business data in the table \ref{table:business}.
+In order to validate the accuracy of the above Neural Networks results, we tested the models on a generated business data set kept completely separate from the training process. This step simulates the effect of trying these binary classifiers on a new set of columnar data (see Table \ref{table:business} for example columns in this dataset).  As shown in Table \ref{table:business} the baseline ANN performed well in correctly identifying people's names, and address details, but was not as confident about company classifications in the data.  It also seemed to miss components of addresses such as cities or states when they appeared without their street addresses.  The most egregious examples of incorrect classification though had to do with false positives.  As an example, dates were mislabeled as products 99\% of the time, and column entries with single letter codes for ``pay cycle" were classified as people's names 98\% of the time.  All results for the business set appear in the table as ``Baseline ANN'' results, and focus on the first set of results we obtained when we tried generalizing the built in classifiers to new unseen data types.  
 
 \begin{table*}
 \centering
 \caption{Business Data Results}
 \begin{tabular}{|l|l|l|l|l|l|l|} \hline
-Col Name &Example& Vanilla NN & w/ Dates &LSTM 1 Epoch & LSTM 5 Epoch \\ \hline
+Col Name &Example& Baseline NN & w/ Dates &LSTM 1 Epoch & LSTM 5 Epoch \\ \hline
 Account Owner & Toni Gomez & Person - 0.998 & Person - 0.997  & Person - 0.827 & Person - 0.999  \\ \hline
 Billing Address & Suite \# 10049 & Address- .999 & Address- .854 & Companies-  .04 & Address - .69 \\ \hline
 Billing Contact & Allen Hardin& Person- .999 & Person- .998 & Person-  .7897& Person-  .999\\ \hline
@@ -394,20 +400,24 @@ Valid To & Sat Mar 15 05:20:32 EDT 2014 & Product - .999 &NONE & Product - .999 
 
 
 
-We tried to address problems in the modeling in two ways:
+It was apparent that the binary classifiers we had built, despite their excellent test performance had some serious problems in their modeling.  We tried to address problems in the modeling in two ways:
 \begin{itemize}
 \item We used a tool called LIME to understand exactly what words the classifier was paying attention to.
-\item We tried to see if using other network architectures such as LSTM might help alleviate the problem.  The core idea behind LSTM is that it is used for capturing sequences of information.  An initial by itself is not likely to be a name but an initial embedded with a first name and a last name is likely to be that of a person. \item We re-trained the original model using dates of different formats as negative examples
+\item We tried to see if using other network architectures such as LSTM (Long Short Term Memory \cite{MIRIAM ADD CITATION HERE}) might help alleviate the problem.  The core idea behind LSTM is that it is used for capturing sequences of information.  An initial by itself is not likely to be a name but an initial embedded with a first name and a last name is likely to be that of a person.  Similarly, a set of numbers in a date should not trigger a classification of product because there are no other product terms associated with the numbers.  Using an LSTM might reduce false positives, by helping build in context.  We tested this hypothesis. 
+\item We tried to address the problem of false positives on unseen data types.  As we described earlier, classifiers are always prone to false positives, primarily because it is actually never possible to show them all possible negative examples at training.  When a classifier produces a very high rate of false positives we have one of two options: either re-train the original model using dates of different formats as negative examples, or fine tune the weights of the existing model to retain the true positives as best as possible while reducing the false positive rate.  We examined the role of each in a preliminary study.
+ 
 \end{itemize}
-Each of these approaches is described below.
+Each of these approaches is described in the section below.
 
-\subsubsection{LIME - Explaining the Predictions}
+\section{Troubleshooting the classifiers}
 
-Machine learning algorithms, and deep learning systems in particular, are black box solutions, where input is fed to a model and a classification returned without explanation as to how the decision was made.  LIME, (Local Interpretable Model-Agnostic Explanations) \cite{Ribeiro:Lime},  attempts to solve this problem by learning an interpretable model locally, around the prediction, to provide insights into exactly what the model might be doing.  Using LIME on a classifier, one can discern which words were most crucial to the classification process.  This sort of exercise is helpful in understanding whether the classifiers are actually useful or whether they picked up spurious correlations in the sample.
+\subsection{LIME - Explaining the Predictions}
 
-We provided LIME with 100 words from each type and list in table \ref{table:LIME}  the top 6 results. A complete list of results can be found in the appendix.
+Machine learning algorithms, and deep learning systems in particular, are black box solutions, where input is fed to a model and a classification returned without an explanation as to how the decision was made.  LIME, (Local Interpretable Model-Agnostic Explanations) \cite{Ribeiro:Lime},  attempts to solve this problem by learning an interpretable model locally, around the prediction, to provide insights into exactly what the model might be doing.  Using LIME on a classifier, one can discern which words were most crucial to the classification process.  This sort of exercise is helpful in understanding whether the classifiers are actually useful or whether they picked up spurious correlations in the sample.
 
-As was hoped, for an address classification model, Ave, Rd, and St are among the 6 most important words. For the company classifier we see words such as Limited and Property as one might expect, but surprisingly ACTUARIAL and CJH make the top of the list, possibly because we provided a very limited sample of 100 phrases to the LIME model. We observed a similar effect for last names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers and mixtures of numbers and letters, like "500" and "2B", carry a lot of weight in the classification of a product, which then explains the spurious results we saw with dates.
+We provided LIME with 100 words from each type and list in Table \ref{table:LIME}  the top 6 results. A complete list of results can be found in the appendix \footnote{Our attempts to provide the entire training set to LIME proved to be problematic because the system could not handle the sample set sizes on our machines}.
+
+As one might expect, for an address classification model, Ave, Rd, and St are among the 6 most important words. For the company classifier we see words such as Limited and Property as one might expect, but surprisingly ACTUARIAL and CJH make the top of the list, possibly because we provided a very limited sample of 100 phrases to the LIME model. We observed a similar effect for last names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers and mixtures of numbers and letters, like "500" and "2B", carry a lot of weight in the classification of a product, which then explains the spurious results we saw with dates.
 
 \begin{table*}
 \centering
@@ -421,25 +431,9 @@ Product & 500, Coffee, Non-Stick, 2B, Wine, rigolo  \\
 \hline\end{tabular}\label{table:LIME}
 \end{table*}
 
-\subsubsection{LSTM}
-We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 1 epoch. It took more than 10X longer to run the single epoch than the previous model took for 10 epochs. Testing it took significantly longer as well, and the results were unimpressive. Results are in table \ref{table:epoch1}.
+\subsection{LSTM}
+We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 5 epochs. It took more than 10X longer to run the single epoch than the previous model took for 10 epochs. Testing it took significantly longer as well.  Results are in Table \ref{table:epoch2}.  As shown in the Table \ref{table:epoch}, the base classification performance of an LSTM model is excellent as one might expect.  Unfortunately, as shown in Table \ref{table:business}, this architecture by itself did not help reduce the false positives to unseen data types.  It appears that even when the new data types did not contain some of the contextual words that must have occurred in the original training set, the model tended to falsely classify dates as products or letter codes as people's names.
 
-The model only classified 79\% of addresses correctly and 90\% of names correctly. Although it did show an improvement on the test set for Products (up 2\% to 98\%) it made the same mistakes on the business data set as the vanilla  network.
-
-In order to determine the effects of additional epochs on this problem, I trained a binary model for products using the LSTM architecture above, but for 5 epochs. The results are much better, and are described below in table \ref{table:epoch2}.
-
-
-\begin{table}
-\centering
-\caption{LSTM 1 epoch - Confusion Matrix}
-\begin{tabular}{|l|l|l|l|l|} \hline
-&Address&Company&Name&Product \\ \hline
-Address & .79172 & .000653 & .000198 & .000914  \\ \hline
-Company& .00724 & .99316& .00173 & .00397   \\ \hline
-Name& .0562 & .0373 & .90744 & .023328\\ \hline
-Product & .05414 & .0092 & .004249 & .983564  \\
-\hline\end{tabular}\label{table:epoch1}
-\end{table}
 
 \begin{table}
 \centering
@@ -454,8 +448,9 @@ Product & .001436 & .00768 & .00551 & .98511  \\
 \end{table}
 
 
-\subsubsection{Network with Dates}
-We added 8487 dates as negative examples and retrained the model on 10 epochs using our initial architecture. The retrained model displayed slightly improved results from the original, with accuracy ranging from 96.6\%-99.6\%, compared to 94\%-98\%. In the business data set, the two models classified every column the same way, but this retrained model did not classify dates as products, companies, addresses, or names. This model also stood slightly apart from the initial model on Pay Method and Terms, classifying both columns with more confidence as products, from 47.2\% confidence to 78.8\% for Pay Method (Invoice, Strip) and from 66.1\% to 79.5\% for Terms (Standard). It also stood out for Billing Address with a decrease in confidence from 99.9\% to 85.4\%. These results can be found in table \ref{table:business}. The results of this model on the test set can be found in table \ref{table:full}. 
+\subsection{Retraining the model versus fine tuning the model}
+\subsubsection{Retraining the model with dates}
+We added 8487 dates as negative examples and retrained the model on 10 epochs using our initial architecture. The retrained model displayed slightly improved results from the original, with accuracy ranging from 96.6\%-99.6\%, compared to 94\%-98\%. In the business data set, the two models classified every column the same way, but this retrained model did not classify dates as products, companies, addresses, or names. This model also stood slightly apart from the initial model on Pay Method and Terms, classifying both columns with more confidence as products, from 47.2\% confidence to 78.8\% for Pay Method (Invoice, Strip) and from 66.1\% to 79.5\% for Terms (Standard). It also stood out for Billing Address with a decrease in confidence from 99.9\% to 85.4\%. These results can be found in table \ref{table:business}. The results of this model on the test set can be found in table \ref{table:full}. MIRIAM it is likely better if you break out the business validation piece for retraining and fine tuning models out of the business table into a second table.  Otherwise you will run out of space.
 
 \begin{table}
 \centering
@@ -469,8 +464,8 @@ Product & .002 & .018 & .006 & .966  \\
 \hline\end{tabular}\label{table:full}
 \end{table}
 
-\subsubsection{Network with Letters}
-In order to fine-tune the model against classifying single letters as names we added the 26 letters in the English Language to the set of negative examples and retrained the model on 10 epochs using our initial architecture. This method we were unsuccessful. The limited number of negative examples barely improved the model, with single letters in the business data set being classified as names with 95.6\% confidence. (For complete results of this model on the business set, see appendix.) See table \ref{table:letter} for complete results of this model on the test set. 
+\subsubsection{Retraining the model with letter codes}
+In order to prevent the model against classifying single letters as names we added the 26 letters in the English Language to the set of negative examples and retrained the model on 10 epochs using our initial architecture. This method we were unsuccessful. The limited number of negative examples barely improved the model, with single letters in the business data set being classified as names with 95.6\% confidence. (For complete results of this model on the business set, see appendix. - MIRIAM put this in a second table along with the retraining data for dates) See table \ref{table:letter} for complete results of this model on the test set. This is hardly surprising given the small size of our closed set, the issue is whether given many such examples (ignoring duplicates), the system would perform much better.  
 
 \begin{table}
 \centering
@@ -484,14 +479,14 @@ Product & .002 & .018 & .006 & .962  \\
 \hline\end{tabular}\label{table:letter}
 \end{table}
 
-\subsection{Fine-Tuning }
-Our original model performed quite well on the data types it had seen before, such as names and companies, but as mentioned above, was confused by some new data types like dates. Instead of retraining the entire model with the new data types, we tried fine tune the model with  8487 dates of different formats.
+\subsection{Fine-Tuning}
+Our original model performed quite well on the data types it had seen before, such as names and companies, but as mentioned above, was confused by some new data types like dates. Instead of retraining the entire model with the new data types, we tried fine tune the model with 8487 dates of different formats.  Fine tuning is especially attractive in actual deployment, because the model can be tweaked as it encounters more and more negative examples that are confusable with positive ones.
 
-We fine-tuned the model using Stochastic Gradient Descent. Freezing all layers except the topmost, we set the learning rate to 0.0001, decay to 1e-6 and momentum to 0.9 \cite{xu:finetun}. 
+As per the standard recommendations \cite{MIRIAM ADD THE RIGHT CITATION HERE} We fine-tuned the model using Stochastic Gradient Descent. Freezing all layers except the connection to the output layer, we set the learning rate to 0.0001, decay to 1e-6 and momentum to 0.9 \cite{xu:finetun}. 
 
 We compiled and trained each model with the new optimizer on 50 epochs, using only  the negative examples. 
 
-\subsubsection{Vanilla Network - Dates}
+\subsubsection{ANN - Products}
 The runtime was less than a minute and accuracy on the product test set dropped from 96.54\% to 92.29\% . However, the model initially classified dates as products with 89.20\% confidence, and after the fine tuning, that confidence drops to 4.40\%. 
 
 When we ran the model on the business data set we found that dates are classified as products with only 33.51\%-43.10\% confidence. We had achieved our goal, fine tuning the model to not mistake dates for products.  
@@ -501,7 +496,7 @@ If we could improve the accuracy on the test set higher than 92.29\% that would 
 We lowered the number of epochs in half, to 25, and found a 1\% improvement to 93.44\% accuracy on the test set, but that dates are classified as products in the business data with 74.60\%-79.41\% confidence. We lowered the decay to 1e-4 and the accuracy on the test set increases less than 1\% to 92.54\% but dates are classified as products with 43.30-50.58\% accuracy. 
 
 There is a very clear trade off here between false positives and false negatives, and it appears that we need more rigorous methods for fine tuning the weights of a model. This is clearly important for future work.
-\subsubsection{Vanilla Network - Names}
+\subsubsection{ANN - Names}
 Using the same architecture as used above for dates we tried to fine-tune the model by providing each of the 26 letters in the English language as negative examples. Our goal was for the model to not classify single letters as names. 
 
 Initially the model classified single letters as  names with 90.5\% confidence, and after 50 epochs the confidence dropped to 88.6\% confidence. The confidence for the valid test data dropped .1\% from 98.8\% to 98.7\%.
@@ -510,15 +505,12 @@ When the number of epochs was increased from 50 to 500, the model improved, clas
 
 Again there is a clear trade off between false positives and false negatives, and a more rigorous fine-tuning method is needed.
 
-\subsubsection{LSTM-1 epoch}
-We also tried to fine-tune the LSTM models, with the expectation that they may do better because of the fact that they have more contextual information from the input.  The run time to perform the fine-tuning was close to 5 minutes and accuracy on the product test set barely dropped from 98.35\% to 98.23\% . The model initially classified dates as products with 86.35\% confidence, and after the fine tuning, that confidence barely dropped as well to 84.09\%. 
-
 \subsubsection{LSTM-5 epoch}
-The run time to fine-tune was close to 10 minutes and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . However, the model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%.
+The run time to fine-tune was close to 10 minutes and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . However, the model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%. MIRIAM DO WE HAVE THE NAMES information here as well?  If not please add it. MIRIAM SPLIT THIS OUT INTO the subsections above - i.e. the model for names and the model for products.  We tested fine tuning on each model we built should be the motivation.
 
-\subsection{Missing Words}
+\section{Open Issues: Missing Words}
 
-Was the creation of classifiers with word embeddings a problem?  We tested this hypothesis.  For the 389917 unique tokens found by the tokenizer, a total of 145,573 words (37\%) were discluded from the embedding matrix; 8724 of 21,711 address words (40\%), 35985 of 252378 company words (14\%), 33669 of 66475  names words (51\%), and 67195 of 106293 product words (63\%).  About 6\% of the total number of texts.  
+Was the creation of classifiers with word embeddings a problem in our classification task?  For the 389917 unique tokens found by the tokenizer, a total of 145,573 words (37\%) were excluded from the embedding matrix; 8724 of 21,711 address words (40\%), 35985 of 252378 company words (14\%), 33669 of 66475  names words (51\%), and 67195 of 106293 product words (63\%).  About 6\% of the total number of texts.  
 
 Of the missing address words, the vast majority are numbers, including 981764 and 4615 and numbers with words like ``u52" and ``569a". However LIME did list numbers very highly in its results for an addresses most important words. 
 
@@ -528,7 +520,7 @@ Of the missing name words, every single one is an irregular name such as ``modrc
 
 Of the missing product words, many are numbers, dimensions, or non English words like ``colgadores", however there are some description words like ``fisherman's" and ``minilight" that are being ignored that may be causing the product classification difficulty. 
 
-One might argue that word embeddings for type classification is actually useful because it focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words.  However, the dominance of odd words like ''CJF" or ``2B" in the embeddings may have skewed the network.  A character embedding may be needed to resolve this problem.  This is again an issue to be resolved in future work. 
+One might argue that word embeddings for type classification is actually useful because it focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words.  However, the dominance of odd words like ''CJF" or ``2B" in the embeddings may have skewed the network.  A character embedding might yield better results for classification but this is future work.
 
 \section{Conclusions}
 
