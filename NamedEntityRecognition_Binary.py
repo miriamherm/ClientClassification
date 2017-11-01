@@ -10,6 +10,8 @@ import numpy as np
 import pickle
 import pandas as pd
 import random
+import argparse
+
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Dense, Input, Flatten
@@ -19,33 +21,7 @@ from keras.utils import to_categorical, plot_model
 
 import enchant #spell checker library to check if words are english
 
-#word files must be saved in base directory "data" folder
-#first argument base directory for project
-#second argument pre trained embedding folder
-#third argument word/char embeddings flag
-#fourth argument embedding file, if .npy character embedding, vocab.txt file must be saved in same directory
-#fifth argument embedding dimension (0 if .NPY character embeddings)
-
-#EXAMPLE: python NamedEntityRecognition_Binary.py C:\Users\Miriam\Documents\MastersResearch\DataScience\ glove word glove.6B.50d.txt 50
-BASE_DIR = os.getcwd()
-# directory containing glove encodings from Wikipedia (we can swap this out for another encoding later)
-# Download glove.6B.zip from https://nlp.stanford.edu/projects/glove/
-EMBEDDING_TYPE=sys.argv[1] #glove
-WORD_CHAR_EMBEDDING= sys.argv[2] #word/char
-
-EMBEDDINGS_FILE= sys.argv[3] #glove.6B.50d.txt
-EMBEDDING_DIM = int(sys.argv[4]) #0 if character embeddings, 50 for above example
-
-MODEL_DIR= BASE_DIR +"/"+ EMBEDDING_TYPE
-TEXT_DATA_DIR =  BASE_DIR + '/data/'
-EXP_NUM=sys.argv[5] #folder for experiment
-# number of words an entity is allowed to have
-MAX_SEQUENCE_LENGTH = 10
-
-# we use an egregious hack to check if its UTF-8
-# Total number of unique tokens in company names is 37K
-# Assuming no overlap between the two we get about 127K.  We may need to tweak this parameter as we go
-# but according to the Keras documentation, this can even be left unset
+MAX_SEQUENCE_LENGTH=10
 MAX_NB_WORDS = 80000
 
 d= enchant.Dict("en_US")
@@ -220,7 +196,10 @@ def trainBinaryModel(data_type):
         if embedding_vector is not None:
             # words not found in embedding index will1111 be all-zeros.
             embedding_matrix[i] = embedding_vector
-
+        else: #word not found
+            with open(data_type+"_missing_words.txt", "a") as f:
+                f.write(word+"\n")
+  
     # load pre-trained word embeddings into an Embedding layer
     # note that we set trainable = False so as to keep the embeddings fixed
     embedding_layer = Embedding(num_words,
@@ -249,7 +228,7 @@ def trainBinaryModel(data_type):
 
     model.fit(x_train, y_train,
               batch_size=128,
-              epochs=10,
+              epochs=num_epochs,
               validation_data=(x_val, y_val))
 
     if not os.path.exists(save_path):
@@ -269,22 +248,47 @@ def trainBinaryModel(data_type):
     tokenizer_file.close()
 
 
+if __name__=="__main__":
 #beging processing
-if WORD_CHAR_EMBEDDING=="char":
-    embeddings_index,EMBEDDING_DIM=char_embeddings()
-else:
-    embeddings_index,EMBEDDING_DIM=word_embeddings()
+    parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--base_dir')
+    parser.add_argument('--word_char_flag')#word or char
+    parser.add_argument('--embedding_folder') #ex embeddings/glove
+    parser.add_argument('--embedding_file_name') #ex glove.6B.100d.txt 
+    parser.add_argument('--embedding_dim') #ex 100, 0 if char embedding
+    parser.add_argument('--experiment_num') 
+    parser.add_argument('--num_epochs')
+    parser.add_argument('--train_data_dir') #folder with data files
 
-print('Found %s word vectors.' % len(embeddings_index))
+    args = parser.parse_args()
+    
+    BASE_DIR=args.base_dir
+    EMBEDDING_TYPE=args.embedding_folder
+    WORD_CHAR_EMBEDDING=args.word_char_flag
+    EMBEDDINGS_FILE=args.embedding_file_name
+    EMBEDDING_DIM= int(args.embedding_dim)
+    MODEL_DIR=BASE_DIR+"/"+EMBEDDING_TYPE
+    TEXT_DATA_DIR=BASE_DIR+"/"+args.train_data_dir+"/"
+    EXP_NUM=args.experiment_num
+    num_epochs=int(args.num_epochs)
+
+    
+    
+    if WORD_CHAR_EMBEDDING=="char":
+        embeddings_index,EMBEDDING_DIM=char_embeddings()
+    else:
+        embeddings_index,EMBEDDING_DIM=word_embeddings()
+
+    print('Found %s word vectors.' % len(embeddings_index))
 
 # first, build index mapping words in the glove embeddings set
 # to their embedding vector.  This is a straightforward lookup of
 # words in Glove and then their embeddings which should be a 100 sized array of floats
 
-print('Reading word embeddings: Indexing word vectors.')
-data_types=["products", "names", "companies", "address", "other", "city", "state"]
-for data_type in data_types:
-    trainBinaryModel(data_type)
+    print('Reading word embeddings: Indexing word vectors.')
+    data_types=["products", "names", "companies", "address"]
+    for data_type in data_types:
+        trainBinaryModel(data_type)
 # later...
 
 # load json and create model
