@@ -417,7 +417,7 @@ Machine learning algorithms, and deep learning systems in particular, are black 
 
 We provided LIME with 100 words from each type and list in Table \ref{table:LIME}  the top 6 results. A complete list of results can be found in the appendix \footnote{Our attempts to provide the entire training set to LIME proved to be problematic because the system could not handle the sample set sizes on our machines}.
 
-As one might expect, for an address classification model `St' is among the 6 most important words. For the company classifier we see words such as `Limited' as one might expect, but surprisingly single letters  `W', `A', and the irregular word `Bowker' at the top of the list.  We observe for names a list of common names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers, like `90' and mixtures of letters and numbers, like ``200-RIZOS" and ``1X10", carry a lot of weight in the classification of a product. This explains the spurious results we saw with dates.
+As one might expect, for an address classification model `St' is among the 6 most important words. For the company classifier we see words such as `Limited' as one might expect, but surprisingly single letters  `W', `A', and the irregular word `Bowker' at the top of the list.  We observe for names a list of common names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers, like `32' and mixtures of letters and numbers, like ``pack, 1" and ``1X10", carry a lot of weight in the classification of a product. This explains the spurious results we saw with dates.
 
 
 \begin{table*}
@@ -426,9 +426,9 @@ As one might expect, for an address classification model `St' is among the 6 mos
 \begin{tabular}{|l|l|l|l|l|} \hline
 Data Type& 6 Important Words \\ \hline
 Address & Crse, Rock, St, Middle, Pendleton, Attawanhood  \\ \hline
-Company& LIMITED, W, BOWKER, A, LIMITED IC, CROWTON  \\ \hline
-Name& Megan, MERCADO, Hannah, Kathleen, Juanita, SAN \\ \hline
-Product & Protector, Ramps, Linen, 90, Diced, All \\
+Company& LIMITED,  BOWKER,W, A, LIMITED IC, CROWTON  \\ \hline
+Name& SAN, JOSE, DELA, BUCHANAN, BONNER, HICKMAN \\ \hline
+Product & Hips, 32, Support, Cheese, 3, lb \\
 \hline\end{tabular}\label{table:LIME}
 \end{table*}
 
@@ -700,7 +700,7 @@ data.gov & Companies & 71 &  Trade \_Waste \_Broker \_Registrants \- Account Nam
 DBpedia & Companies & 82838 & Column B\\\hline
 DBpedia & People & 200946 & \\\hline
 data.gov.uk & Companies & 1,045,333 & BasicCompanyData\\\hline
-\hline\end{tabular}Embeddings & precision & recall & f1-score & \# instances tested \\ \hline
+\hline\end{tabular}
 \end{table}
 
 
