@@ -79,7 +79,7 @@
 % --- End of Author Metadata ---
 
 \title{Artificial Neural Networks Applied to Named Entity Recognition of Structured Data Sets }
-\subtitle{Master's Thesis, Submitted on 10/23/2017 }
+\subtitle{Master's Thesis, Submitted on 11/2/2017 }
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -231,7 +231,7 @@ This paper demonstrates the utilization of Artificial Neural Networks (ANNs) to 
 \keywords{Artifical Neural Networks;  ANN; Named Entity Recognition;NER; structured data}
 
 \section{Introduction}
- According to a survey conducted by CrowdFlower, a platform for data scientists, ``data preparation accounts for about 51\% of the work of data scientists" and ``60\% of data scientists view data preparation [collecting, labeling, cleaning, and organizing data] as the least enjoyable part of their work." \cite{CrowdFlower:report} The report also stated that 49\% of a data scientists work involves structured data. It would therefore be extremely valuable to provide a rigorous method for semantically tagging the contents of structured data sets to minimize the amount of time data scientists must spend on the tasks they enjoy the least. Semantically structuring the data is therefore an important first step to allow data scientists to search for useful data, merge data etc.
+ According to a survey conducted by CrowdFlower, a platform for data scientists, ``data preparation accounts for about 51\% of the work of data scientists" and ``60\% of data scientists view data preparation [collecting, labeling, cleaning, and organizing data] as the least enjoyable part of their work." \cite{CrowdFlower:report} The report also stated that 49\% of a data scientists work involves structured data. It would be extremely valuable therefore to provide a rigorous method for semantically tagging the contents of structured data sets to minimize the amount of time data scientists must spend on the tasks they enjoy the least. Semantically structuring the data is therefore an important first step to allow data scientists to search for useful data, merge data etc.
  
 One mechanism to tag columns semantically involves recognizing the semantic types of entities in a given column.  If a column contains entities that are all addresses for instance, it may help the user to find locational data even if the column name were not recognizable as an address.  In natural language processing (NLP), the task of extracting semantic types for corresponding words in a sentence is called named entity recognition (NER).  There are several NLP models geared for named entity recognition of data.  Could we re-use these models to extract columnar types?
 
@@ -242,7 +242,7 @@ Our goal therefore was to create a set of named entity recognizers uniquely gear
 Having built the models, we used state of the art techniques to convince ourselves of the validity of the models.  We used LIME \cite{Ribeiro:Lime}, a tool to inspect what features the classifier was paying attention to.  In our example these would be the specific words in the entity that caused the classifier to choose a specific class.  We also demonstrate how any classifier is always prone to false positives, mainly because the negative examples for a specific class is really an open set.  Given that a classifier can never be perfect, the next question is how do we effectively tune the classifier when it produces false positives.  We provide a very initial set of studies around this problem.
 
 \section{Data, Baselines, and Experiments}
-In this section, we describe the datasets we used for training and test, as well as the results of the baseline classifiers with examples.  We also describe the architecture for a Neural Network that achieves near perfect accuracy on the test data set. We then show how to inspect the Neural Networks to assess the quality of what was built, and then present a viable way to fine-tune the model when it makes errors.  
+In this section, we describe the datasets we used for training and testing, as well as the results of the baseline classifiers with examples.  We also describe the architecture for a Neural Network that achieves near perfect accuracy on the test data set. We then show how to inspect the Neural Networks to assess the quality of what was built, and then present a viable way to fine-tune the model when it makes errors.  
 
 \subsection{Data Collection and Cleansing}
 Data for training and testing was acquired from a variety of sources, with duplicates removed. The appendix contains a complete list of data sources used, with notes regarding file name, column name and any additional steps taken on the data.
@@ -285,7 +285,7 @@ Product & NA & NA& NA & NA & NA & NA \\
 \end{table*}
 
 \subsubsection{OpenNLP}
-We used the OpenNLP NER \cite{apache:openNLP} tool to classify addresses, organizations and people, but like StanfordNLP, it is only capable of classifying: Location, Person, Organization, Money, Percent, Date, and Time right out of the box. We did not attempt to train it to classify product data.
+We used the OpenNLP NER \cite{apache:openNLP} tool to classify addresses, organizations and people, but like StanfordNLP, it ships capable of classifying: Location, Person, Organization, Money, Percent, Date, and Time. We did not attempt to train it to classify product data.
 
 OpenNLP performed much better than Stanford NLP when classifying addresses because it seems to recognize certain words common to addresses, like ``Ave" and ``St". However, it does not recognize other crucial words, like ``Rd" and misclassified most ``Rd"s as ``Organizations". Out of 144,709  addresses in the test set, OpenNLP classified 19.22\% or 27,818 examples correctly. 
 
@@ -313,11 +313,11 @@ Product & NA & NA& NA & NA & NA & NA \\
 \subsubsection{NLTK Classifer}
 We attempted to classify addresses, organizations and people using the Natural Language Toolkit (NLTK)\cite{python:NLTK} package in Python. The NLTK package can classify: Organization, Person, Location (for example Mount Everest), Date, Time, Money, Percent, Facility, GPE (Geo-political entities, like city, state/province, country). As before we did not attempt to train it to classify product data.
 
-NLTK performed much better than Stanford NLP when classifying addresses but worse than OpenNLP. It seems to recognize certain words common to addresses, like ``East" and ``Indian" but not the crucial words like ``st", ``rd", and ``ave". The NLTK classifier misclassified addresses as organizations, people, and other, but very rarely confused them with several mixed labels. Out of 144709  address in the test set, NLTK classified 2.61\% or 3,771 examples correctly. 
+NLTK performed much better than Stanford NLP when classifying addresses but worse than OpenNLP. It seemed to recognize certain words common to addresses, like ``East" and ``Indian" but not the crucial words like ``St", ``Rd", and ``Ave". The NLTK classifier misclassified addresses as organizations, people, and other, but very rarely confused them with several mixed labels. Out of 144709  address in the test set, NLTK classified 2.61\% or 3,771 examples correctly. 
 
-This model performed much better than Stanford NLP and OpenNLP when classifying companies, recognizing common company abbreviations like "LTD" and "CO" as part of an organization. Out of 212,307 companies in the test set, NLTK classified 82.73\% or 175,631 examples correctly.
+This model performed much better than Stanford NLP and OpenNLP when classifying companies, recognizing common company abbreviations like ``LTD" and ``CO" as part of an organization. Out of 212,307 companies in the test set, NLTK classified 82.73\% or 175,631 examples correctly.
 
-When classifying names NLTK performed worse than Stanford NLP and OpenNLP, and it is unclear why. On occasion NLTK would correctly identify a name with initials as a person, and in other cases it would classify them as organizations, GPEs, or other. There does seem to be a correct trend of classifying names as "Person" if there is a first and middle initial, but this is not consistent. Out of 49,844 names in the test set, OpenNLP classified 3.46\% or 1727 examples correctly. 
+When classifying names NLTK performed worse than Stanford NLP and OpenNLP, and it is unclear why. On occasion NLTK would correctly identify a name with initials as a person, and in other cases it would classify them as organizations, GPEs, or other. There does seem to be a correct trend of classifying names as ``Person" if there is a first and middle initial, but this is not consistent. Out of 49,844 names in the test set, OpenNLP classified 3.46\% or 1727 examples correctly. 
 
 When the NLTK classifier was tested on the collected names data together with the datafactory generated names data, it performed  better, labeling 20.43\% or 18,346 out of 89,789 names correctly. 
 
@@ -336,14 +336,14 @@ Product & NA & NA& NA & NA & NA & NA \\
 \end{table*}
 
 \subsection{Neural Network Training}
-A key component of building deep learning networks for NLP tasks is the use of embeddings for words derived from very large corpora.  These embeddings capture important distributional semantics of words (e.g. the word \textit{king} is related to \textit{queen}), and are crucial in learning to perform generic NLP tasks.  In previous work, we conducted a thorough analysis of embeddings, including; Facebook fastText, word2vec, continuous bag of words dependency based embeddings, character embeddings from the one billion word corpus etc, and their relevance for the task of building deep learning classifiers.  For the classification task at hand, we learned that one of the best pre-trained embeddings for this task are the 100 dimensional GloVe word vectors. Our models therefore were trained using these embeddings.
+A key component of building deep learning networks for NLP tasks is the use of embeddings for words derived from very large corpora.  These embeddings capture important distributional semantics of words (e.g. the word \textit{king} is related to \textit{queen}), and are crucial in learning to perform generic NLP tasks.  In previous work, we conducted a thorough analysis of embeddings, including; Facebook fastText, word2vec, continuous bag of words dependency based embeddings, character embeddings from the one billion word corpus etc, and their relevance for the task of building deep learning classifiers. (Results for this work can be found in the Embedding - Results section of the appendix)  For the classification task at hand, we learned that one of the best pre-trained embeddings for this task are the 100 dimensional GloVe word vectors. Our models therefore were trained using these embeddings.
 
-Our original intent in building the models was to perform a grid search for the parameters of our model. We began our tests with the simplest model and created binary classifiers for each data type. This architectural choice of having many binary classifiers rather than a single multi-class classifier was deliberate.  It easily allows extensibility in the system to add more classifiers fore new types as we come across new data.  Each model was a simple multilayered perceptron with an embedding layer, with a single hidden layer of 128 nodes  to extract features specific to the semantic type.  These nodes were connected to a single output node for a binary decision.  Each model was optimized with the adam optimizer, and trained with 10 epochs. The four models achieved 97\%-99\% accuracy. As this was a huge improvement from all the previous baselines, we did not see a need to fine tune the architecture further, although as we will see later, there may be a need to revisit the architectural decisions when fine tuning is needed.
+Our original intent in building the models was to perform a grid search for the parameters of our model. We began our tests with the simplest model and created binary classifiers for each data type. This architectural choice of having many binary classifiers rather than a single multi-class classifier was deliberate.  It easily allows extension in the system to add more classifiers for new types as we come across new data.  Each model was a simple multilayered perceptron with an embedding layer, with a single hidden layer of 128 nodes  to extract features specific to the semantic type.  These nodes were connected to a single output node for a binary decision.  Each model was optimized with the adam optimizer, and trained with 10 epochs. The four models achieved 97\%-99\% accuracy. As this was a huge improvement from all the previous baselines, we did not see a need to fine tune the architecture further, although as we will see later, there may be a need to revisit the architectural decisions when fine tuning is needed.
 
-Our models were trained on 2,016,028 unique phrases containing 389,808 unique words. The max number of words in a phrase was set to be 10 (most entity names do not exceed 10 words), so our model was trained on 10-dimensional word vectors. If a phrase had fewer than 10 words, its associated vector was padded with zeros. For the people's name classifier alone, we trained two models; one  with the datafactory generated names and one without.  Both models were subsequently tested on our test set and on a generated business data set. The models generated probability predictions for each type.
+Our models were trained on 2,016,028 unique phrases containing 389,808 unique words. The max number of words in a phrase was set to be 10 (most entity names do not exceed 10 words), so our model was trained on 10-dimensional word vectors. If a phrase had fewer than 10 words, its associated vector was padded with zeros. 
 
 \subsubsection{Test Set Results}
-For names, the model trained with the generated names performed 4\% better, from 94\% to 98\%, and therefore going forward in this paper we used the models trained on the generated names when we refer to the name models. The address classifier hovered around 99\%, the companies classifier around 98\% and the product classifier at 96\%.  Complete results for all the models are presented in Table \ref{table:NN} and Table \ref{table:NN0}.
+For names, we trained two models, one with datafactory generated names and one without. The model with generated names performed 4\% better, from 94\% to 98\%. Going forward in this paper we used the models trained with the generated names when we refer to the name models. The address classifier hovered around 99\%, the companies classifier around 98\% and the product classifier at 96\%.  Complete results for all the models are presented in Table \ref{table:NN} and Table \ref{table:NN0}.
 
 \begin{table}
 \centering
@@ -376,25 +376,25 @@ In order to validate the accuracy of the above Neural Networks results, we teste
 \centering
 \caption{Business Data Results}
 \begin{tabular}{|l|l|l|l|l|l|l|} \hline
-Col Name &Example& Baseline NN & w/ Dates &LSTM 1 Epoch & LSTM 5 Epoch \\ \hline
-Account Owner & Toni Gomez & Person - 0.998 & Person - 0.997  & Person - 0.827 & Person - 0.999  \\ \hline
-Billing Address & Suite \# 10049 & Address- .999 & Address- .854 & Companies-  .04 & Address - .69 \\ \hline
-Billing Contact & Allen Hardin& Person- .999 & Person- .998 & Person-  .7897& Person-  .999\\ \hline
-Billing Email & jgoff@ma1l2u.org & Company - .826 & Company - .711 & Company - .811& Company - .956\\ \hline
-City & Helena & Person - .429& Person - .401 & Company - .308 & Person .356  \\ \hline
-Conversion Date & Thu Apr 03 05:20:32 EDT 2014 &Product - .999  & NONE &Product - .999&Product - .998 \\ \hline
-Country & Slovakia & Product - .430& Product - .427  & Product - .430  & Product - .413 \\ \hline
-Custom Metrics & code,text,room & Product - .584& Product - .592& Product - .596 & Product - .564\\ \hline
-Org Name& Morgan Studios & Company - .864 & Company - .839 & Company - .875 & Company - .877  \\ \hline
-Parent Name& 'Ringgold Cafe' & Company - .861& Company - .833 & Company - .832& Company - .852  \\ \hline
-Pay Cycle & 'Q','T' & Person - .982 & Person - .969  & Person - .993& Person - .997 \\ \hline
-Pay Method & 'Invoice' & Product - .472& Product - .788& Product - .540 & Product - .542  \\ \hline
-po\_num & PO6793946273 & Company - .575 & Company - .568  & Company - .459& Product - .397  \\ \hline
-State &  'in', 'so' & Product - .664& Product - .576& Product - .661& Product - .880  \\ \hline
-Street & 'Mcconnel' & Person - .501 & Person - .438 & Person - .322 & Person - .456 \\ \hline
-Terms & 'Standard' & Product - .661 & Product - .795 & Product - .670 & Product - .552 \\ \hline
-Valid From & Thu Jul 30 05:20:32 EDT 2013 & Product - .999  &NONE & Product - .999& Product - .999 \\ \hline
-Valid To & Sat Mar 15 05:20:32 EDT 2014 & Product - .999 &NONE & Product - .999 & Product - .998  \\ \hline
+Col Name &Example& Baseline NN  & LSTM 5 Epoch \\ \hline
+Account Owner & Toni Gomez & Person - 0.998  & Person - 0.999  \\ \hline
+Billing Address & Suite \# 10049 & Address- .99 4 & Address - .69 \\ \hline
+Billing Contact & Allen Hardin& Person- .999& Person-  .999\\ \hline
+Billing Email & jgoff@ma1l2u.org & Company - .826& Company - .956\\ \hline
+City & Helena & Person - .429 & Person .356  \\ \hline
+Conversion Date & Thu Apr 03 05:20:32 EDT 2014 &Product - .999&Product - .998 \\ \hline
+Country & Slovakia & Product - .430& Product - .413 \\ \hline
+Custom Metrics & code,text,room & Product - .584 & Product - .564\\ \hline
+Org Name& Morgan Studios & Company - .864 & Company - .877  \\ \hline
+Parent Name& 'Ringgold Cafe' & Company - .861 & Company - .852  \\ \hline
+Pay Cycle & 'Q','T' & Person - .982   & Person - .997 \\ \hline
+Pay Method & 'Invoice' & Product - .47 & Product - .542  \\ \hline
+po\_num & PO6793946273 & Company - .575& Product - .397  \\ \hline
+State &  'in', 'so' & Product - .664& Product - .880  \\ \hline
+Street & 'Mcconnel' & Person - .501 & Person - .456 \\ \hline
+Terms & 'Standard' & Product - .661 & Product - .552 \\ \hline
+Valid From & Thu Jul 30 05:20:32 EDT 2013 & Product - .999 & Product - .999 \\ \hline
+Valid To & Sat Mar 15 05:20:32 EDT 2014 & Product - .999 & Product - .998  \\ \hline
 \hline\end{tabular}\label{table:business}
 \end{table*}
 
@@ -403,8 +403,8 @@ Valid To & Sat Mar 15 05:20:32 EDT 2014 & Product - .999 &NONE & Product - .999 
 It was apparent that the binary classifiers we had built, despite their excellent test performance had some serious problems in their modeling.  We tried to address problems in the modeling in two ways:
 \begin{itemize}
 \item We used a tool called LIME to understand exactly what words the classifier was paying attention to.
-\item We tried to see if using other network architectures such as LSTM (Long Short Term Memory \cite{MIRIAM ADD CITATION HERE}) might help alleviate the problem.  The core idea behind LSTM is that it is used for capturing sequences of information.  An initial by itself is not likely to be a name but an initial embedded with a first name and a last name is likely to be that of a person.  Similarly, a set of numbers in a date should not trigger a classification of product because there are no other product terms associated with the numbers.  Using an LSTM might reduce false positives, by helping build in context.  We tested this hypothesis. 
-\item We tried to address the problem of false positives on unseen data types.  As we described earlier, classifiers are always prone to false positives, primarily because it is actually never possible to show them all possible negative examples at training.  When a classifier produces a very high rate of false positives we have one of two options: either re-train the original model using dates of different formats as negative examples, or fine tune the weights of the existing model to retain the true positives as best as possible while reducing the false positive rate.  We examined the role of each in a preliminary study.
+\item We tried to see if using other network architectures such as LSTM (Long Short Term Memory \cite{LSTM}) might help alleviate the problem.  The core idea behind LSTM is that it is used for capturing sequences of information.  An initial by itself is not likely to be a name but an initial embedded with a first name and a last name is likely to be that of a person.  Similarly, a set of numbers in a date should not trigger a classification of product because there are no other product terms associated with the numbers.  Using an LSTM might reduce false positives, by helping build in context.  We tested this hypothesis. 
+\item We tried to address the problem of false positives on unseen data types.  As we described earlier, classifiers are always prone to false positives, primarily because it is actually never possible to show them all possible negative examples at training.  When a classifier produces a very high rate of false positives we have one of two options: either re-train the original model using a sample of the false positives as negative examples, or fine tune the weights of the existing model to retain the true positives as best as possible while reducing the false positive rate.  We examined the role of each in a preliminary study.
  
 \end{itemize}
 Each of these approaches is described in the section below.
@@ -417,23 +417,23 @@ Machine learning algorithms, and deep learning systems in particular, are black 
 
 We provided LIME with 100 words from each type and list in Table \ref{table:LIME}  the top 6 results. A complete list of results can be found in the appendix \footnote{Our attempts to provide the entire training set to LIME proved to be problematic because the system could not handle the sample set sizes on our machines}.
 
-As one might expect, for an address classification model, Ave, Rd, and St are among the 6 most important words. For the company classifier we see words such as Limited and Property as one might expect, but surprisingly ACTUARIAL and CJH make the top of the list, possibly because we provided a very limited sample of 100 phrases to the LIME model. We observed a similar effect for last names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers and mixtures of numbers and letters, like "500" and "2B", carry a lot of weight in the classification of a product, which then explains the spurious results we saw with dates.
+As one might expect, for an address classification model `St' is among the 6 most important words. For the company classifier we see words such as `Limited' as one might expect, but surprisingly single letters  `W', `A', and the irregular word `Bowker' at the top of the list.  We observe for names a list of common names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers, like `90' and mixtures of letters and numbers, like ``200-RIZOS" and ``1X10", carry a lot of weight in the classification of a product. This explains the spurious results we saw with dates.
+
 
 \begin{table*}
 \centering
 \caption{LIME - Most Important Words}
 \begin{tabular}{|l|l|l|l|l|} \hline
 Data Type& 6 Important Words \\ \hline
-Address & Saddle, AVE, Rd, Suffield, MADISON, St  \\ \hline
-Company& LIMITED, PROPERTY, ACTUARIAL, CJH, PLAYING, WORLD  \\ \hline
-Name& SINGH, Frank, GALLIMORE, Harding, Bush, Remirez \\ \hline
-Product & 500, Coffee, Non-Stick, 2B, Wine, rigolo  \\
+Address & Crse, Rock, St, Middle, Pendleton, Attawanhood  \\ \hline
+Company& LIMITED, W, BOWKER, A, LIMITED IC, CROWTON  \\ \hline
+Name& Megan, MERCADO, Hannah, Kathleen, Juanita, SAN \\ \hline
+Product & Protector, Ramps, Linen, 90, Diced, All \\
 \hline\end{tabular}\label{table:LIME}
 \end{table*}
 
 \subsection{LSTM}
-We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 5 epochs. It took more than 10X longer to run the single epoch than the previous model took for 10 epochs. Testing it took significantly longer as well.  Results are in Table \ref{table:epoch2}.  As shown in the Table \ref{table:epoch}, the base classification performance of an LSTM model is excellent as one might expect.  Unfortunately, as shown in Table \ref{table:business}, this architecture by itself did not help reduce the false positives to unseen data types.  It appears that even when the new data types did not contain some of the contextual words that must have occurred in the original training set, the model tended to falsely classify dates as products or letter codes as people's names.
-
+We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 5 epochs. It took more than 10X longer to run a single epoch than the previous model took for 10 epochs. Testing it took significantly longer as well.  Results are in Table \ref{table:epoch2}.  As shown in the Table \ref{table:epoch2}, the base classification performance of an LSTM model is excellent as one might expect.  Unfortunately, as shown in Table \ref{table:business}, this architecture by itself did not help reduce the false positives to unseen data types.  It appears that even when the new data types did not contain some of the contextual words that must have occurred in the original training set, the model tended to falsely classify dates as products or letter codes as people's names. The lime results (See table \ref{table:lime_lstm}) for names very obviously reveal this phenomena, with 2/3 of the most important name words for this model being single letters. 
 
 \begin{table}
 \centering
@@ -448,9 +448,24 @@ Product & .001436 & .00768 & .00551 & .98511  \\
 \end{table}
 
 
+\begin{table*}
+\centering
+\caption{LIME - Most Important Words - LSTM}
+\begin{tabular}{|l|l|l|l|l|} \hline
+Data Type& 6 Important Words \\ \hline
+Address & Rd, Jarvis, Three, 33,Fish, Milford  \\ \hline
+Company& Limited, Properties, Limited I.C, Blueberry, Property, Crowton  \\ \hline
+Name& Virella, Coffey, D, K, M, L \\ \hline
+Product & Blender, Bar, Moisturizing, Waring, Mushroom, Hips  \\
+\hline\end{tabular}\label{table:lime_lstm}
+\end{table*}
+
+
 \subsection{Retraining the model versus fine tuning the model}
 \subsubsection{Retraining the model with dates}
-We added 8487 dates as negative examples and retrained the model on 10 epochs using our initial architecture. The retrained model displayed slightly improved results from the original, with accuracy ranging from 96.6\%-99.6\%, compared to 94\%-98\%. In the business data set, the two models classified every column the same way, but this retrained model did not classify dates as products, companies, addresses, or names. This model also stood slightly apart from the initial model on Pay Method and Terms, classifying both columns with more confidence as products, from 47.2\% confidence to 78.8\% for Pay Method (Invoice, Strip) and from 66.1\% to 79.5\% for Terms (Standard). It also stood out for Billing Address with a decrease in confidence from 99.9\% to 85.4\%. These results can be found in table \ref{table:business}. The results of this model on the test set can be found in table \ref{table:full}. MIRIAM it is likely better if you break out the business validation piece for retraining and fine tuning models out of the business table into a second table.  Otherwise you will run out of space.
+We added 8487 dates as negative examples and retrained the model on 10 epochs using our initial architecture. The retrained model displayed slightly improved results from the original, with accuracy ranging from 96.6\%-99.6\%, compared to 94\%-98\%. On the business data set, this model and the baseline NN model classified every column the same way, but this model did not classify dates as products, companies, addresses, or names. This model also stood slightly apart from the initial model on Pay Method and Terms, classifying both columns with more confidence as products, from 47.2\% confidence to 78.8\% for Pay Method (Invoice, Strip) and from 66.1\% to 79.5\% for Terms (Standard). It also stood out for Billing Address with a decrease in confidence from 99.9\% to 85.4\%. These results can be found in table \ref{table:business_val}. The results of this model on the test set can be found in table \ref{table:full}. 
+
+The first 6 lime results of this model can be found in table \ref{table:lime_dates}. Our intention when retraining this model with dates data was to improve the products model, and with that we were successful: no words containing letters and numbers are in the top 6. 
 
 \begin{table}
 \centering
@@ -464,38 +479,92 @@ Product & .002 & .018 & .006 & .966  \\
 \hline\end{tabular}\label{table:full}
 \end{table}
 
+\begin{table*}
+\centering
+\caption{LIME - Most Important Words - Dates}
+\begin{tabular}{|l|l|l|l|l|} \hline
+Data Type& 6 Important Words \\ \hline
+Address & Saddle, Ave, Rd, Suffield, Madison, St  \\ \hline
+Company& Limited, W, A, Properties, Bowker, Innovations  \\ \hline
+Name& San, Barker, W, Coffey, Matthew, Stephanie \\ \hline
+Product & fluid, Surimi, Protect-a-Bed, Mixed, Greek, L-lysine  \\
+\hline\end{tabular}\label{table:lime_dates}
+\end{table*}
+
 \subsubsection{Retraining the model with letter codes}
-In order to prevent the model against classifying single letters as names we added the 26 letters in the English Language to the set of negative examples and retrained the model on 10 epochs using our initial architecture. This method we were unsuccessful. The limited number of negative examples barely improved the model, with single letters in the business data set being classified as names with 95.6\% confidence. (For complete results of this model on the business set, see appendix. - MIRIAM put this in a second table along with the retraining data for dates) See table \ref{table:letter} for complete results of this model on the test set. This is hardly surprising given the small size of our closed set, the issue is whether given many such examples (ignoring duplicates), the system would perform much better.  
+In order to prevent the model against classifying single letters as names we added the 26 letters in the English Language to the set of negative examples and retrained the model on 10 epochs using our initial architecture. With this method we were unsuccessful. The limited number of negative examples barely improved the model, with single letters in the business data set being classified as names with 95.6\% confidence. For complete results of this model on the business set, see table \ref{table:business_val}. See table \ref{table:letter} for complete results of this model on the test set.
+
+The first 6 lime results of this model can be found in table \ref{table:lime_dates}. The model was unsuccessful and as we can see from the lime results, single letters are still highly related to names. 
 
 \begin{table}
 \centering
-\caption{Network w/ Dates- Confusion Matrix}
+\caption{Network w/ Letters- Confusion Matrix}
 \begin{tabular}{|l|l|l|l|l|} \hline
 &Address&Company&Name&Product \\ \hline
-Address & .996 & .002 & .0003 & .003  \\ \hline
-Company& .0007 & .987& .003 & .008   \\ \hline
-Name& .0007 & .009 & .988 & .009\\ \hline
-Product & .002 & .018 & .006 & .962  \\
+Company& .0007 & .988& .003 & .008   \\ \hline
+Name& .0008 & .011 & .985 & .010\\ \hline
+Product & .003 & .020 & .006 & .966 \\
 \hline\end{tabular}\label{table:letter}
 \end{table}
+
+\begin{table}
+\centering
+\caption{LIME - Most Important Words - Letters}
+\begin{tabular}{|l|l|l|l|l|} \hline
+Data Type& 6 Important Words \\ \hline
+Address & Three, Fish, Mile, Colony, Trl, Rd:q  \\ \hline
+Company& Limited, Ltd, Properties, W, A, Blueberry  \\ \hline
+Name& Theresa, S, A, Jose, Glen,K \\ \hline
+Product & 60, Traditional, Free,Travel, Moisturizing, Skin\\\hline
+\end{tabular}\label{table:lime_letters}
+\end{table}
+
+ \begin{table*}
+\centering
+\caption{Business Data Retraining Results}
+\begin{tabular}{|l|l|l|l|l|l|l|} \hline
+Col Name &Example&Network w/dates & Network w/ letters \\ \hline
+Account Owner & Toni Gomez & Person - 0.997 & Person - 0.991   \\ \hline
+Billing Address & Suite \# 10049  & Address- .854& Address- .580  \\ \hline
+Billing Contact & Allen Hardin &   Person- .998& Person- .997 \\ \hline
+Billing Email & jgoff@ma1l2u.org & Company - .826 & Person - .421\\ \hline
+City & Helena & Person - .401& Person - .421 \\ \hline
+Conversion Date & Thu Apr 03 05:20:32 EDT 2014   & None &Product - .999  \\ \hline
+Country & Slovakia & Product - .427 & Product - .408 \\ \hline
+Custom Metrics & code,text,room & Product - .593& Product - .592\\ \hline
+Org Name& Morgan Studios & Company - .839 & Company - .869  \\ \hline
+Parent Name& 'Ringgold Cafe' & Company - .833 & Company - .824  \\ \hline
+Pay Cycle & 'Q','T' & Person - .993& Person - .948  \\ \hline
+Pay Method & 'Invoice' & Product - .788& Product - .493  \\ \hline
+po\_num & PO6793946273 & Company - .568 & Company - .564   \\ \hline
+State &  'in', 'so'& Product - .576 & Product - .629  \\ \hline
+Street & 'Mcconnel'& Person - .438  & Person - .457  \\ \hline
+Terms & 'Standard'& Product - .795 & Product - .922  \\ \hline
+Valid From & Thu Jul 30 05:20:32 EDT 2013&None  & Product - .999  \\ \hline
+Valid To & Sat Mar 15 05:20:32 EDT 2014&None  & Product -  .999  \\ \hline
+\hline\end{tabular}\label{table:business_val}
+\end{table*}
 
 \subsection{Fine-Tuning}
 Our original model performed quite well on the data types it had seen before, such as names and companies, but as mentioned above, was confused by some new data types like dates. Instead of retraining the entire model with the new data types, we tried fine tune the model with 8487 dates of different formats.  Fine tuning is especially attractive in actual deployment, because the model can be tweaked as it encounters more and more negative examples that are confusable with positive ones.
 
-As per the standard recommendations \cite{MIRIAM ADD THE RIGHT CITATION HERE} We fine-tuned the model using Stochastic Gradient Descent. Freezing all layers except the connection to the output layer, we set the learning rate to 0.0001, decay to 1e-6 and momentum to 0.9 \cite{xu:finetun}. 
+As per the standard recommendations \cite{xu:finetun} We fine-tuned the model using Stochastic Gradient Descent. Freezing all layers except the connection to the output layer, we set the learning rate to 0.0001, decay to 1e-6 and momentum to 0.9. 
 
 We compiled and trained each model with the new optimizer on 50 epochs, using only  the negative examples. 
 
 \subsubsection{ANN - Products}
-The runtime was less than a minute and accuracy on the product test set dropped from 96.54\% to 92.29\% . However, the model initially classified dates as products with 89.20\% confidence, and after the fine tuning, that confidence drops to 4.40\%. 
+When fine-tuning the baseline NN, the run time was less than a minute and accuracy on the product test set dropped from 96.54\% to 92.29\% . The model initially classified dates as products with 89.20\% confidence, and after the fine tuning, that confidence drops to 4.40\%. A good start, but further testing must be done on the business set. 
 
-When we ran the model on the business data set we found that dates are classified as products with only 33.51\%-43.10\% confidence. We had achieved our goal, fine tuning the model to not mistake dates for products.  
+When we ran the model on the business set we found that dates are classified as products with only 33.51\%-43.10\% confidence, way down from the original 99.9\%. We achieved our goal, fine tuning the model to not mistake dates for products, but in the process lowered the classifiers overall accuracy.  
 
-If we could improve the accuracy on the test set higher than 92.29\% that would be ideal.
+If we could improve the accuracy on the test set higher than 92.29\%, with the same results for dates, that would be ideal.
 
-We lowered the number of epochs in half, to 25, and found a 1\% improvement to 93.44\% accuracy on the test set, but that dates are classified as products in the business data with 74.60\%-79.41\% confidence. We lowered the decay to 1e-4 and the accuracy on the test set increases less than 1\% to 92.54\% but dates are classified as products with 43.30-50.58\% accuracy. 
+We lowered the number of epochs in half, to 25, and found a 1\% improvement to 93.44\% accuracy on the test set, but dates are classified as products in the business set with 74.60\%-79.41\% confidence. We lowered the decay to 1e-4 and the accuracy on the test set increases less than 1\% to 92.54\% but dates are classified as products with 43.30-50.58\% accuracy. 
+
+We tried fine-tuning the LSTM model trained with 5 epochs, and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . The model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%. 
 
 There is a very clear trade off here between false positives and false negatives, and it appears that we need more rigorous methods for fine tuning the weights of a model. This is clearly important for future work.
+
 \subsubsection{ANN - Names}
 Using the same architecture as used above for dates we tried to fine-tune the model by providing each of the 26 letters in the English language as negative examples. Our goal was for the model to not classify single letters as names. 
 
@@ -503,10 +572,9 @@ Initially the model classified single letters as  names with 90.5\% confidence, 
 
 When the number of epochs was increased from 50 to 500, the model improved, classifying letters as names with only 47.0\% confidence. The confidence for the valid test data dropped too, from 98.8\% to 95.0\%.
 
-Again there is a clear trade off between false positives and false negatives, and a more rigorous fine-tuning method is needed.
+When we performed the fine-tuning on the LSTM model trained on 5 epochs the accuracy on the test set decreased from 99.1\% to 98.9\% and accuracy on the letters set stayed exactly the same, at 99.2\%.
 
-\subsubsection{LSTM-5 epoch}
-The run time to fine-tune was close to 10 minutes and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . However, the model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%. MIRIAM DO WE HAVE THE NAMES information here as well?  If not please add it. MIRIAM SPLIT THIS OUT INTO the subsections above - i.e. the model for names and the model for products.  We tested fine tuning on each model we built should be the motivation.
+There remains a trade off between false positives and false negatives, and a more rigorous fine-tuning method is needed.
 
 \section{Open Issues: Missing Words}
 
@@ -514,13 +582,13 @@ Was the creation of classifiers with word embeddings a problem in our classifica
 
 Of the missing address words, the vast majority are numbers, including 981764 and 4615 and numbers with words like ``u52" and ``569a". However LIME did list numbers very highly in its results for an addresses most important words. 
 
-Of the missing company words, the vast majority are non-English words, including ``kebabse", ``capitus", ``amav", and ``bevtex". Some words like ``limitmanagement" were also discarded. Though it would seem most non-English words were excluded, LIME did list very unlikely words like ``CJF" in its results for  most important words.
+Of the missing company words, the vast majority are non-English words, including ``kebabse", ``capitus", ``amav", and ``bevtex". Some words like ``limitmanagement" were also discarded. Though it would seem most non-English words were excluded, LIME did list very unlikely words like ``Bowker" in its results for  most important words.
 
 Of the missing name words, every single one is an irregular name such as ``modrcin", ``repohl", and ``berdichevskaya".
 
 Of the missing product words, many are numbers, dimensions, or non English words like ``colgadores", however there are some description words like ``fisherman's" and ``minilight" that are being ignored that may be causing the product classification difficulty. 
 
-One might argue that word embeddings for type classification is actually useful because it focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words.  However, the dominance of odd words like ''CJF" or ``2B" in the embeddings may have skewed the network.  A character embedding might yield better results for classification but this is future work.
+One might argue that word embeddings for type classification is actually useful because it focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words.  However, the dominance of odd words like 'Bowker" or ``2B" in the embeddings may have skewed the network.  A character embedding might yield better results for classification but this is future work.
 
 \section{Conclusions}
 
@@ -632,511 +700,577 @@ data.gov & Companies & 71 &  Trade \_Waste \_Broker \_Registrants \- Account Nam
 DBpedia & Companies & 82838 & Column B\\\hline
 DBpedia & People & 200946 & \\\hline
 data.gov.uk & Companies & 1,045,333 & BasicCompanyData\\\hline
-\hline\end{tabular}
+\hline\end{tabular}Embeddings & precision & recall & f1-score & \# instances tested \\ \hline
 \end{table}
 
+
 \section{LIME Full Results}
-\begin{table}
+\begin{table*}
 \centering
 \caption{LIME Results - Addresses (1)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight \\ \hline
-'Colony'& 0.011473951103404855			\\\hline
-'Rock'& 0.0089593689938616706			\\\hline
-'ST'& -0.0088593440869146143			\\\hline
-'472'& -0.0087149165447808329			\\\hline
-'Attawanhood'& -0.0084193680321162229			\\\hline
-'Trl'& 0.0083109071638142514			\\\hline
-'Crse'& 0.0073590555140528148			\\\hline
-'Ln'& 0.0068177014744160123			\\\hline
-'1173'& 0.0067862905088006738			\\\hline
-'St'& 0.0066825214955059282			\\\hline
-'Holcomb'& 0.0066454675118291593			\\\hline
-'MILFORD'& 0.0065828182899055456			\\\hline
-'Dr'& 0.0062634731443634893			\\\hline
-'Sharon'& -0.0062604222173652593			\\\hline
-'Three'& 0.0060686596157848551			\\\hline
-'70'& 0.005944576885357245			\\\hline
-'South'& -0.0057737948566826316			\\\hline
-'Cutlery'& -0.0055069602681032583			\\\hline
-'281'& 0.0054479898148037725			\\\hline
-'750'& 0.0053575837734054482			\\\hline
-'Fish'& 0.0052517231180250834			\\\hline
-'Ct'& -0.005249845626465144			\\\hline
-'Dziok'& 0.005195532481860588			\\\hline
-'MAIN'& -0.0051827186689839761			\\\hline
-'339'& 0.0051711308051238377			\\\hline
-'W'& 0.0051267782330448094			\\\hline
-'JARVIS'& 0.0051169503896465887			\\\hline
-'Long'& 0.0051141868924031034			\\\hline
-'Overlook'& 0.0050983299215228445			\\\hline
-'6'& -0.0050572295784190825			\\\hline
-'Mile'& 0.0049800477202194141			\\\hline
-'Pembroke'& 0.004789621037759562			\\\hline
-'1226'& -0.0047872522310372541			\\\hline
-'67'& -0.0046897959503926622			\\\hline
-'Colonial'& -0.0046597142972620072			\\\hline
-'Hill'& -0.0045926377398190525			\\\hline
-'71'& 0.0045063251439902627			\\\hline
-'Pendleton'& 0.0044695469127539848			\\\hline
-'280'& -0.0044146549356582545			\\\hline
-'24'& -0.0043828796785156656			\\\hline
-'59'& -0.0043713162217085119			\\\hline
-'Middle'& 0.0043517852493370618			\\\hline
-'Pape'& 0.0042792432102687471			\\\hline
-'308'& -0.0042628445800114226			\\\hline
-'50'& -0.0041895565069510702			\\\hline
-'School'& 0.0041876186438888421			\\\hline
-'ALYCE'& 0.0041780174901895799			\\\hline
-'Ford'& -0.0041424826686335221			\\\hline
-'Mayflower'& 0.0041262396914725826			\\\hline
-'2768'& 0.004090286339501082			\\\hline
-'US'& -0.0040225689872512649			\\\hline
-'AVE'& 0.003969894901525879			\\\hline
-'S'& 0.0039338102123051459			\\\hline
-'PRATT'& -0.0039145983503342287			\\\hline
-'259'& 0.0039065843632802169			\\\hline
-'S'& 0.0038705685903864871			\\\hline
-'High'& -0.003864942088071649			\\\hline
-'180'& 0.0038492445991866468			\\\hline
-'33'& -0.0038243753658219843			\\\hline
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+  'Crse '	0.012	&	 'Rd '	-0.247	&	 'Three'	0.016	&	 'Three'	0.013	\\\hline
+ 'Rock'	0.006	&	 'RD '	-0.224	&	 'Colony'	0.013	&	 'Fish'	0.012	\\\hline
+ 'St '	0.006	&	 'JARVIS'	0.165	&	 'Crse '	0.012	&	 'Mile'	0.011	\\\hline
+ 'ST '	-0.006	&	 'Three'	0.133	&	 'Mile'	0.012	&	 'Colony'	0.011	\\\hline
+ 'Middle'	-0.006	&	 '33'	0.122	&	 '40'	-0.009	&	 'Trl '	0.010	\\\hline
+ 'Pendleton'	-0.006	&	 'Fish'	0.115	&	 'St '	0.008	&	 'RD '	-0.010	\\\hline
+ 'Attawanhood'	-0.005	&	 'MILFORD'	0.098	&	 'Worthington'	0.008	&	 'Rd '	-0.009	\\\hline
+ 'Fish'	0.005	&	 '86'	-0.096	&	 '339'	0.008	&	 'Rock'	0.007	\\\hline
+ 'WALNUT'	0.005	&	 'S'	0.095	&	 'Hawthorne'	0.008	&	 'Settlement'	0.007	\\\hline
+ '329'	-0.005	&	 'Colony'	0.087	&	 'Bennetts'	0.008	&	 'Attawanhood'	-0.007	\\\hline
+ 'Colony'	0.005	&	 'ST '	-0.083	&	 'ST '	-0.008	&	 'Cook'	-0.007	\\\hline
+ 'Meadow'	-0.005	&	 'Crse '	-0.079	&	 '7'	-0.008	&	 'LN '	0.006	\\\hline
+ '200'	0.005	&	 'St '	0.065	&	 '329'	-0.008	&	 '555'	0.006	\\\hline
+ '143'	0.004	&	 '40'	-0.061	&	 'Fish'	0.007	&	 '72'	0.006	\\\hline
+ 'Old'	0.004	&	 'Dr '	-0.052	&	 'LN '	0.007	&	 '143'	0.006	\\\hline
+ 'Settlement'	0.004	&	 '14'	0.047	&	 'CIRCLE '	-0.007	&	 'Shadow'	0.006	\\\hline
+ 'US'	0.004	&	 'Overlook'	-0.044	&	 'Sunny'	0.007	&	 '113'	0.006	\\\hline
+ '555'	-0.004	&	 'N'	-0.042	&	 'Land'	-0.007	&	 '25'	0.006	\\\hline
+ '23'	-0.004	&	 'Cook'	0.040	&	 'ST'	-0.006	&	 'Crse '	0.005	\\\hline
+ '72'	-0.004	&	 'W '	0.039	&	 'S '	-0.006	&	 '480'	-0.005	\\\hline
+ '135'	0.004	&	 'S '	0.039	&	 '14'	-0.006	&	 'Pl '	0.005	\\\hline
+ 'Trl '	0.004	&	 '308'	-0.038	&	 'Morea'	0.006	&	 'Gail'	-0.005	\\\hline
+ 'Arrowhead'	0.004	&	 '76'	-0.037	&	 '23'	0.006	&	 'JARVIS'	0.005	\\\hline
+ 'Rdg '	-0.004	&	 'Trl '	-0.037	&	 '86'	0.006	&	 '135'	0.005	\\\hline
+ '29'	0.004	&	 '89'	0.036	&	 '87'	-0.006	&	 'Canterbury'	0.005	\\\hline
+ 'MILFORD'	0.004	&	 '329'	0.036	&	 '45'	0.006	&	 '308'	-0.005	\\\hline
+ '180'	-0.004	&	 '59'	0.035	&	 'RD '	-0.006	&	 'SOUTHMAYD'	0.005	\\\hline
+ '9'	0.004	&	 'Old'	-0.035	&	 'Farm'	-0.006	&	 'N'	0.005	\\\hline
+ 'Overlook'	-0.004	&	 'Dziok'	0.034	&	 'Trl '	0.006	&	 '34'	-0.005	\\\hline
+ '259'	0.004	&	 'Spgs '	0.034	&	 'Pl '	0.006	&	 'S'	0.005	\\\hline
+ 'Wells'	-0.004	&	 'Ohio '	0.033	&	 '135'	0.006	&	 'Sperry'	0.005	\\\hline
+ 'Highland'	0.004	&	 '135'	-0.033	&	 '1294'	-0.006	&	 'Weed'	-0.005	\\\hline
+ 'Elm'	0.004	&	 '472'	-0.032	&	 'Nooks'	-0.006	&	 'Wells'	-0.005	\\\hline
+ '89'	-0.003	&	 'Morea'	-0.032	&	 'US'	0.006	&	 '215'	0.005	\\\hline
+ 'Wood'	-0.003	&	 'MIDDLE'	0.031	&	 'S'	0.006	&	 'Sheridan'	-0.005	\\\hline
+ 'Neptune'	-0.003	&	 '46'	-0.031	&	 '9'	-0.006	&	 'KING'	-0.004	\\\hline
+ 'Hawthorne'	-0.003	&	 '471'	0.030	&	 '512'	0.005	&	 '67'	-0.004	\\\hline
+ 'TERR '	0.003	&	 'Tpke '	0.030	&	 '472'	-0.005	&	 'MAIN'	-0.004	\\\hline
+ 'Overhill'	-0.003	&	 'MACAULEY'	-0.029	&	 '32'	0.005	&	 'AVE '	-0.004	\\\hline
+ 'CIRCLE '	-0.003	&	 'South '	-0.029	&	 '25'	-0.005	&	 'Farmington'	0.004	\\\hline
+ 'River'	-0.003	&	 'WHITE'	-0.029	&	 'Holcomb'	0.005	&	 'View'	0.004	\\\hline
+ 'Oates'	0.003	&	 '8516'	0.028	&	 '281'	0.005	&	 'Naugatuck'	0.004	\\\hline
+ 'Naugatuck'	0.003	&	 '2768 '	-0.028	&	 'Long'	0.005	&	 'Elm'	-0.004	\\\hline
+ 'Three'	0.003	&	 'CIRCLE '	0.027	&	 '308'	-0.005	&	 'MILFORD'	0.004	\\\hline
+ '215'	-0.003	&	 'Arrowhead'	-0.027	&	 'Portland'	0.005	&	 'JANET'	-0.004	\\\hline
+ 'WACONA'	-0.003	&	 'School'	0.027	&	 'Highland'	-0.005	&	 'P.O.BOX'	0.004	\\\hline
+ 'Ct '	0.003	&	 'Shadow'	0.027	&	 'Hudson'	0.005	&	 'St '	0.004	\\\hline
+ 'JARVIS'	0.003	&	 'Mile'	0.027	&	 'Sheridan'	0.005	&	 '180'	-0.004	\\\hline
+ '750'	0.003	&	 'KING'	0.026	&	 'Wells'	0.005	&	 'Ford'	0.004	\\\hline
+ 'Randolph'	0.003	&	 'Ct '	0.025	&	 'TPKE'	-0.005	&	 'Pembroke'	-0.004	\\\hline
+
+
 
 \hline\end{tabular}
-\end{table}
+\end{table*}
 
 \section{LIME Full Results}
-\begin{table}
+\begin{table*}
 \centering
 \caption{LIME Results - Addresses(2)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight 			\\\hline
-'Willow'& -0.0037921911871189738			\\\hline
-'Gail'& -0.0037642957560122398			\\\hline
-'Porterbrook'& 0.0037343963878524035			\\\hline
-'150'& 0.0037099380896738884			\\\hline
-'Lakeside'& 0.0036784420502833058			\\\hline
-'Head'& 0.0036616703009673783			\\\hline
-'Land'& 0.0035886181222156794			\\\hline
-'Arrow'& -0.003527077332686993			\\\hline
-'Mountain'& 0.0034743149416708884			\\\hline
-'Rd'& 0.0033216321445049043			\\\hline
-'Wells'& -0.0033192727316741439			\\\hline
-'Farmington'& -0.0031890192159536265			\\\hline
-'Worthington'& -0.0031638633683624116			\\\hline
-'Wood'& -0.0031612217063246148			\\\hline
-'1505'& 0.0031520395361399893			\\\hline
-'80'& -0.0030203794962196003			\\\hline
-'Farm'& -0.0029941068543401046			\\\hline
-'CIRCLE'& -0.0028786259553511022			\\\hline
-'Beach'& 0.0028246371143732319			\\\hline
-'Tpke'& -0.0027204438274248581			\\\hline
-'TERR'& -0.002715074879436093			\\\hline
-'Langford'& -0.0026955396185983182			\\\hline
-'75'& -0.0026469541740276525			\\\hline
-'P.O.BOX'& -0.0025882855374589901			\\\hline
-'RD'& 0.0025412948329680599			\\\hline
-'River'& -0.0025362414423635098			\\\hline
-'89'& -0.0025336525092620266			\\\hline
-'30'& -0.0025107459066266965			\\\hline
-'329'& -0.0024983032155716529			\\\hline
-'Settlement'& 0.0024250463893147898			\\\hline
-'Weed'& -0.002419795170162874			\\\hline
-'26'& -0.0023868050130499436			\\\hline
-'WALNUT'& -0.0023863253908911518			\\\hline
-'73'& -0.0021987873870489638			\\\hline
-'Cook'& -0.0021531165485411796			\\\hline
-'Meredith'& -0.0020533778470170324			\\\hline
-'14'& -0.0018424474278807507			\\\hline
-'Flax'& -0.0017715615269663385			\\\hline
-'48'& -0.0017622115634650941			\\\hline
-'94'& -0.0015277133441205879			\\\hline
-'WHITE'& -0.0014284530102881574			\\\hline
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+ '37'	0.003	&	 'Cheshire'	0.025	&	 '71'	-0.005	&	 'Nooks'	-0.004	\\\hline
+ 'S'	0.003	&	 '26'	-0.025	&	 '8516'	0.005	&	 '59'	0.004	\\\hline
+ '42'	-0.003	&	 'Myrtle'	-0.024	&	 'Neptune'	-0.005	&	 'Sixth'	-0.004	\\\hline
+ 'Langford'	0.003	&	 'Attawanhood'	0.024	&	 '215'	-0.004	&	 '48'	0.004	\\\hline
+ '195'	-0.003	&	 'Waterfront'	0.024	&	 '83'	0.004	&	 '2410'	-0.004	\\\hline
+ '1505'	0.003	&	 'US'	0.024	&	 '178'	0.004	&	 'Pendleton'	0.004	\\\hline
+ 'View'	0.003	&	 'House'	0.024	&	 'Rock'	0.004	&	 '42'	0.003	\\\hline
+ 'PRATT'	0.003	&	 'Meadow'	0.023	&	 '42'	-0.004	&	 'MIDDLE'	0.003	\\\hline
+ 'Sixth'	-0.003	&	 'Bennetts'	-0.023	&	 '46'	-0.004	&	 'Middle'	-0.003	\\\hline
+ '7'	-0.003	&	 'High'	-0.022	&	 'Shadow'	0.004	&	 'WILSON '	-0.003	\\\hline
+ 'Bennetts'	-0.003	&	 '1173'	-0.022	&	 'Carol'	0.004	&	 '6'	-0.003	\\\hline
+ 'KING'	-0.003	&	 'Gertrude'	0.022	&	 '19'	0.004	&	 'Carol'	-0.003	\\\hline
+ 'Broadway'	0.003	&	 'Cedar'	0.022	&	 'Overlook'	-0.004	&	 'Rdg '	0.003	\\\hline
+ 'Hilltop'	-0.003	&	 '195'	-0.021	&	 '44'	0.004	&	 'South '	-0.003	\\\hline
+ '2'	-0.003	&	 'View'	0.021	&	 'AVE '	-0.004	&	 'Waterfront'	0.003	\\\hline
+ '308'	0.003	&	 'Settlement'	-0.021	&	 '72'	-0.004	&	 '94'	0.003	\\\hline
+ '18'	-0.003	&	 '150'	-0.021	&	 'Mountain'	-0.004	&	 '40'	0.003	\\\hline
+ 'Farmington'	-0.003	&	 'Hawthorne'	0.021	&	 'Ave '	-0.004	&	 '12'	0.003	\\\hline
+ '14'	-0.003	&	 '47'	0.021	&	 'Arrowhead'	-0.004	&	 '87'	-0.003	\\\hline
+ '280'	0.003	&	 'Soundview'	0.020	&	 'Pendleton'	-0.004	&	 '2768 '	-0.003	\\\hline
+ 'WHITE'	0.003	&	 'Overhill'	-0.020	&	 '28'	-0.004	&	 '150'	0.003	\\\hline
+ 'Lakeside'	-0.003	&	 '1'	0.020	&	 '26'	-0.004	&	 'Highland'	0.003	\\\hline
+ 'F.D.'	0.002	&	 'Neptune'	-0.020	&	 '30'	-0.004	&	 'Bennetts'	-0.003	\\\hline
+ 'S '	-0.002	&	 '12'	0.020	&	 '581'	0.004	&	 'MACAULEY'	-0.003	\\\hline
+ 'Dr '	0.002	&	 'Tree'	0.020	&	 '82'	-0.004	&	 'House'	0.003	\\\hline
+ 'Hartford'	-0.002	&	 '73'	-0.020	&	 'ALYCE'	-0.004	&	 'Farm'	-0.003	\\\hline
+ '581'	0.002	&	 '87'	-0.020	&	 'PRATT'	0.004	&	 'ST '	-0.003	\\\hline
+ 'Porterbrook'	-0.002	&	 'Russell'	-0.019	&	 '10'	-0.004	&	 'Hudson'	-0.003	\\\hline
+ 'Ohio '	0.002	&	 '280'	-0.019	&	 '59'	0.004	&	 '98'	0.003	\\\hline
+ 'Farm'	-0.002	&	 '1226'	0.019	&	 'JANET'	-0.004	&	 'Cedar'	0.003	\\\hline
+ 'House'	-0.002	&	 'Langford'	-0.019	&	 'Arrow'	-0.004	&	 '37'	-0.003	\\\hline
+ 'MACAULEY'	-0.002	&	 '6'	0.019	&	 '48'	0.004	&	 'Old'	-0.003	\\\hline
+ '45'	0.002	&	 '2505'	0.019	&	 '50'	0.004	&	 '10'	0.003	\\\hline
+ 'Tree'	-0.002	&	 '24'	-0.019	&	 'Soundview'	0.003	&	 'Tree'	-0.003	\\\hline
+ 'School'	0.002	&	 '75'	-0.019	&	 '98'	0.003	&	 '82'	-0.003	\\\hline
+ '24'	0.002	&	 'Chestnut'	0.018	&	 'W '	-0.003	&	 '7'	-0.003	\\\hline
+ '1226'	0.002	&	 '1294'	0.018	&	 '750'	0.003	&	 'W '	-0.003	\\\hline
+ 'Canterbury'	0.002	&	 'Sperry'	-0.017	&	 'Cutlery'	-0.003	&	 'High'	-0.003	\\\hline
+ '404'	-0.002	&	 'WALNUT'	0.017	&	 '2768 '	0.003	&	 'E'	-0.003	\\\hline
+ 'Whitney'	0.002	&	 'Ridge'	0.017	&	 'Dr '	0.003	&	 'Gertrude'	0.003	\\\hline
+ 'Sharon'	0.002	&	 '37'	0.017	&	 '555'	-0.003	&	 'Pape'	-0.002	\\\hline
+ 'ST'	-0.002	&	 'Weed'	-0.017	&	 '94'	-0.003	&	 'Portland'	-0.002	\\\hline
+ 'WILSON '	-0.002	&	 'Ln '	-0.016	&	 'JARVIS'	0.003	&	 'Oates'	-0.002	\\\hline
+ 'Ave '	0.002	&	 'ALYCE'	-0.016	&	 'Meredith'	-0.003	&	 '472'	-0.002	\\\hline
+ '28'	-0.002	&	 'TPKE'	-0.015	&	 'Mayflower'	-0.003	&	 'Sharon'	-0.002	\\\hline
+ 'Ln '	0.002	&	 'Farmington'	-0.015	&	 'Cedar'	-0.003	&	 '238'	0.002	\\\hline
+ 'Sycamore'	0.002	&	 '28'	-0.015	&	 'Myrtle'	-0.003	&	 '750'	-0.002	\\\hline
+ 'Ford'	-0.002	&	 'Pendleton'	0.015	&	 'Beach'	0.003	&	 'Hartford'	-0.002	\\\hline
+ '317'	-0.002	&	 'Sunny'	-0.014	&	 'Ct '	-0.003	&	 '1'	-0.002	\\\hline
+ '12'	0.002	&	 'Mountain'	-0.013	&	 '29'	-0.003	&	 'Meredith'	-0.002	\\\hline
+
+
 
 \hline\end{tabular}
-\end{table}
-
-
-\begin{table}
-\centering
-\caption{LIME Results - Companies (1)}
-\begin{tabular}{|l|l|} \hline
-'LIMITED'& -0.63349013065099768\\\hline
-'BOWKER'& 0.085768448232139916\\\hline
-'W'& 0.085256963785598189\\\hline
-'A'& 0.077019693074941054\\\hline
-'CROWTON'& 0.063811590981113275\\\hline
-'LIMITED.I.C.'& 0.063226970014220785\\\hline
-'BLUEBERRY'& 0.047334262962764828\\\hline
-'VISION'& 0.041637078213711549\\\hline
-'DIAMOND'& -0.029686911972685942\\\hline
-'EMPLOYMENT'& -0.028821850833759433\\\hline
-'SERVICES'& -0.02675147127561733\\\hline
-'CHARIOT'& -0.026343271954209862\\\hline
-'INNOVATIONS'& 0.025761522824528798\\\hline
-'PROPERTY'& -0.025056847403916681\\\hline
-'BOYLE'& 0.024847613266834677\\\hline
-'PLUMBING'& 0.023818811932263484\\\hline
-'CAPITAL'& 0.023478350642488779\\\hline
-'GOURMET'& 0.023280027593238065\\\hline
-'BURUNGA'& 0.02179084173611746\\\hline
-'CCI'& -0.021382209983426478\\\hline
-'PRIVATE'& -0.021266271724758642\\\hline
-'CHESHIRE'& -0.020814664069936307\\\hline
-'PRINT'& -0.020803835364209447\\\hline
-'ALAMORT'& -0.020644670993146316\\\hline
-'TRANS'& 0.020573449048155883\\\hline
-'TRANSPORT'& -0.019689917035936574\\\hline
-'PLUMBING'& -0.019673519729161787\\\hline
-'GIFTS'& -0.019247381076709064\\\hline
-'MANAGEMENT'& 0.019216652622711532\\\hline
-'LIGHTINTHEBOX'& -0.018814686020860959\\\hline
-'ELECTRICAL'& -0.01785203711354728\\\hline
-'COST'& -0.017054545513881091\\\hline
-'ATOMIC'& -0.01696395227116955\\\hline
-'OUTSKIRTS'& -0.016135831769840563\\\hline
-'A.V.'& -0.016044059045798663\\\hline
-'ASSIST'& -0.01598204180976778\\\hline
-'AUTOMOTIVE'& 0.015825302950403356\\\hline
-'RUTLAND'& -0.015682944856849682\\\hline
-'APC'& 0.015563790964872162\\\hline
-'CORPORATE'& 0.015507539580536888\\\hline
-'PUBLISHING'& 0.015501764794851217\\\hline
-'VEHICLE'& -0.01521185070585581\\\hline
-'MITSUBISHI'& 0.015166627019123965\\\hline
-'COCHRANE'& -0.01514414968313427\\\hline
-'LIM'& 0.015113258069838122\\\hline
-'CEILINGS'& 0.014986838982052032\\\hline
-'CAVEAT'& -0.014741092974705869\\\hline
-'SHIRT'& -0.014316302671818684\\\hline
-'CELLWIZE'& 0.014265175473772073\\\hline
-'LTD'& 0.014226032630922888\\\hline
-'ALYASAMEEN'& 0.014224222298585875\\\hline
-'2017'& -0.01417865195848435\\\hline
-'ANDREI'& -0.014154684427557516\\\hline
-'CDCE'& 0.014066137159655703\\\hline
-'K'& -0.013881831339935365\\\hline
-'PARTNERS'& 0.013782206091035566\\\hline
-'LIMITEDMPANY'& 0.013536027423489739\\\hline
-'LEARNING'& 0.01352363395115847\\\hline
-'COVENTRYTED'& -0.013435468891485898\\\hline
-
-\hline\end{tabular}
-\end{table}
-
-
-\begin{table}
-\centering
-\caption{LIME Results - Companies (2)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight \\ \hline
-'LTD.'& 0.013396475386249987\\\hline
-'12'& 0.013278325400936221\\\hline
-'CARDPRIZE'& -0.013085957788976444\\\hline
-'DADDIES'& 0.013035745507551596\\\hline
-'LTD"'& -0.01281774107701851\\\hline
-'BUBBLE'& -0.012725919749265787\\\hline
-'CONSTRUCTION'& -0.012699909713637415\\\hline
-'CAR'& 0.012564794891783504\\\hline
-'ARTSPACESLTD'& -0.012145364975982807\\\hline
-'BRUNSWICK'& 0.011962864236176209\\\hline
-'P.'& -0.011932563688370895\\\hline
-'APJ'& -0.011868965883454102\\\hline
-'DEVELOPMENTS'& -0.011811340904650171\\\hline
-"D'AMICO"& -0.011788191300219372\\\hline
-'MUSIC'& -0.0117761190798452\\\hline
-'PIMPEC'& -0.011736491029493507\\\hline
-'DBA'& -0.011669044298071285\\\hline
-'MIDLANDS'& 0.011661086813649033\\\hline
-'COLRON'& 0.011656571268037565\\\hline
-'AGE'& 0.011494734127881842\\\hline
-'CLIVE'& -0.011345752977641309\\\hline
-'SITE'& 0.011323800073455679\\\hline
-'VERONICA'& 0.01127953567447228\\\hline
-'AUDIO'& 0.011200096809111293\\\hline
-'BODZIO'& 0.010916039924463139\\\hline
-'RECLAIM'& 0.010886798446109758\\\hline
-'ENGINEERS'& 0.010872443291239913\\\hline
-'AZK'& -0.01074301721043534\\\hline
-'COFFEE'& 0.01072613918409023\\\hline
-'"A2B'& 0.010653370580137093\\\hline
-'INC'& -0.010263077183875428\\\hline
-'COMPUTERS'& 0.010130103810699025\\\hline
-'VIATOR'& 0.010051822178148885\\\hline
-'COLBERRY'& 0.010008599322361041\\\hline
-'N'& 0.0099214911098746729\\\hline
-'CRAGFIT'& 0.0095915665011525684\\\hline
-'ANNE'& 0.0095891016126281245\\\hline
-'M'& -0.0095262281832718624\\\hline
-'MARKETING'& 0.009320108060377974\\\hline
-'RABICANO'& 0.0093139853168189568\\\hline
-'DELTA'& 0.0081194713759227006\\\hline
-
-\hline\end{tabular}
-\end{table}
-
-
-\begin{table}
-\centering
-\caption{LIME Results - Names (1)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight \\ \hline
-'Megan'& 0.0020859877331014854\\\hline
-'MERCADO'& 0.0020250263741921769\\\hline
-'Hannah'& 0.0019930725456540452\\\hline
-'Kathleen'& 0.001979090476057016\\\hline
-'Juanita'& -0.0019744115520613763\\\hline
-'SAN'& 0.001904837049135831\\\hline
-'Mark'& -0.0018448339205664032\\\hline
-'Nathan'& -0.0017945064864189162\\\hline
-'Perkins'& 0.0017878865465037453\\\hline
-'BUCHANAN'& 0.0017517594348443204\\\hline
-'S'& 0.0016787643173931241\\\hline
-'Moss'& 0.0016702165905126752\\\hline
-'Shannon'& -0.0016648960651855596\\\hline
-'DRAYCOTT'& -0.0016103413375417037\\\hline
-'N'& -0.0015932217856837851\\\hline
-'GOMEZDELATORRE'& 0.0015674730881019994\\\hline
-'Tate'& -0.0015607938369164806\\\hline
-'Carolyn'& 0.0015489686799778567\\\hline
-'SANTIAGO'& 0.0015378158818201404\\\hline
-'H'& 0.0015279213568687488\\\hline
-'SANTANGELO'& -0.001516661825864027\\\hline
-'Morton'& 0.0015151727001957659\\\hline
-'Anita'& -0.0014943811064093021\\\hline
-'SCHILLING'& 0.0014885028875234671\\\hline
-'LARRY'& -0.0014770034154076221\\\hline
-'Heath'& 0.0014724073394996673\\\hline
-'Roger'& -0.0014635410620008019\\\hline
-'JIMENEZ'& 0.0014430361931297168\\\hline
-'Valenzuela'& 0.0014348824833932696\\\hline
-'A'& 0.0014225054601604851\\\hline
-'Arnold'& 0.0014062961588791488\\\hline
-'Paul'& 0.0013903387391633749\\\hline
-'Z'& -0.0013879262361200986\\\hline
-'R'& 0.0013722776398363374\\\hline
-'Edwards'& -0.0013666751184415124\\\hline
-'DEVITO-RODRIGUE'& -0.0013575577856406141\\\hline
-'SHARELL'& 0.0013245257548944818\\\hline
-'MAGRAS'& -0.001315102130826329\\\hline
-'GRULLON'& -0.0013114917255550751\\\hline
-'M'& 0.0013008313889095752\\\hline
-'E'& -0.0012960629778131011\\\hline
-'Herrera'& 0.0012807023155936021\\\hline
-'Hatfield'& -0.0012728655119864842\\\hline
-'JOSE'& 0.0012579291472865938\\\hline
-'GRULLON'& -0.0012442560742293395\\\hline
-'Guzman'& -0.0012421304963356103\\\hline
-'ISLA'& -0.0011877015530645629\\\hline
-'Donaldson'& 0.0011866710733414714\\\hline
-'CAMPBELL'& -0.0011763569827931183\\\hline
-'BONNER'& 0.001171232333539194\\\hline
-'BARNABY'& 0.0011673858799001104\\\hline
-'Theresa'& -0.0011670397955275932\\\hline
-'TAVERAS'& 0.001166376836556538\\\hline
-'SANTORO'& 0.0011471322594295156\\\hline
-'Kaufman'& 0.0011353931875683026\\\hline
-'LIMATO'& -0.0011303816355485903\\\hline
-'Derek'& -0.0011286176368469525\\\hline
-'HARGRAVES'& 0.0011070245601237428\\\hline
-'Cain'& -0.0010901525656780155\\\hline
-
-\hline\end{tabular}
-\end{table}
-
-
-
-\begin{table}
-\centering
-\caption{LIME Results - Names (2)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight \\ \hline
-'J'& -0.0010404575139248491\\\hline
-'Marlene'& 0.0010040435875653181\\\hline
-'Allen'& 0.0010026888506596162\\\hline
-'Chase'& -0.00099699021955446717\\\hline
-'Barker'& -0.00098477545191912323\\\hline
-'Alice'& -0.00097973869649372724\\\hline
-'Baby'& -0.00097642376282147995\\\hline
-'D'& -0.00092049071846337521\\\hline
-'P'& -0.00091318087785729281\\\hline
-'Duffy'& -0.00089691424835125206\\\hline
-'L'& -0.00087330076905062107\\\hline
-'Hendrix'& 0.00085676494824100664\\\hline
-'WLADIS'& -0.00084780884419382815\\\hline
-'PEDROSA'& -0.00082508782360140567\\\hline
-'Oliver'& 0.00081513611976707402\\\hline
-'Jack'& -0.00080299692764281688\\\hline
-'Danny'& 0.00076866022509179319\\\hline
-'SHAH'& 0.00075870789998360474\\\hline
-'IBERN'& -0.00075611046173506896\\\hline
-'Mariah'& 0.00075568519414857783\\\hline
-'OLIVO'& -0.00073905073832933126\\\hline
-'Phillip'& -0.00073739096680993364\\\hline
-'Tommy'& 0.00071614692856639595\\\hline
-'RESTREPO'& -0.00071081954974465845\\\hline
-'Shannon'& 0.0007058785198820782\\\hline
-'Stephanie'& 0.000642583920313274\\\hline
-'HERSHBERGER'& 0.00064101457315222422\\\hline
-'FERONE'& 0.00063473073907655019\\\hline
-'Hurley'& -0.00063406012091820263\\\hline
-'Elizabeth'& -0.0006323550955838861\\\hline
-'Melendez'& 0.00060608752365264886\\\hline
-'BARGLOWSKA'& -0.00054918115755219475\\\hline
-'EDKINS'& 0.0005455871970456227\\\hline
-'T'& 0.00054222060118458621\\\hline
-'Love'& -0.00047300884099280168\\\hline
-'Clayton'& 0.00045190603421496389\\\hline
-'Allison'& -0.0010767208109246239\\\hline
-'ANDERSON'& -0.0010737612028428446\\\hline
-'B'& -0.0010572042718499158\\\hline
-'Kathryn'& 0.001053010009960439\\\hline
-'Matthew'& -0.0010439297154172847\\\hline
-\hline\end{tabular}
-\end{table}
-
-
-\begin{table}
-\centering
-\caption{LIME Results - Products (1)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight\\ \hline
-'Protector'& -2.6256731385071901e-06\\\hline
-'Ramps'& -2.3891930611410793e-06\\\hline
-'Linen'& -2.3436619972902771e-06\\\hline
-'90'& -2.1822042687207914e-06\\\hline
-'Diced'& -2.1095900325115041e-06\\\hline
-'All'& -2.0906144044229118e-06\\\hline
-'60'& -2.0875366521500831e-06\\\hline
-'Double-sided'& -2.0660697678161833e-06\\\hline
-'C'& -2.0519284562773661e-06\\\hline
-'Lemon'& -1.9946896081845479e-06\\\hline
-'Oil'& -1.9325735219645206e-06\\\hline
-'Close-up'& -1.9271269704153383e-06\\\hline
-'Sugar'& -1.9179601088354763e-06\\\hline
-'MELHORAL'& -1.8979716223716453e-06\\\hline
-'Hair'& -1.8921892830713871e-06\\\hline
-'120'& -1.8880829607139037e-06\\\hline
-'Dining'& 1.8877568586110512e-06\\\hline
-'LECHE'& -1.8767255359194773e-06\\\hline
-'Definition'& -1.869100759258901e-06\\\hline
-'Xylitol'& -1.8610120962086523e-06\\\hline
-'Tomatoes'& -1.8416359579577202e-06\\\hline
-'"Tablets'& -1.8281706632805249e-06\\\hline
-'Chewing'& -1.8230891540283091e-06\\\hline
-'Lung'& -1.8074822485009271e-06\\\hline
-'Detoxitech'& 1.8062111028529713e-06\\\hline
-'Soft'& -1.7804751654310493e-06\\\hline
-'Squeaksters'& 1.7401255137497323e-06\\\hline
-'Butter'& -1.739962185491471e-06\\\hline
-'Achari'& -1.7387419284086943e-06\\\hline
-'Core'& -1.7290335400193742e-06\\\hline
-'STYLE'& -1.7044688391325595e-06\\\hline
-'Back'& -1.7030634397438147e-06\\\hline
-'Predator'& -1.6880776452748697e-06\\\hline
-'TB'& -1.6848665630139052e-06\\\hline
-'Chelator'& -1.6518442496193498e-06\\\hline
-'vcaps'& 1.6465199109375219e-06\\\hline
-'L'& -1.6387403257462667e-06\\\hline
-'200-RIZOS'& -1.6090654576430883e-06\\\hline
-'Enema'& -1.5974708730980886e-06\\\hline
-'Tablets'& -1.5902977283374838e-06\\\hline
-'Just'& 1.588204272712646e-06\\\hline
-'Elite'& -1.5335638564684069e-06\\\hline
-'1x10'& -1.5145173169796078e-06\\\hline
-'Height'& -1.4925871373063442e-06\\\hline
-'Cooking'& -1.4901305224565788e-06\\\hline
-'Set'& -1.4823013966042235e-06\\\hline
-'Tabs'& -1.476077267303884e-06\\\hline
-'Amish'& 1.4752362136062863e-06\\\hline
-'Pea'& -1.4722668845971375e-06\\\hline
-'5'& -1.4665139192096464e-06\\\hline
-'100'& -1.4640129945103964e-06\\\hline
-'Peach'& -1.4526914768189861e-06\\\hline
-'Lime'& -1.450068051045915e-06\\\hline
-'Moxie'& -1.4288992773748449e-06\\\hline
-'0.2-0.5\%'& -1.4191096791622887e-06\\\hline
-'Sunblock'& -1.4177367457820354e-06\\\hline
-'CLARA'& 1.4069510240662509e-06\\\hline
-'PHILIPS'& 1.4042306274615911e-06\\\hline
-'Vegetarian'& -1.3929175179679644e-06\\\hline
-
-\hline\end{tabular}
-\end{table}
-
-
-\begin{table}
-\centering
-\caption{LIME Results - Products (2)}
-\begin{tabular}{|l|l|} \hline
-Word & Weight\\ \hline
-'German'& 1.3767813528298174e-06\\\hline
-'3'& -1.3763715193717075e-06\\\hline
-'Exceptional'& -1.3734769604219943e-06\\\hline
-'And'& 1.3669455406460257e-06\\\hline
-'Margarita'& -1.359951026740795e-06\\\hline
-'de'& -1.3587517644007717e-06\\\hline
-'candle'& -1.3557198009088583e-06\\\hline
-'Mesh'& -1.343309094427119e-06\\\hline
-'Game'& -1.2974261153885734e-06\\\hline
-'gevrey'& -1.2967931013186837e-06\\\hline
-'Set'& -1.2930235061471416e-06\\\hline
-'Company'& -1.2702066701276919e-06\\\hline
-'With'& -1.2600445682397555e-06\\\hline
-'King-size'& -1.2579524583158708e-06\\\hline
-'Tonic'& -1.2477854655096949e-06\\\hline
-'Mix'& -1.236308831489104e-06\\\hline
-'SOLAR'& -1.2008742577073988e-06\\\hline
-'Style'& -1.1949076969395926e-06\\\hline
-'Balancing'& -1.1895504550842334e-06\\\hline
-'Gel'& -1.1847598428074099e-06\\\hline
-'5pcs'& -1.1688672416422164e-06\\\hline
-'Up'& 1.1287450929999031e-06\\\hline
-'06'& -1.0258863095484146e-06\\\hline
-'2'& 8.2519284939639115e-07\\\hline
-'LAMP'& 7.5539964975550151e-07\\\hline
-'Great'& 7.3858458513431401e-07\\\hline
-'Caplets'& 7.1571621909023754e-07\\\hline
-'piece'& 6.9778274573269864e-07\\\hline
-'Traditional'& 6.7338281909254261e-07\\\hline
-'mg'& 6.4891759798861803e-07\\\hline
-'De'& 6.3313836372461049e-07\\\hline
-'Eye'& 6.3134619411807593e-07\\\hline
-'Tv'& 6.0705314781305259e-07\\\hline
-'Focus'& 6.0051452422139066e-07\\\hline
-'10X1UN'& 5.8422228639365285e-07\\\hline
-'Normal'& 4.7739378080513686e-07\\\hline
-'Assorted'& 4.7255056508412135e-07\\\hline
-'Series'& 4.5769601315060888e-07\\\hline
-'Metal'& 3.3426722865088335e-07\\\hline
-'Waterlily'& 3.1612327160284638e-07\\\hline
-\hline\end{tabular}
-\end{table}
- \section{Business Data - Fine-Tuning}
- \begin{table*}
-\centering
-\caption{Business Data Results}
-\begin{tabular}{|l|l|l|l|l|l|l|} \hline
-Col Name &Example& Vanilla NN w/ letters \\ \hline
-Account Owner & Toni Gomez & Person - 0.997   \\ \hline
-Billing Address & Suite \# 10049 & Address- .546  \\ \hline
-Billing Contact & Allen Hardin& Person- .998 \\ \hline
-Billing Email & jgoff@ma1l2u.org & Company - .684\\ \hline
-City & Helena & Person - .394 \\ \hline
-Conversion Date & Thu Apr 03 05:20:32 EDT 2014 &Product - None  \\ \hline
-Country & Slovakia & Companies - .342 \\ \hline
-Custom Metrics & code,text,room & Product - .549\\ \hline
-Org Name& Morgan Studios & Company - .849  \\ \hline
-Parent Name& 'Ringgold Cafe' & Company - .840  \\ \hline
-Pay Cycle & 'Q','T' & Person - .957  \\ \hline
-Pay Method & 'Invoice' & Product - .474  \\ \hline
-po\_num & PO6793946273 & Company - .559   \\ \hline
-State &  'in', 'so' & Product - .646  \\ \hline
-Street & 'Mcconnel' & Person - .449  \\ \hline
-Terms & 'Standard' & Product - .816  \\ \hline
-Valid From & Thu Jul 30 05:20:32 EDT 2013 & Product - .005  \\ \hline
-Valid To & Sat Mar 15 05:20:32 EDT 2014 & Product -  None  \\ \hline
-\hline\end{tabular}\label{table:business}
 \end{table*}
 
 
+\begin{table*}
+\centering
+\caption{LIME Results - Companies (1)}
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+LIMITED	-0.667	&	LIMITED	-0.039	&	LIMITED	-0.260	&	LIMITED	-0.336	\\\hline
+BOWKER	0.098	&	PROPERTIES	-0.031	&	W	0.074	&	LTD	-0.097	\\\hline
+W	0.097	&	LIMITED.I.C.	-0.021	&	A	0.048	&	PROPERTIES	-0.070	\\\hline
+A	0.070	&	BLUEBERRY	0.019	&	PROPERTIES	-0.047	&	W	0.059	\\\hline
+LIMITED.I.C.	0.069	&	PROPERTY	-0.017	&	BOWKER	0.040	&	A	0.055	\\\hline
+CROWTON	0.056	&	CROWTON	0.016	&	INNOVATIONS	0.038	&	BLUEBERRY	0.049	\\\hline
+VISION	0.046	&	LTD	-0.015	&	EMPLOYMENT	-0.029	&	BOWKER	0.038	\\\hline
+BLUEBERRY	0.041	&	EMPLOYMENT	-0.011	&	ROAD	-0.026	&	LIMITED.I.C.	0.036	\\\hline
+SERVICES	-0.033	&	SERVICES	-0.010	&	TRANS	0.024	&	CROWTON	0.028	\\\hline
+GROUP	-0.033	&	BODZIO	0.010	&	COCHRANE	-0.023	&	RATED	0.026	\\\hline
+CHESHIRE	-0.032	&	HEADQUARTERS	0.009	&	ACER	0.020	&	ARTSPACESLTD	0.025	\\\hline
+EMPLOYMENT	-0.030	&	SOLUTIONS	-0.009	&	BSEC	0.020	&	SOLUTIONS	0.023	\\\hline
+GOURMET	0.028	&	ORTHODONTICS	0.008	&	BODZIO	-0.019	&	GLASGOW	-0.023	\\\hline
+DE-TOY	0.026	&	GOURMET	0.008	&	ENGINEERS	-0.019	&	PROPERTY	-0.022	\\\hline
+RECLAIM	0.025	&	W	0.007	&	ATOS	0.019	&	HENRY	0.022	\\\hline
+CHARLIE	-0.025	&	BLINK	-0.006	&	ANTHONY	-0.019	&	BODZIO	-0.020	\\\hline
+DARWIN	0.022	&	MANPOWER	0.006	&	PROPERTY	-0.019	&	RECLAIM	-0.020	\\\hline
+CONTRACTOR	0.022	&	M	-0.006	&	ANDREI	-0.018	&	COMPUTERS	0.019	\\\hline
+PROPERTY	-0.021	&	FALCON	0.006	&	BLUEBERRY	0.018	&	GAS	-0.019	\\\hline
+DR	0.021	&	LIGHTINTHEBOX	-0.006	&	MINISTRY	-0.017	&	ALAMORT	0.019	\\\hline
+WINGS	-0.021	&	DADDIES	0.006	&	COST	-0.017	&	FUN	0.018	\\\hline
+BENICKY	0.021	&	CYSEC	0.006	&	GOURMET	0.017	&	VEHICLE	-0.018	\\\hline
+GREEN	0.020	&	CLIVE	0.006	&	JOINT	0.016	&	CONSTANCE	0.018	\\\hline
+AZAR	0.020	&	CRADDOCK	0.005	&	LTD	-0.016	&	BLINK	0.018	\\\hline
+ATOS	0.020	&	RATED	0.005	&	CAPITAL	-0.016	&	DOBINSON	-0.018	\\\hline
+ATOMIC	0.020	&	RECLAIM	0.005	&	MANAGEMENT	0.016	&	MANPOWER	-0.018	\\\hline
+EQUITY	-0.020	&	ALAMORT	-0.005	&	PUBLISHING	-0.015	&	LIMI	0.017	\\\hline
+ADRIAN	0.019	&	BADER	-0.005	&	IMAGING	0.015	&	M	-0.017	\\\hline
+PROPERTIES	-0.018	&	BSEC	-0.005	&	78	0.014	&	CRADDOCK	0.017	\\\hline
+ANNE	-0.018	&	BURUNGA	0.005	&	BELTA	0.014	&	PLUMBING	-0.017	\\\hline
+COLRON	0.018	&	CARDPRIZE	-0.005	&	PROCESSING	-0.014	&	78	-0.017	\\\hline
+AJC	-0.018	&	LEWISHAM	0.005	&	MUSIC	-0.014	&	GATE	-0.017	\\\hline
+KITE	-0.018	&	AZAR	-0.005	&	MIDLANDS	0.014	&	PRODUCTIONS	0.016	\\\hline
+LTD	0.017	&	CREATIVE	0.005	&	DR	-0.013	&	DO	-0.016	\\\hline
+DAMICO	-0.017	&	ARTSPACESLTD	-0.005	&	OUTSKIRTS	0.013	&	EVENTS	0.016	\\\hline
+CRADDOCK	-0.017	&	VISION	-0.005	&	EQUITY	-0.013	&	PUBLISHING	0.016	\\\hline
+BADER	-0.017	&	TWO	0.005	&	BRIAN	0.013	&	CONTRACTOR	0.016	\\\hline
+ACADEMY	0.017	&	CONTRACTOR	0.005	&	TWO	-0.012	&	CELERUM	-0.016	\\\hline
+LIMITEMITED	-0.017	&	BABBACOMBE	0.005	&	INFORMATION	0.012	&	ELITE	0.015	\\\hline
+INNOVATIONS	0.017	&	78	-0.005	&	1	0.012	&	CELLWIZE	-0.015	\\\hline
+HOLDINGS	0.017	&	DOBINSON	-0.005	&	BUSINESS	0.012	&	INNOVATIONS	-0.015	\\\hline
+CUM	-0.017	&	COCHRANE	-0.005	&	GIFTS	0.011	&	TRANSPORT	-0.015	\\\hline
+LIM	-0.016	&	M.	0.005	&	BADER	0.011	&	PARTNERS	0.015	\\\hline
+BIN	0.016	&	MANAGEMENT	-0.005	&	HENRY	-0.011	&	COCHRANE	-0.014	\\\hline
+VEHICLE	0.016	&	CELTIC	0.004	&	BOOKMAKERS	0.011	&	DBA	0.014	\\\hline
+MUSIC	-0.015	&	BUSINESS	0.004	&	CAR	0.011	&	A2B	-0.014	\\\hline
+AGCAS	0.015	&	GIFTS	-0.004	&	FALCON	0.011	&	ELECTRICAL	0.014	\\\hline
+SITE	-0.015	&	JOE	0.004	&	ELECTRICAL	0.011	&	GOURMET	0.013	\\\hline
+RESTAURANT	-0.015	&	ALAIN	0.004	&	COMPUTERS	-0.011	&	TRANS	0.013	\\\hline
+CARLIN	-0.015	&	BUCKLEFIELDS	0.004	&	CARLIN	-0.011	&	BENICKY	0.013	\\\hline
+
+\hline\end{tabular}
+\end{table*}
+
+
+\begin{table*}
+\centering
+\caption{LIME Results - Companies (2)}
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+ARTSPACESLTD	-0.015	&	and	0.004	&	CHARLES	0.011	&	RESTAURANT	-0.013	\\\hline
+GAS	0.015	&	COST	-0.004	&	COVENTRYTED	0.011	&	ROAD	-0.013	\\\hline
+M.	0.015	&	EQUITY	-0.004	&	COLBERRY	-0.010	&	MAN	-0.013	\\\hline
+CELLWIZE	-0.015	&	CHARLES	-0.004	&	AHL	0.010	&	ACADEMY	0.012	\\\hline
+WORKS	0.014	&	APJ	-0.004	&	BREW	0.010	&	LEWISHAM	0.012	\\\hline
+A.V.	0.014	&	COMMUNITY	0.004	&	M.	-0.010	&	DCandV	0.012	\\\hline
+TRANSPORT	0.014	&	TRANS	0.004	&	RECLAIM	-0.010	&	CAROLINE	-0.012	\\\hline
+CAR	-0.014	&	ANTHONY	0.004	&	BOYLE	-0.010	&	GOLF	-0.012	\\\hline
+HARDY	0.014	&	CDCE	-0.004	&	LEWISHAM	-0.010	&	BIN	-0.012	\\\hline
+COCHRANE	-0.014	&	K	0.004	&	AJC	0.010	&	BIECO	-0.012	\\\hline
+AZK	-0.014	&	VERONICA	0.004	&	M	0.010	&	EMPLOYMENT	-0.012	\\\hline
+PRODUCTIONS	-0.013	&	UK	-0.004	&	CELERUM	-0.010	&	CONTRACTING	-0.011	\\\hline
+COST	-0.013	&	LTD.	-0.004	&	CANTINHO	0.009	&	ALYASAMEEN	-0.011	\\\hline
+GATE	0.013	&	PLUMBING	-0.004	&	CROSSFIELDS	-0.009	&	LIVING	-0.011	\\\hline
+BUTTERFLY	-0.013	&	LIVING	-0.004	&	MITSUBISHI	-0.009	&	CANTINHO	-0.011	\\\hline
+FALCON	-0.013	&	ACER	-0.004	&	34	0.009	&	GOIAS	0.011	\\\hline
+GLASGOW	-0.013	&	AGCAS	0.004	&	CROWTON	0.009	&	BRIAN	0.010	\\\hline
+TWO	0.013	&	AP	-0.004	&	BRUNSWICK	-0.009	&	ASSIST	0.010	\\\hline
+ELTON	0.012	&	NATIONAL	-0.004	&	AZK	0.009	&	TRAVEL	0.010	\\\hline
+34	0.012	&	CONTRACTING	-0.004	&	RUTLAND	-0.009	&	ENGINEERS	-0.010	\\\hline
+BOOKMAKERS	-0.012	&	AHL	0.004	&	APJ	-0.009	&	ANTHONY	0.010	\\\hline
+ALEEPH	0.012	&	VEHICLE	-0.004	&	ANNE	0.009	&	WINGS	0.010	\\\hline
+CYSEC	-0.012	&	CROSSFIELDS	-0.004	&	COMPANY	0.008	&	ORTHODONTICS	0.010	\\\hline
+DEVELOPING	-0.012	&	DARWIN	0.004	&	HOLDING	-0.008	&	COST	0.010	\\\hline
+CONISTON	-0.012	&	BUTTERFLY	0.004	&	DARWIN	-0.008	&	LIMITEDMPANY	0.010	\\\hline
+ENGINEERING	0.012	&	ANDREI	-0.004	&	STORES	0.008	&	CORNER	0.010	\\\hline
+DEVELOPMENTS	-0.012	&	BRUNSWICK	0.004	&	ASSIST	0.008	&	LIMITEMITED	0.010	\\\hline
+LTD	-0.012	&	INC	-0.004	&	CHESHIRE	-0.008	&	A.V.	0.010	\\\hline
+AUTOMOTIVE	0.011	&	DESIGN	-0.004	&	CEILINGS	0.008	&	ADVANCE	0.009	\\\hline
+DBA	0.011	&	ADRIAN	-0.003	&	164	0.008	&	ENGINEERING	-0.009	\\\hline
+ALAIN	-0.011	&	JOINT	-0.003	&	DE-TOY	-0.008	&	AHL	-0.009	\\\hline
+BURGERS	-0.011	&	COMPUTERS	-0.003	&	CHORLTON	-0.008	&	CONTEMPORARY	-0.009	\\\hline
+COMMUNITY	0.011	&	BURGERS	0.003	&	WINGS	0.008	&	P.	0.009	\\\hline
+LEWISHAM	-0.011	&	SPICE	0.003	&	2017	0.008	&	CELTIC	-0.009	\\\hline
+AND	0.011	&	MITSUBISHI	-0.003	&	PLUMBING	0.008	&	AGE	-0.008	\\\hline
+PUBLISHING	-0.011	&	WINGS	-0.003	&	A.	0.008	&	ANNE	0.008	\\\hline
+INTERIORS	-0.011	&	CHEAM	-0.003	&	CHARIOT	-0.008	&	PRINT	0.008	\\\hline
+and	0.011	&	HOLDINGS	0.003	&	ENGINEERING	0.007	&	CREATIVE	-0.008	\\\hline
+LLP	-0.011	&	DEVELOPMENTS	-0.003	&	PARTNERS	-0.007	&	INTERES	0.008	\\\hline
+AP	0.010	&	LTD	-0.003	&	OPTICIANS	0.007	&	34	-0.008	\\\hline
+C	0.010	&	PLUMBING	-0.003	&	SOLUTIONS	-0.007	&	1	-0.008	\\\hline
+M	-0.010	&	PRODUCTIONS	0.003	&	LTD.	0.007	&	INFORMATION	-0.008	\\\hline
+JEWELLERS	-0.010	&	CRAGFIT	0.003	&	VENTURES	0.007	&	ACTU	0.008	\\\hline
+VIATOR	0.009	&	LIMITED6LIMITED	-0.003	&	HEATING	-0.007	&	THE	0.007	\\\hline
+CO	-0.009	&	DIAMOND	0.003	&	ACTU	-0.007	&	AZK	-0.007	\\\hline
+ALYASAMEEN	0.009	&	CARLIN	0.003	&	NATIONAL	0.007	&	IMAGING	0.007	\\\hline
+BODZIO	0.009	&	CAROLINE	-0.003	&	12	-0.007	&	PIMPEC	-0.006	\\\hline
+IMAGING	0.008	&	DEVELOPING	-0.003	&	DEVELOPING	-0.007	&	ALEEPH	0.006	\\\hline
+CCI	0.008	&	PROCESSING	-0.002	&	GAS	0.006	&	ASCURLO	-0.006	\\\hline
+ANDREI	0.008	&	EVENTS	-0.002	&	COFFEE	0.006	&	MIDLANDS	-0.006	\\\hline
+
+
+
+\hline\end{tabular}
+\end{table*}
+
+
+\begin{table*}
+\centering
+\caption{LIME Results - Names (1)}
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+SAN	0.003	&	VIRELLA	-0.116	&	SAN	4.42E-05	&	Theresa	0.0004	\\\hline
+JOSE	0.003	&	COFFEY	-0.115	&	Barker	4.36E-05	&	S	0.0003	\\\hline
+DELA	0.003	&	D	-0.107	&	W	-4.28E-05	&	A	0.0003	\\\hline
+BUCHANAN	0.003	&	K	-0.101	&	COFFEY	-3.73E-05	&	JOSE	0.0003	\\\hline
+BONNER	0.003	&	M	-0.086	&	Matthew	3.64E-05	&	Glen	0.0003	\\\hline
+HICKMAN	-0.003	&	L	-0.085	&	Stephanie	-3.48E-05	&	K	-0.0003	\\\hline
+MERCADO	0.003	&	JOSE	-0.085	&	BARUCCHERI	-3.43E-05	&	VIRELLA	0.0003	\\\hline
+N	-0.003	&	N	-0.074	&	MATHIEU	-3.41E-05	&	Valenzuela	-0.0003	\\\hline
+Alvarez	0.002	&	SAN	-0.069	&	J	3.39E-05	&	Cain	-0.0003	\\\hline
+Gregory	-0.002	&	MERCADO	0.044	&	Cain	-3.38E-05	&	SAN	0.0003	\\\hline
+C	-0.002	&	SHAH	0.034	&	Alvarez	3.27E-05	&	Marlene	-0.0003	\\\hline
+REYNOLDS	0.002	&	S	-0.032	&	Donaldson	3.25E-05	&	MERCADO	0.0003	\\\hline
+BARNABY	0.002	&	Valenzuela	0.032	&	Payne	3.11E-05	&	Phillip	-0.0003	\\\hline
+Juanita	0.002	&	PEREZ	0.031	&	Darren	-3.10E-05	&	Matthew	-0.0002	\\\hline
+VIRELLA	0.002	&	ANDERSON	-0.028	&	Derek	3.09E-05	&	L	-0.0002	\\\hline
+FAJARDO	-0.002	&	Phillip	-0.028	&	GRULLON	3.06E-05	&	DAYS	-0.0002	\\\hline
+GOMEZDELATORRE	0.002	&	Juanita	0.027	&	Herrera	2.95E-05	&	ANDERSON	-0.0002	\\\hline
+Tate	-0.002	&	SCHILLING	0.025	&	Kathleen	2.95E-05	&	KUZMA	0.0002	\\\hline
+E	-0.002	&	Anita	0.025	&	JOSE	2.87E-05	&	Nathan	0.0002	\\\hline
+IBERN	0.002	&	Sandoval	-0.024	&	Kelly	2.83E-05	&	GRULLON	0.0002	\\\hline
+Matthew	-0.002	&	Kathryn	-0.024	&	RESTREPO	-2.83E-05	&	Kaufman	-0.0002	\\\hline
+SHAH	-0.002	&	DELA	-0.024	&	EDWARDS	2.82E-05	&	LEAKE	-0.0002	\\\hline
+COLLINS	-0.002	&	Marlene	0.023	&	Hendrix	2.77E-05	&	Stephanie	0.0002	\\\hline
+SADIQ	-0.002	&	TOBIN	-0.022	&	SANTIAGO	-2.77E-05	&	M	-0.0002	\\\hline
+P	0.002	&	A	0.022	&	Tate	-2.76E-05	&	MYRIE	-0.0002	\\\hline
+A	0.002	&	SHARELL	0.022	&	SHARELL	2.71E-05	&	B	0.0002	\\\hline
+KUZMA	-0.002	&	Shannon	-0.021	&	A	2.70E-05	&	REYNOLDS	-0.0002	\\\hline
+Heath	0.002	&	Herrera	0.021	&	PEREZ	-2.70E-05	&	DIZDAREVIC	0.0002	\\\hline
+Kathleen	-0.002	&	SANTIAGO	0.019	&	SANTORO	2.69E-05	&	EDKINS	-0.0002	\\\hline
+Virginia	-0.002	&	Riggs	-0.019	&	Sandoval	2.63E-05	&	J	0.0002	\\\hline
+Theresa	0.002	&	Hurley	-0.019	&	Megan	2.60E-05	&	YE	-0.0002	\\\hline
+MAGRAS	0.002	&	J	-0.019	&	SADIQ	2.59E-05	&	Hannah	0.0002	\\\hline
+Payne	-0.002	&	JIMENEZ	-0.019	&	DRAYCOTT	2.56E-05	&	Mark	0.0002	\\\hline
+Darlene	0.002	&	Guzman	0.018	&	YE	2.55E-05	&	Paul	-0.0002	\\\hline
+Perkins	-0.002	&	BARNABY	-0.018	&	Heath	2.46E-05	&	Tommy	0.0002	\\\hline
+Cain	-0.002	&	Nathan	-0.018	&	Morton	2.45E-05	&	SHARELL	0.0002	\\\hline
+Mariah	0.002	&	Stephanie	-0.017	&	Lott	2.44E-05	&	Alice	-0.0002	\\\hline
+SANTIAGO	-0.001	&	REYNOLDS	0.017	&	Perkins	2.40E-05	&	Guzman	0.0002	\\\hline
+Duffy	-0.001	&	HARDIAL	0.016	&	OLIVO	2.36E-05	&	Chester	-0.0002	\\\hline
+BUTASEK	0.001	&	Allison	0.016	&	DELA	2.36E-05	&	Walters	-0.0002	\\\hline
+Allen	-0.001	&	LIMATO	0.016	&	DEVITO-RODRIGUE	2.33E-05	&	Brooke	-0.0002	\\\hline
+RESTREPO	0.001	&	SANTANGELO	-0.016	&	BUTASEK	2.31E-05	&	Perkins	0.0002	\\\hline
+Galloway	0.001	&	YE	0.016	&	H	2.27E-05	&	Bass	-0.0002	\\\hline
+Moss	-0.001	&	GRULLON	0.016	&	R	2.23E-05	&	BARUCCHERI	-0.0002	\\\hline
+PEDROSA	0.001	&	Z	0.015	&	N	2.20E-05	&	MORENO	-0.0002	\\\hline
+Tessa	0.001	&	Morton	0.015	&	Brooke	2.20E-05	&	SANTANGELO	0.0002	\\\hline
+DRAYCOTT	0.001	&	GARCIA	-0.015	&	Stevenson	2.18E-05	&	V	-0.0002	\\\hline
+Anita	-0.001	&	Teresa	-0.014	&	D	-2.15E-05	&	WILLIAMS	0.0002	\\\hline
+Phillip	-0.001	&	EDWARDS	0.014	&	C	2.13E-05	&	Garrett	0.0002	\\\hline
+Love	-0.001	&	Gregory	0.014	&	GARCIA	2.12E-05	&	Donaldson	0.0002	\\\hline
+
+
+\hline\end{tabular}
+\end{table*}
+
+
+
+\begin{table*}
+\centering
+\caption{LIME Results - Names (2)}
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+Valenzuela	0.001	&	WLADIS	-0.014	&	Hurley	2.10E-05	&	GRULLON	0.0002	\\\hline
+COFFEY	0.001	&	Bass	0.014	&	ISLA	2.10E-05	&	IBERN	0.0002	\\\hline
+Barker	-0.001	&	Payne	0.014	&	Jack	2.08E-05	&	Roger	0.0002	\\\hline
+Melendez	0.001	&	Love	-0.014	&	SCHILLING	-2.07E-05	&	SANTORO	-0.0002	\\\hline
+B	-0.001	&	H	-0.014	&	Elizabeth	2.07E-05	&	Kelly	0.0002	\\\hline
+TAVERAS	-0.001	&	Elizabeth	0.014	&	DIZDAREVIC	2.05E-05	&	Hatfield	0.0002	\\\hline
+Herrera	-0.001	&	C	-0.014	&	P	2.04E-05	&	Jack	0.0002	\\\hline
+EDKINS	-0.001	&	GOMEZDELATORRE	-0.013	&	Darlene	-2.04E-05	&	Anita	0.0002	\\\hline
+Edwards	0.001	&	MATHIEU	-0.013	&	MERCADO	2.02E-05	&	Sandoval	0.0002	\\\hline
+R	-0.001	&	REID	-0.013	&	COLLINS	2.02E-05	&	JIMENEZ	0.0002	\\\hline
+REID	0.001	&	Arthur	-0.013	&	Allison	1.98E-05	&	EDWARDS	-0.0001	\\\hline
+Alice	0.001	&	Glen	0.013	&	LARRY	-1.97E-05	&	Alvarez	0.0001	\\\hline
+LAZARO	0.001	&	Shannon	-0.013	&	VIRELLA	1.96E-05	&	PEDROSA	-0.0001	\\\hline
+Paul	0.001	&	Brandi	-0.013	&	Brandi	1.96E-05	&	Lott	0.0001	\\\hline
+Y	0.001	&	Paul	-0.013	&	SHAH	1.88E-05	&	Shannon	0.0001	\\\hline
+Brooke	-0.001	&	B	-0.013	&	Brady	1.86E-05	&	Gay	0.0001	\\\hline
+GARCIA	0.001	&	Derek	-0.013	&	Duffy	1.86E-05	&	Sears	0.0001	\\\hline
+LIMATO	-0.001	&	DEVITO-RODRIGUE	0.012	&	IBERN	1.85E-05	&	Chase	-0.0001	\\\hline
+BARUCCHERI	-0.001	&	Perkins	-0.012	&	BONNER	1.82E-05	&	TOBIN	-0.0001	\\\hline
+Arnold	-0.001	&	LEAKE	-0.012	&	Melendez	-1.80E-05	&	Hendrix	0.0001	\\\hline
+MYRIE	0.001	&	Alvarez	0.012	&	SANTANGELO	-1.73E-05	&	MATHIEU	0.0001	\\\hline
+Arthur	-0.001	&	BRESNAHAN	0.011	&	K	1.69E-05	&	Lester	0.0001	\\\hline
+ISLA	0.001	&	Mariah	0.011	&	M	-1.66E-05	&	Allen	0.0001	\\\hline
+Mark	-0.001	&	Matthew	0.011	&	GRULLON	-1.66E-05	&	H	0.0001	\\\hline
+V	0.001	&	Lester	-0.011	&	Paul	1.62E-05	&	Darlene	0.0001	\\\hline
+Gay	0.001	&	KUZMA	0.011	&	HERSHBERGER	1.59E-05	&	HARDIAL	-0.0001	\\\hline
+Danny	0.001	&	Donaldson	-0.010	&	TOBIN	1.59E-05	&	SCHILLING	-0.0001	\\\hline
+YE	-0.001	&	Barker	0.010	&	Tommy	1.58E-05	&	Carolyn	-0.0001	\\\hline
+WILLIAMS	-0.001	&	R	-0.010	&	Whitley	-1.58E-05	&	Tate	0.0001	\\\hline
+Hannah	0.001	&	IBERN	-0.010	&	TAVERAS	-1.53E-05	&	REID	0.0001	\\\hline
+F	0.001	&	LAZARO	0.010	&	Shannon	1.52E-05	&	Clayton	0.0001	\\\hline
+Cooke	-0.001	&	TAVERAS	0.010	&	KUZMA	1.52E-05	&	ISLA	0.0001	\\\hline
+Hatfield	-0.001	&	MYRIE	-0.010	&	BARGLOWSKA	1.51E-05	&	Megan	-0.0001	\\\hline
+Teresa	-0.001	&	Heath	-0.009	&	Edwards	-1.51E-05	&	SOTO	-0.0001	\\\hline
+LARRY	0.001	&	FERONE	-0.009	&	Valenzuela	1.50E-05	&	Whitley	-0.0001	\\\hline
+Chester	0.001	&	F	0.009	&	Virginia	-1.46E-05	&	BARNABY	-0.0001	\\\hline
+Stephanie	0.001	&	Tessa	-0.008	&	SOTO	1.44E-05	&	GOMEZ	0.0001	\\\hline
+Kelly	-0.001	&	Gay	0.008	&	Kathryn	1.43E-05	&	Elizabeth	-0.0001	\\\hline
+Carolyn	-0.001	&	Galloway	0.008	&	Glen	1.43E-05	&	T	-0.0001	\\\hline
+DEVITO-RODRIGUE	-0.001	&	Jack	-0.008	&	MORENO	1.42E-05	&	COFFEY	-0.0001	\\\hline
+BARGLOWSKA	-0.001	&	DIZDAREVIC	0.008	&	Z	-1.39E-05	&	HICKMAN	-0.0001	\\\hline
+T	0.001	&	E	0.008	&	Gregory	1.37E-05	&	HERSHBERGER	0.0001	\\\hline
+Brandi	-0.001	&	G	-0.008	&	Allen	1.34E-05	&	Barker	-0.0001	\\\hline
+Guzman	-0.001	&	BUTASEK	-0.007	&	MYRIE	1.33E-05	&	Shannon	-0.0001	\\\hline
+Chase	-0.001	&	MAGRAS	0.007	&	GOMEZ	-1.33E-05	&	BUCHANAN	-0.0001	\\\hline
+Brown	-0.001	&	WILLIAMS	0.007	&	CAMPBELL	1.25E-05	&	C	0.0001	\\\hline
+FERONE	-0.001	&	Allen	-0.007	&	WILLIAMS	-1.24E-05	&	BUTASEK	0.0001	\\\hline
+Z	-0.001	&	MORENO	-0.007	&	Y	-1.19E-05	&	Morton	-0.0001	\\\hline
+Allison	-0.001	&	Roger	0.006	&	Mark	-1.18E-05	&	Moss	-0.0001	\\\hline
+Roger	0.000	&	BUCHANAN	-0.006	&	S	1.06E-05	&	Brady	-0.0001	\\\hline
+
+\hline\end{tabular}
+\end{table*}
+
+
+\begin{table*}
+\centering
+\caption{LIME Results - Products (1)}
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+Hips	-2.86E-06	&	Blender	7.37E-06	&	fluid	1.82E-05	&	60	-2.76E-06	\\\hline
+32	-2.79E-06	&	Bar	-4.36E-06	&	Surimi	1.73E-05	&	Traditional	2.66E-06	\\\hline
+Support	-2.71E-06	&	Moisturizing	-2.10E-06	&	Protect-A-Bed	1.65E-05	&	Free	-2.37E-06	\\\hline
+Cheese	-2.56E-06	&	Waring	-2.04E-06	&	Mixed	-1.62E-05	&	Travel	2.32E-06	\\\hline
+3	-2.56E-06	&	Mushroom	1.91E-06	&	Greek	-1.52E-05	&	Moisturizing	-2.01E-06	\\\hline
+lb	-2.51E-06	&	Hips	1.36E-06	&	L-lysine	1.51E-05	&	Skin	-1.93E-06	\\\hline
+pack,1	-2.45E-06	&	tabs	-1.11E-06	&	5pcs	1.51E-05	&	Mite	-1.88E-06	\\\hline
+3/	2.44E-06	&	Lime	-1.06E-06	&	Blender	-1.47E-05	&	Carmel	1.87E-06	\\\hline
+Eggo	-2.43E-06	&	Lite	1.02E-06	&	Blackforest	-1.43E-05	&	Fleurage	1.80E-06	\\\hline
+Cranberry	-2.43E-06	&	Fo	9.68E-07	&	Candle	-1.43E-05	&	Blue	-1.77E-06	\\\hline
+Food	-2.43E-06	&	chair	-8.35E-07	&	Rhino	1.43E-05	&	Intensite	1.72E-06	\\\hline
+Tubes	-2.42E-06	&	With	-8.19E-07	&	GRS.|	-1.42E-05	&	Hair	-1.70E-06	\\\hline
+Reducer	-2.42E-06	&	1000	-7.70E-07	&	system	1.42E-05	&	German	-1.68E-06	\\\hline
+Seed	-2.39E-06	&	Foxtail	7.67E-07	&	"Vitamin	1.41E-05	&	Berry	-1.68E-06	\\\hline
+vcaps	-2.38E-06	&	Toothbrush	-7.22E-07	&	Biphosphate	1.40E-05	&	chair	-1.64E-06	\\\hline
+6	-2.36E-06	&	vcaps	-7.20E-07	&	Reducer	1.40E-05	&	98\%	-1.63E-06	\\\hline
+BACON	-2.33E-06	&	Protector	-7.20E-07	&	Peanut	1.38E-05	&	Mushroom	-1.63E-06	\\\hline
+Style	-2.32E-06	&	Purple	-7.02E-07	&	Waterlily	1.38E-05	&	10	-1.62E-06	\\\hline
+Box	-2.30E-06	&	Tea	-6.92E-07	&	Supremo	1.38E-05	&	Facial	-1.59E-06	\\\hline
+98%	-2.29E-06	&	Dry	-6.84E-07	&	98%	1.38E-05	&	All	-1.58E-06	\\\hline
+De	-2.26E-06	&	STYLE	-6.81E-07	&	10	-1.36E-05	&	Homocysteine	-1.57E-06	\\\hline
+Liquid	-2.25E-06	&	Vermont	-6.76E-07	&	MELHORAL	1.36E-05	&	P	1.56E-06	\\\hline
+5	-2.24E-06	&	Exceptional	6.75E-07	&	Tv	1.36E-05	&	Makeup	-1.51E-06	\\\hline
+Tablets	-2.22E-06	&	-	-6.73E-07	&	130	-1.35E-05	&	Tabs	-1.50E-06	\\\hline
+candle	-2.21E-06	&	Awakening	-6.68E-07	&	Tracker	-1.34E-05	&	Packet	-1.50E-06	\\\hline
+oz	-2.20E-06	&	crabe	-6.67E-07	&	Amish	-1.33E-05	&	6x100	-1.48E-06	\\\hline
+Soft	-2.18E-06	&	Fever	-6.63E-07	&	piece	1.33E-05	&	Dry	-1.47E-06	\\\hline
+Creme	-2.14E-06	&	Daily	6.60E-07	&	Wafers	1.32E-05	&	Protein	-1.47E-06	\\\hline
+Ages	-2.11E-06	&	Berry	-6.57E-07	&	With	-1.31E-05	&	Greek	-1.46E-06	\\\hline
+Cooking	-2.10E-06	&	Height	-6.56E-07	&	Dog	-1.29E-05	&	Rtu	-1.46E-06	\\\hline
+Facial	-2.08E-06	&	Metal	-6.55E-07	&	Moxie	-1.29E-05	&	Cocktail	-1.45E-06	\\\hline
+2	-2.08E-06	&	Peach	-6.47E-07	&	Carmel	-1.29E-05	&	LECHE	-1.44E-06	\\\hline
+25/4UNS	-2.07E-06	&	Of	-6.41E-07	&	Meatloaf	1.27E-05	&	Bit	-1.44E-06	\\\hline
+With	-2.06E-06	&	Madness	6.39E-07	&	Bariatric	1.27E-05	&	182	-1.41E-06	\\\hline
+Plus	-2.06E-06	&	ALOE	-6.37E-07	&	Puzzle	1.27E-05	&	Disney	-1.41E-06	\\\hline
+Seltzer	-2.03E-06	&	Peanut	-6.29E-07	&	Action	1.26E-05	&	C	-1.40E-06	\\\hline
+23123	-1.99E-06	&	Mighty	-6.24E-07	&	Colombian	1.26E-05	&	Egg	-1.37E-06	\\\hline
+Core	-1.95E-06	&	Egg	-6.23E-07	&	ESPUMA	1.26E-05	&	kg	-1.36E-06	\\\hline
+Conditioner	-1.94E-06	&	mg, 250	-6.22E-07	&	Macaroni	1.25E-05	&	Achari	-1.35E-06	\\\hline
+Hair	-1.93E-06	&	Even	-6.18E-07	&	Conditioner	-1.25E-05	&	Spaetzle	-1.35E-06	\\\hline
+Flute	-1.87E-06	&	creme	-6.18E-07	&	Lite	-1.25E-05	&	Waffles	-1.35E-06	\\\hline
+Iced	1.86E-06	&	Meatloaf	-6.09E-07	&	6	-1.25E-05	&	Sinus	-1.35E-06	\\\hline
+150	1.83E-06	&	Enamel	-6.07E-07	&	Pain	-1.24E-05	&	Teva	1.33E-06	\\\hline
+Duck	-1.69E-06	&	Traditional	-5.95E-07	&	Noodle	-1.23E-05	&	Meatloaf	-1.32E-06	\\\hline
+chair	1.52E-06	&	Just	-5.77E-07	&	Double-sided	-1.22E-05	&	Mattress	-1.29E-06	\\\hline
+Tonic	1.46E-06	&	70\%	-5.76E-07	&	Origins	-1.21E-05	&	BABARIA|BABARIA	-1.27E-06	\\\hline
+Teva	1.38E-06	&	Margarita	-5.72E-07	&	Gourmet	1.21E-05	&	Dress	-1.25E-06	\\\hline
+Height	1.36E-06	&	Splash	-5.66E-07	&	Set	-1.21E-05	&	piece	-1.25E-06	\\\hline
+FRUCTIS|FRUCTIS	1.33E-06	&	Tubes	-5.60E-07	&	-	-1.20E-05	&	Primer	-1.24E-06	\\\hline
+1x100	1.31E-06	&	Honey	-5.44E-07	&	X	-1.20E-05	&	Tea	-1.24E-06	\\\hline
+
+
+\hline\end{tabular}
+\end{table*}
+
+
+\begin{table*}
+\centering
+\caption{LIME Results - Products (2)}
+\begin{tabular}{|l|l|l|l|} \hline
+ Baseline NN & LSTM & w/ Dates & w/ Letters \\\hline
+each	1.26E-06	&	3.6	-5.43E-07	&	6x100	-1.20E-05	&	Fat	-1.23E-06	\\\hline
+Ham	1.25E-06	&	Cooking	-5.32E-07	&	Homocysteine	-1.20E-05	&	crabe	1.21E-06	\\\hline
+Foot	1.23E-06	&	Fruit	-5.32E-07	&	Predator	-1.19E-05	&	Caplets	-1.21E-06	\\\hline
+Game	1.21E-06	&	De	-5.26E-07	&	Fluffy	-1.19E-05	&	One	-1.20E-06	\\\hline
+Football	1.20E-06	&	Drink	-5.25E-07	&	creme	-1.19E-05	&	Contemporary	-1.19E-06	\\\hline
+Bit	1.20E-06	&	SUN	-5.22E-07	&	caplets	-1.19E-05	&	Style	-1.18E-06	\\\hline
+Xylitol	1.11E-06	&	system	-5.06E-07	&	Daily	1.18E-05	&	24	-1.18E-06	\\\hline
+Sinus	1.11E-06	&	120	-5.05E-07	&	SABOR	1.18E-05	&	Height	-1.18E-06	\\\hline
+BRINOX	1.06E-06	&	Detoxitech	-5.04E-07	&	Attractant	-1.17E-05	&	ALOE	-1.17E-06	\\\hline
+Pain	9.97E-07	&	Sl400u	5.03E-07	&	Seed	-1.17E-05	&	Focus	-1.16E-06	\\\hline
+Candle	9.94E-07	&	Core	-4.97E-07	&	Eyeshadow	-1.16E-05	&	candle	-1.15E-06	\\\hline
+capsule	9.90E-07	&	Miettes	-4.90E-07	&	Facial	-1.15E-05	&	Definition	-1.15E-06	\\\hline
+P	9.64E-07	&	Cocktail	4.90E-07	&	toothbrush	-1.15E-05	&	Moxie	-1.14E-06	\\\hline
+LAMP	9.42E-07	&	4	4.85E-07	&	Dry	-1.14E-05	&	American	-1.14E-06	\\\hline
+Purple	9.37E-07	&	Omega	-4.83E-07	&	Bar	-1.14E-05	&	Country	-1.12E-06	\\\hline
+Powder	9.15E-07	&	Action	-4.83E-07	&	3.6	-1.13E-05	&	Waring	-1.11E-06	\\\hline
+Snow	8.88E-07	&	Oolong	-4.72E-07	&	Tablets	1.13E-05	&	L	-1.09E-06	\\\hline
+Colour	8.78E-07	&	Almonds	-4.69E-07	&	Focus	-1.13E-05	&	Holiday	-1.07E-06	\\\hline
+SABOR	8.31E-07	&	500	-4.69E-07	&	Colour	1.13E-05	&	Normal	-1.05E-06	\\\hline
+Sodium	7.82E-07	&	Ages	4.68E-07	&	Soft	-1.12E-05	&	Seltzer	-1.04E-06	\\\hline
+Elbow	7.81E-07	&	Spray	4.64E-07	&	Juice	-1.11E-05	&	China	1.03E-06	\\\hline
+Up	7.67E-07	&	de	-4.63E-07	&	count	-1.09E-05	&	Madness	-1.02E-06	\\\hline
+Counter	7.49E-07	&	Blackforest	4.55E-07	&	BWF	-1.07E-05	&	tabs	-9.90E-07	\\\hline
+ALOE	7.29E-07	&	Chewing	-4.46E-07	&	Vermont	1.05E-05	&	toothbrush	-9.71E-07	\\\hline
+Colombian	6.99E-07	&	Gourmet	4.45E-07	&	savon	-1.05E-05	&	Just	-9.43E-07	\\\hline
+Country	6.59E-07	&	Gourmet	4.23E-07	&	Oregano	1.04E-05	&	Oolong	-8.79E-07	\\\hline
+Attractant	6.21E-07	&	Panel	-4.12E-07	&	Kosher	1.04E-05	&	Anti-bacterial	-8.66E-07	\\\hline
+Skin	6.02E-07	&	Lung	4.12E-07	&	Traditional	1.03E-05	&	Foxtail	8.51E-07	\\\hline
+F.50+AFTER|+AFTER	5.98E-07	&	Formula	-4.02E-07	&	0.2-0.5\%	1.03E-05	&	Glass	8.49E-07	\\\hline
+Metal	5.70E-07	&	182	4.00E-07	&	To	1.03E-05	&	Size	8.12E-07	\\\hline
+Drops	5.55E-07	&	savon	3.98E-07	&	Bristles	1.02E-05	&	Root	-7.91E-07	\\\hline
+Gum	5.55E-07	&	Unit	-3.92E-07	&	Seasoned	-1.02E-05	&	Drops	7.80E-07	\\\hline
+Blackforest	4.95E-07	&	Caplets	3.89E-07	&	Ecofam	-1.01E-05	&	Noodle	7.53E-07	\\\hline
+Rtu	4.88E-07	&	in	-3.83E-07	&	P	-1.01E-05	&	Shape	7.51E-07	\\\hline
+Soak	4.84E-07	&	33	3.69E-07	&	Sl400u	-1.01E-05	&	90	6.93E-07	\\\hline
+Intensite	4.17E-07	&	Elbow	3.65E-07	&	Drops	-9.77E-06	&	Pain	6.92E-07	\\\hline
+1/2-inch	4.07E-07	&	Smoothing	3.37E-07	&	Football	9.55E-06	&	Ham	6.91E-07	\\\hline
+Tablets	4.06E-07	&	Seltzer	2.90E-07	&	gr	-9.49E-06	&	Up	6.36E-07	\\\hline
+PHILIPS	3.98E-07	&	Back	2.83E-07	&	Game	-9.49E-06	&	gevrey	6.34E-07	\\\hline
+Factors	3.78E-07	&	COLHER	2.79E-07	&	500	-9.27E-06	&	each	6.27E-07	\\\hline
+Mfg.	3.65E-07	&	Allergy	2.65E-07	&	Velour	-9.25E-06	&	Tonic	6.15E-07	\\\hline
+X	2.88E-07	&	vegetarian	2.62E-07	&	Of	9.13E-06	&	Clean	5.76E-07	\\\hline
+Formula	2.64E-07	&	Enema	2.54E-07	&	tabs	8.76E-06	&	Lite	5.50E-07	\\\hline
+LECHE	2.56E-07	&	Facial	2.51E-07	&	FRUCTIS|FRUCTIS	-8.71E-06	&	Series	5.46E-07	\\\hline
+Lemonade	2.54E-07	&	6	2.29E-07	&	Flute	8.68E-06	&	Feet	5.39E-07	\\\hline
+American	-2.39E-07	&	In	2.00E-07	&	150	8.44E-06	&	FRUCTIS|FRUCTIS	5.32E-07	\\\hline
+Gotcha	1.87E-07	&	Reducer	2.00E-07	&	Makeup	8.16E-06	&	savon	5.22E-07	\\\hline
+Surimi	1.74E-07	&	candle	1.91E-07	&	Tomato	-8.06E-06	&	Large	5.16E-07	\\\hline
+Ecofam	6.56E-08	&	chamb.dom.trapet	1.82E-07	&	mg,250	7.82E-06	&	Gel	3.93E-07	\\\hline
+Focus	5.50E-08	&	Rtu	1.20E-07	&	Counter	7.79E-06	&	Rose	3.58E-07	\\\hline
+
+\hline\end{tabular}
+\end{table*}
+
+\section{Embedding - Results}
+\begin {table*}
+\caption {Precision/Recall- Addresses} \label{tab:title}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | l | l |}
+    Embeddings & precision & recall & f1-score & \# instances tested \\ \hline
+    GloVe,d=50 & .95 & .99 & .97 & 3586\\ \hline
+    GloVe, d=100 & .94 & .95 & .95 & 3586\\ \hline
+    GloVe, d=200 & .94 & .99 & .96 & 3586\\ \hline
+    GloVe, d=300 & .95 & .99 & .97 & 3586\\ \hline
+    GloVe 42B, d=300 & .95 & .99 & .97 & 3586\\ \hline
+    CBOW(n=2) & .95 & .99 & .97 & 3586\\ \hline
+    CBOW(n=5)  & .95 & .99 & .97 & 3586\\ \hline
+    Dependancy Based & .96 & .99 & .97 & 3586\\ \hline
+    fastText & .93 & .99 & .96 & 3586\\ \hline
+    Character Embedding & .96 & .99 & .98 & 3586\\ \hline
+    Character Softmax Embedding & .95 & .99 & .97 & 3586\\ \hline
+    \end{tabular}
+  \end{center}
+\end {table*}
+
+\begin {table*}[!htbp]
+\caption {Precision/Recall- Companies} \label{tab:title}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | l | l |}
+    Embeddings & precision & recall & f1-score & \# instances tested \\ \hline
+     GloVe,d=50 & .71 & .78 & .74 & 4019\\ \hline
+    GloVe,d=100  & .70 & .78 & .74 & 4019\\ \hline
+    GloVe,d=200 & .69 & .77 & .73 & 4019\\ \hline
+    GloVe,d=300 & .68 & .78 & .73 & 4019\\ \hline
+    GloVe 42B,d=300 & .82 & .51 & .63 & 4019\\ \hline
+CBOW(n=2) & .71 & .78 & .74 & 4019\\ \hline
+     CBOW(n=5) & .70 & .79 & .74 & 4019\\ \hline
+    Dependancy Based & .70 & .80 & .74 & 4019\\ \hline
+    fastText & .81 & .51 & .63 & 4019\\ \hline
+     Character Embeddings & .72 & .46 & .56 & 4019\\ \hline
+   Character Softmax Embedding  & .73 & .46 & .57 & 4019\\ \hline
+    \end{tabular}
+  \end{center}
+\end {table*}
+
+\begin {table*}
+\caption {Precision/Recall- People} \label{tab:title}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | l | l |}
+    Embeddings & precision & recall & f1-score & \# instances tested \\ \hline
+GloVe,d=50 & .89 & .80 & .84 & 5859\\ \hline
+    GloVe,d=100 & .89 & .79 & .74 & 5859\\ \hline
+    GloVe,d=200 & .88 & .77 & .73 & 5859\\ \hline
+    GloVe,d=300 & .88 & .76 & .82 & 5859\\ \hline
+    GloVe 42B,d=300 & .76 & .92 & .83 & 5859\\ \hline
+   CBOW(n=2) & .89 & .80 & .84 & 5859\\ \hline
+    CBOW(n=5) & .89 & .78 & .83 & 5859\\ \hline
+    Dependancy Based & .89 & .78 & .84 & 5859\\ \hline
+    fastText & .76 & .91 & .83 & 5859\\ \hline
+    Charcter Embedding & .72 & .89 & .80 & 5859\\ \hline
+     Character Softmax Embedding & .72 & .89 & .80 & 5859\\ \hline
+    \end{tabular}
+  \end{center}
+\end {table*}
+
+\begin {table*}[!htbp]
+\caption {Precision/Recall- Products} \label{tab:title}
+  \begin{center}
+    \begin{tabular}{ | l | l | l | l | l |}
+Embeddings & precision & recall & f1-score & \# instances tested \\ \hline
+     GloVe,d=50 & .87 & .89 & .88 & 2976\\ \hline
+    GloVe,d=100 & .87 & .89 & .88 & 2976\\ \hline
+    GloVe,d=200 & .87 & .89 & .88 & 2976\\ \hline
+    GloVe,d=300 & .86 & .89 & .88 & 2976\\ \hline
+    GloVe 42B,d=300 & .86 & .90 & .88 & 2976\\ \hline
+      CBOW(n=2) & .87 & .89 & .88 & 2976\\ \hline
+    CBOW(n=5) & .87 & .90 & .88 & 2976\\ \hline
+       Dependancy Based & .88 & .89 & .89 & 2976\\ \hline
+    fastText & .86 & .88 & .87 & 2976\\ \hline
+    Character Embedding & .89 & .85 & .87 & 2976\\ \hline
+    Character Softmax Embedding  & .88 & .87 & .87 & 2976\\ \hline
+    \end{tabular}
+  \end{center}
+\end {table*}
 \end{document}
