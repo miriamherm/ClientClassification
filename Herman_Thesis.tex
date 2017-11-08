@@ -235,7 +235,7 @@ This paper demonstrates the utilization of Artificial Neural Networks (ANNs) to 
  
 In natural language processing (NLP), the task of extracting semantic types for corresponding words in a sentence is called named entity recognition (NER).  There are several NLP models geared for named entity recognition of data.  One possibility is to re-use these models to extract columnar types.  There is however, a significant problem in applying NLP models for named entity recognition on structured data because these models have all been trained on unstructured data.  The context they use for named entity recognition is therefore significantly different from structured data, which often contains little or no clues for classification of an entity.  
 
-Our goal was to create a set of named entity recognizers uniquely geared towards classifying structured data.  We decided to create models using deep learning networks primarily because there are now many language models in deep learning that can be leveraged to build better named entity recognition (e.g., word embeddings that capture the distributional semantics of words from massive corpora).  As a baseline, we compared the results of our ANN models to NLP models such as Stanford NLP, openNLP, and Python's NLTK toolkit to find a 99.7\% accuracy improvement in the best case for Neural Networks and a 16\% improvement in the worst.  Compared with all the NLP models, the average improvement was 75\% with our Neural Network model. \footnote{Our source code and training sets can be found  at \url{https://github.com/miriamherm/ClientClassification}.}
+Our goal was to create a set of named entity recognizers uniquely geared towards classifying structured data.  We decided to create models using deep learning networks primarily because there are now many language models in deep learning that can be leveraged to build better named entity recognition (e.g., word embeddings that capture the distributional semantics of words from massive corpora).  As a baseline, we compared the results of our ANN models to NLP models such as Stanford NLP, openNLP, and Python's NLTK toolkit to find a 99.7\% accuracy improvement in the best case for Neural Networks and a 16\% improvement in the worst.  Compared with all the NLP models, the average improvement was 75\% with our Neural Network model.\footnote{Our source code and training sets can be found  at \url{https://github.com/miriamherm/ClientClassification}.}
 
 After we built the models, we used state of the art techniques to convince ourselves of the validity of the models.  We used LIME \cite{Ribeiro:Lime}, a tool to inspect what features the classifier was paying attention to.  In our example these would be the specific words in the entity that caused the classifier to choose a specific class.  We also demonstrate how any classifier is always prone to false positives, mainly because the negative examples for a specific class is really an open set.  Given that a classifier can never be perfect, the next question is how do we effectively tune the classifier when it produces false positives.  We provide a very initial set of studies around this problem.
 
@@ -250,7 +250,7 @@ Once all the data was collected, the data was divided by type and compiled for e
 We also generated a set of 250,000 names using a datafactory \cite{gibson:datafactory}  that utilizes US census information to create name data determined by name frequency. We performed tests and training on names data with and without the generated names.
 
 \subsection{Baselines}
-In order to assess the necessity of a Neural Network trained classifiers for structured data, three baseline measures were tested; Stanford NLP NER \cite{finkel:ner}, OpenNLP, and Python's NLTK package.
+In order to assess the efficacy of Neural Network trained classifiers for structured data, three baseline measures were tested; Stanford NLP NER \cite{finkel:ner}, OpenNLP, and Python's NLTK package.
 
 We tested the models on address, company, and names data, using the following metric. A tag was labeled  correct if all words in a cell had the same label, and that label was correct, otherwise it was labeled incorrect. If the model allowed, we also show the metric for all words in a cell having at least once the correct label, and the rest ``other." 
 
@@ -376,7 +376,7 @@ In order to validate the accuracy of the above Neural Networks results, we teste
 \begin{tabular}{|l|l|l|l|l|l|l|} \hline
 Col Name &Example& Baseline NN  & LSTM 5 Epoch \\ \hline
 Account Owner & Toni Gomez & Person - 0.998  & Person - 0.999  \\ \hline
-Billing Address & Suite \# 10049 & Address- .99 4 & Address - .69 \\ \hline
+Billing Address & Suite \# 10049 & Address- .994 & Address - .69 \\ \hline
 Billing Contact & Allen Hardin& Person- .999& Person-  .999\\ \hline
 Billing Email & jgoff@ma1l2u.org & Company - .826& Company - .956\\ \hline
 City & Helena & Person - .429 & Person .356  \\ \hline
@@ -413,7 +413,7 @@ Each of these approaches is described in the section below.
 
 Machine learning algorithms, and deep learning systems in particular, are black box solutions, where input is fed to a model and a classification returned without an explanation as to how the decision was made.  LIME, (Local Interpretable Model-Agnostic Explanations) \cite{Ribeiro:Lime},  attempts to solve this problem by learning an interpretable model locally, around the prediction, to provide insights into exactly what the model might be doing.  Using LIME on a classifier, one can discern which words were most crucial to the classification process.  This sort of exercise is helpful in understanding whether the classifiers are actually useful or whether they picked up spurious correlations in the sample.
 
-We provided LIME with 100 words from each type and list in Table \ref{table:LIME}  the top 6 results. A complete list of results can be found in the appendix \footnote{Our attempts to provide the entire training set to LIME proved to be problematic because the system could not handle the sample set sizes on our machines}.
+We provided LIME with 100 examples from each type and list in Table \ref{table:LIME}  the top 6 results. A complete list of results can be found in the Appendix.\footnote{Our attempts to provide the entire training set to LIME proved to be problematic because the system could not handle the sample set sizes on our machines}
 
 As one might expect, for an address classification model `St' is among the 6 most important words. For the company classifier we see words such as `Limited' as one might expect, but surprisingly single letters  `W', `A', and the irregular word `Bowker' at the top of the list.  We observe for names a list of common names. For Products, LIME provides some insight into why dates were being mislabeled as products, as we describe in the next section.  Numbers, like `32' and mixtures of letters and numbers, like ``pack, 1" and ``1X10", carry a lot of weight in the classification of a product. This explains the spurious results we saw with dates.
 
@@ -431,7 +431,7 @@ Product & Hips, 32, Support, Cheese, 3, lb \\
 \end{table*}
 
 \subsection{LSTM}
-We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 5 epochs. It took more than 10X longer to run a single epoch than the previous model took for 10 epochs. Testing it took significantly longer as well.  Results are in Table \ref{table:epoch2}.  As shown in the Table \ref{table:epoch2}, the base classification performance of an LSTM model is excellent as one might expect.  Unfortunately, as shown in Table \ref{table:business}, this architecture by itself did not help reduce the false positives to unseen data types.  It appears that even when the new data types did not contain some of the contextual words that must have occurred in the original training set, the model tended to falsely classify dates as products or letter codes as people's names. The lime results (See table \ref{table:lime_lstm}) for names very obviously reveal this phenomena, with 2/3 of the most important name words for this model being single letters. 
+We changed the network architecture to feed the embeddings for the same 10 dimensional word vectors to 128 LTSM nodes, with dropout and recurrent dropout of .2, and sigmoid activation. We trained for 5 epochs. It took more than 10X longer to run a single epoch than the previous model took for 10 epochs. Testing it took significantly longer as well.  Results are in Table \ref{table:epoch2}.  As shown in the Table \ref{table:epoch2}, the base classification performance of an LSTM model is excellent as one might expect.  Unfortunately, as shown in Table \ref{table:business}, this architecture by itself did not help reduce the false positives to unseen data types.  It appears that even when the new data types did not contain some of the contextual words that must have occurred in the original training set, the model tended to falsely classify dates as products or letter codes as people's names. The LIME results (See Table \ref{table:lime_lstm}) for names very obviously reveal this phenomena, with many of the most important name words for this model being single letters. 
 
 \begin{table}
 \centering
@@ -463,9 +463,9 @@ Product & Blender, Bar, Moisturizing, Waring, Mushroom, Hips  \\
 We tried next to contrast the effects of retraining a model from scratch relative to fine tuning the model.
 
 \subsubsection{Retraining the model with dates}
-We added 8487 dates as negative examples and retrained the model on 10 epochs using our initial architecture. The retrained model displayed slightly improved results from the original, with accuracy ranging from 96.6\%-99.6\%, compared to 94\%-98\%. On the business data set, this model and the baseline NN model classified every column the same way, but this model did not classify dates as products, companies, addresses, or names. This model also stood slightly apart from the initial model on Pay Method and Terms, classifying both columns with more confidence as products, from 47.2\% confidence to 78.8\% for Pay Method (Invoice, Strip) and from 66.1\% to 79.5\% for Terms (Standard). It also stood out for Billing Address with a decrease in confidence from 99.9\% to 85.4\%. These results can be found in Table \ref{table:business_val}. The results of this model on the test set can be found in Table \ref{table:full}. 
+We added 8487 dates as negative examples and retrained the model on 10 epochs using our initial architecture. The results of this model on the test set can be found in Table \ref{table:full}.  The retrained model displayed slightly improved results from the original, with accuracy ranging from 96.6\%-99.6\%, compared to 94\%-98\%. On the business data set, this model and the baseline NN model classified every column the same way, but this model did not classify dates as products, companies, addresses, or names. This model also stood slightly apart from the initial model on Pay Method and Terms, classifying both columns with more confidence as products, from 47.2\% confidence to 78.8\% for Pay Method (Invoice, Strip) and from 66.1\% to 79.5\% for Terms (Standard). It also stood out for Billing Address with a decrease in confidence from 99.9\% to 85.4\%. These results can be found in Table \ref{table:business_val}. 
 
-The first 6 lime results of this model can be found in table \ref{table:lime_dates}. Our intention when retraining this model with dates data was to improve the products model, and with that we were successful: no words containing letters and numbers are in the top 6. 
+The first 6 LIME results of this model can be found in table \ref{table:lime_dates}. Our intention when retraining this model with dates data was to improve the products model, and with that we were successful: no words containing letters and numbers are in the top 6. 
 
 \begin{table}
 \centering
@@ -492,9 +492,9 @@ Product & fluid, Surimi, Protect-a-Bed, Mixed, Greek, L-lysine  \\
 \end{table*}
 
 \subsubsection{Retraining the model with letter codes}
-In order to prevent the model against classifying single letters as names we added the 26 letters in the English Language to the set of negative examples and retrained the model on 10 epochs using our initial architecture. With this method we were unsuccessful. The limited number of negative examples barely improved the model, with single letters in the business data set being classified as names with 95.6\% confidence. For complete results of this model on the business set, see Table \ref{table:business_val}. See Table \ref{table:letter} for complete results of this model on the test set.
+In order to prevent the model against classifying single letters as names we added the 26 letters in the English Language to the set of negative examples and retrained the model on 10 epochs using our initial architecture. See Table \ref{table:letter} for complete results of this model on the test set.  With this method we were unsuccessful. The limited number of negative examples barely improved the model, with single letters in the business data set being classified as names with 95.6\% confidence. For complete results of this model on the business set, see Table \ref{table:business_val}. 
 
-The first 6 lime results of this model can be found in table \ref{table:lime_dates}. The model was unsuccessful and as we can see from the lime results, single letters are still highly related to names. 
+The first 6 LIME results of this model can be found in Table \ref{table:lime_dates}. The model was unsuccessful and as we can see from the lime results, single letters are still highly related to names. 
 
 \begin{table}
 \centering
@@ -553,34 +553,31 @@ As per the standard recommendations \cite{xu:finetun}, we fine-tuned the model u
 We compiled and trained each model with the new optimizer on 50 epochs, using only the negative examples. 
 
 \subsubsection{ANN - Products}
-When fine-tuning the baseline NN, the run time was less than a minute and accuracy on the product test set dropped from 96.54\% to 92.29\% . The model initially classified dates as products with 89.20\% confidence, and after the fine tuning, that confidence drops to 4.40\%. A good start, but further testing must be done on the business set. 
+When fine-tuning the baseline NN, the run time was less than a minute and accuracy on the product test set dropped from 96.54\% to 92.29\% . The model initially classified dates as products with 89.20\% confidence, and after the fine tuning, that confidence drops to 4.40\%. 
 
-When we ran the model on the business set we found that dates are classified as products with only 33.51\%-43.10\% confidence, way down from the original 99.9\%. We achieved our goal, fine tuning the model to not mistake dates for products, but in the process lowered the classifiers overall accuracy.  
-
-If we could improve the accuracy on the test set higher than 92.29\%, with the same results for dates, that would be ideal.
+When we ran the model on the business set we found that dates are classified as products with only 33.51\%-43.10\% confidence, down from the original 99.9\%. We partially achieved our goal; we could fine tune the model to not mistake dates for products, but we did end up lowering the classifier's overall accuracy.  If we could improve the accuracy on the test set higher than 92.29\%, with the same results for dates, that would be ideal.
 
 We lowered the number of epochs in half, to 25, and found a 1\% improvement to 93.44\% accuracy on the test set, but dates are classified as products in the business set with 74.60\%-79.41\% confidence. We lowered the decay to 1e-4 and the accuracy on the test set increases less than 1\% to 92.54\% but dates are classified as products with 43.30-50.58\% accuracy. 
 
-We tried fine-tuning the LSTM model trained with 5 epochs, and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . The model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%. 
+We talso ried fine-tuning the LSTM model trained with 5 epochs, and accuracy on the product test set barely dropped from 98.51\% to 98.43\% . The model initially classified dates as products with 86.88\% confidence, and after the fine tuning, that confidence barely dropped again, to 84.28\%. 
 
-There is a very clear trade off here between false positives and false negatives, and it appears that we need more rigorous methods for fine tuning the weights of a model. This is clearly important for future work.
+There is a very clear trade off here between false positives and false negatives, and it appears that we need more rigorous methods for fine tuning the weights of a model. This is an clearly important direction for future work.
 
 \subsubsection{ANN - Names}
 Using the same architecture as used above for dates we tried to fine-tune the model by providing each of the 26 letters in the English language as negative examples. Our goal was for the model to not classify single letters as names. 
 
 Initially the model classified single letters as names with 90.5\% confidence, and after 50 epochs the confidence dropped to 88.6\% confidence. The confidence for the valid test data dropped .1\% from 98.8\% to 98.7\%.
 
-When the number of epochs was increased from 50 to 500, the model improved, classifying letters as names with only 47.0\% confidence. The confidence for the valid test data dropped too, from 98.8\% to 95.0\%.
+When the number of epochs was increased from 50 to 500, the model improved, classifying letters as names with only 47.0\% confidence. The confidence for the valid test data dropped too, from 98.8\% to 95.0\%.  There remains a trade off between false positives and false negatives, and a need to develop better approaches for fine-tuning.
 
-When we performed the fine-tuning on the LSTM model trained on 5 epochs the accuracy on the test set decreased from 99.1\% to 98.9\% and accuracy on the letters set stayed exactly the same, at 99.2\%.
+When we performed the fine-tuning on the LSTM model trained on 5 epochs the accuracy on the test set decreased from 99.1\% to 98.9\% and accuracy on the letters set stayed exactly the same, at 99.2\%.  In both cases, the LSTM networks seemed less resistant to training which is a somewhat surprising finding.  It is possible that these networks need a lot more data and epochs of training.
 
-There remains a trade off between false positives and false negatives, and a more rigorous fine-tuning method is needed.
 
 \section{Open Issues: Missing Words}
 
-Was the creation of classifiers with word embeddings a problem in our classification task?  For the 389917 unique tokens found by the tokenizer, a total of 145,573 words (37\%) were excluded from the embedding matrix; 8724 of 21,711 address words (40\%), 35985 of 252378 company words (14\%), 33669 of 66475  names words (51\%), and 67195 of 106293 product words (63\%).  About 6\% of the total number of texts.  
+Was the creation of classifiers with word embeddings a problem in our classification task?  For the 389,917 unique tokens found by the tokenizer, a total of 145,573 words (37\%) were excluded from the embedding matrix; 8724 of 21,711 address words (40\%), 35985 of 252378 company words (14\%), 33669 of 66475  names words (51\%), and 67195 of 106293 product words (63\%).  About 6\% of the total number of texts.  
 
-Of the missing address words, the vast majority are numbers, including 981764 and 4615 and numbers with words like ``u52" and ``569a". However LIME did list numbers very highly in its results for an addresses most important words. 
+Of the missing address words, the vast majority are numbers, including 981764 and 4615 and numbers with words like ``u52" and ``569a". However LIME did list certain numbers very highly in its results for an addresses most important words. It is possible that word embeddings sample the space of numbers unevenly.
 
 Of the missing company words, the vast majority are non-English words, including ``kebabse", ``capitus", ``amav", and ``bevtex". Some words like ``limitmanagement" were also discarded. Though it would seem most non-English words were excluded, LIME did list very unlikely words like ``Bowker" in its results for  most important words.
 
@@ -588,11 +585,11 @@ Of the missing name words, every single one is an irregular name such as ``modrc
 
 Of the missing product words, many are numbers, dimensions, or non English words like ``colgadores", however there are some description words like ``fisherman's" and ``minilight" that are being ignored that may be causing the product classification difficulty. 
 
-One might argue that word embeddings for type classification is actually useful because it focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words.  However, the dominance of odd words like ``Bowker" or ``2B" in the embeddings may have skewed the network.  A character embedding might yield better results for classification but this is future work.
+One might argue that word embeddings are more useful for type classification than character embeddings because they focuses the learning problem on what are clearly generalities rather than having the network learn some idiosyncratic words as being indicative of a particular semantic type.  This was the main reason for our focus on word embeddings in this work.  However, the issue of whether character embeddings help better classifiers for type classification remains and open empirical question, and should be explored in the future.
 
 \section{Conclusions}
 
-In conclusion we have shown the viability of Neural Networks for learning the contents of structured data sets, and have proven that this method is an improvement on the existing software. We have also presented a simple usable architecture for this task, as well as tools for fine-tuning a model with a small set of negative examples. The source code for this project can be found at \url{https://github.com/miriamherm/ClientClassification} along with our training and test datasets.
+In conclusion we have shown the viability of using Neural Networks for the classification of contents of structured data sets, and have shown that this method is an improvement over existing NER systems. We have also presented a simple usable architecture for this task, as well as tools for fine-tuning a model with a small set of negative examples. The source code for this project can be found at \url{https://github.com/miriamherm/ClientClassification} along with our training and test datasets.
 
 %\end{document}  % This is where a 'short' article might terminate
 
