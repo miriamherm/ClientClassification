@@ -79,7 +79,7 @@
 % --- End of Author Metadata ---
 
 \title{Artificial Neural Networks Applied to Named Entity Recognition of Structured Data Sets }
-\subtitle{Master's Thesis, Submitted on 11/2/2017 }
+\subtitle{Master's Thesis, Submitted on 11/20/2017 }
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -368,7 +368,7 @@ Product & .00291918 & .0184617& .0068049 & .965063  \\
 \end{table}
 
 \subsection{Business Set Results}
-In order to validate the accuracy of the above Neural Networks results, we tested the models on a generated business data set kept completely separate from the training process. This step simulates the effect of trying these binary classifiers on a new set of columnar data (see Table \ref{table:business} for example columns in this dataset).  As shown in Table \ref{table:business} the baseline ANN performed well in correctly identifying people's names, and address details, but was not as confident about company classifications in the data.  It also seemed to miss components of addresses such as cities or states when they appeared without their street addresses.  The most egregious examples of incorrect classification though had to do with false positives.  As an example, dates were mislabeled as products 99\% of the time, and column entries with single letter codes for ``pay cycle" were classified as people's names 98\% of the time.  All results for the business set appear in the table as ``Baseline ANN'' results, and focus on the first set of results we obtained when we tried generalizing our NER classifiers to new unseen data types.  
+In order to validate the accuracy of the above Neural Networks results, we tested each of the models on a generated business data set kept completely separate from the training process. This step simulates the effect of trying these binary classifiers on a new set of columnar data (see Table \ref{table:business} for example columns in this dataset). We chose the classification with the highest confidence rating for the type.  As shown in Table \ref{table:business} the baseline ANN performed well in correctly identifying people's names, and address details, but was not as confident about company classifications in the data.  It also seemed to miss components of addresses such as cities or states when they appeared without their street addresses.  The most egregious examples of incorrect classification though had to do with false positives.  As an example, dates were mislabeled as products 99\% of the time, and column entries with single letter codes for ``pay cycle" were classified as people's names 98\% of the time.  All results for the business set appear in the table as ``Baseline ANN'' results, and focus on the first set of results we obtained when we tried generalizing our NER classifiers to new unseen data types.  
 
 \begin{table*}
 \centering
@@ -529,7 +529,7 @@ Billing Address & Suite \# 10049  & Address- .854& Address- .580  \\ \hline
 Billing Contact & Allen Hardin &   Person- .998& Person- .997 \\ \hline
 Billing Email & jgoff@ma1l2u.org & Company - .826 & Person - .421\\ \hline
 City & Helena & Person - .401& Person - .421 \\ \hline
-Conversion Date & Thu Apr 03 05:20:32 EDT 2014   & None &Product - .999  \\ \hline
+Conversion Date & Thu Apr 03 05:20:32 EDT 2014   & Product - .021 &Product - .999  \\ \hline
 Country & Slovakia & Product - .427 & Product - .408 \\ \hline
 Custom Metrics & code,text,room & Product - .593& Product - .592\\ \hline
 Org Name& Morgan Studios & Company - .839 & Company - .869  \\ \hline
@@ -540,8 +540,8 @@ po\_num & PO6793946273 & Company - .568 & Company - .564   \\ \hline
 State &  'in', 'so'& Product - .576 & Product - .629  \\ \hline
 Street & 'Mcconnel'& Person - .438  & Person - .457  \\ \hline
 Terms & 'Standard'& Product - .795 & Product - .922  \\ \hline
-Valid From & Thu Jul 30 05:20:32 EDT 2013&None  & Product - .999  \\ \hline
-Valid To & Sat Mar 15 05:20:32 EDT 2014&None  & Product -  .999  \\ \hline
+Valid From & Thu Jul 30 05:20:32 EDT 2013& Product - .101  & Product - .999  \\ \hline
+Valid To & Sat Mar 15 05:20:32 EDT 2014&Product - .028  & Product -  .999  \\ \hline
 \hline\end{tabular}\label{table:business_val}
 \end{table*}
 
